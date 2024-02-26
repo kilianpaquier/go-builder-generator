@@ -3,7 +3,7 @@ ci: github
 maintainers:
     - url: kilianpaquier.com
       name: kilianpaquier
+codecov: true
 no_api: true
 no_chart: true
 no_dockerfile: true
-no_sonar: true

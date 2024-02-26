@@ -73,6 +73,7 @@ jobs:
       - run: CGO_ENABLED="0" go test ./... -coverpkg=./... -covermode=count -coverprofile=coverage.out
       - uses: codecov/codecov-action@v4
         with:
+          codecov_yml_path: codecov.yml
           disable_search: true
           fail_ci_if_error: true
           file: coverage.out
