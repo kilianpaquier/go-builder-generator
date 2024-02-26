@@ -12,6 +12,6 @@ type Export struct {
 	Int64Alias // should be added to builder
 
 	Exported            unexportedAlias // should not be added to builder
-	unexported          Aliases         // should not be added to builder
+	unexported          FuncAlias       // should not be added to builder
 	unexportedPrimitive int64           // should not be added to builder
 }

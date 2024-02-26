@@ -24,7 +24,8 @@ func (b *ArrayAndSliceBuilder) Copy() *ArrayAndSliceBuilder {
 
 // Build returns built ArrayAndSlice.
 func (b *ArrayAndSliceBuilder) Build() *success_slices.ArrayAndSlice {
-	return (*success_slices.ArrayAndSlice)(b)
+	c := (success_slices.ArrayAndSlice)(*b)
+	return &c
 }
 
 // SetArrayField sets ArrayAndSlice's ArrayField.

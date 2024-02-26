@@ -25,7 +25,8 @@ func (b *NamingBuilder) Copy() *NamingBuilder {
 
 // Build returns built Naming.
 func (b *NamingBuilder) Build() *success_naming.Naming {
-	return (*success_naming.Naming)(b)
+	c := (success_naming.Naming)(*b)
+	return &c
 }
 
 // SetACRONYMOUS sets Naming's ACRONYMOUS.

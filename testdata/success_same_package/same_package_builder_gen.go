@@ -22,7 +22,8 @@ func (b *SamePackageBuilder) Copy() *SamePackageBuilder {
 
 // Build returns built SamePackage.
 func (b *SamePackageBuilder) Build() *SamePackage {
-	return (*SamePackage)(b)
+	c := (SamePackage)(*b)
+	return &c
 }
 
 // SetCtx sets SamePackage's Ctx.

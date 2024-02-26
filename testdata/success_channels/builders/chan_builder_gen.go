@@ -24,7 +24,8 @@ func (b *ChanBuilder) Copy() *ChanBuilder {
 
 // Build returns built Chan.
 func (b *ChanBuilder) Build() *success_channels.Chan {
-	return (*success_channels.Chan)(b)
+	c := (success_channels.Chan)(*b)
+	return &c
 }
 
 // SetChanField sets Chan's ChanField.

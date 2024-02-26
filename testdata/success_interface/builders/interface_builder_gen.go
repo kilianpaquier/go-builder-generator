@@ -24,7 +24,8 @@ func (b *InterfaceBuilder) Copy() *InterfaceBuilder {
 
 // Build returns built Interface.
 func (b *InterfaceBuilder) Build() *success_interface.Interface {
-	return (*success_interface.Interface)(b)
+	c := (success_interface.Interface)(*b)
+	return &c
 }
 
 // SetAnotherInterface sets Interface's AnotherInterface.

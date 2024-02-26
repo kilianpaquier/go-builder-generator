@@ -22,7 +22,8 @@ func (b *FuncBuilder) Copy() *FuncBuilder {
 
 // Build returns built Func.
 func (b *FuncBuilder) Build() *success_funcs.Func {
-	return (*success_funcs.Func)(b)
+	c := (success_funcs.Func)(*b)
+	return &c
 }
 
 // SetFuncField sets Func's FuncField.

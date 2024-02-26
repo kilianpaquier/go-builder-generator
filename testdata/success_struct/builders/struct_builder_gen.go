@@ -24,7 +24,8 @@ func (b *StructBuilder) Copy() *StructBuilder {
 
 // Build returns built Struct.
 func (b *StructBuilder) Build() *success_struct.Struct {
-	return (*success_struct.Struct)(b)
+	c := (success_struct.Struct)(*b)
+	return &c
 }
 
 // SetAnotherStruct sets Struct's AnotherStruct.

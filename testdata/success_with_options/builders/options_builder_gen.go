@@ -26,12 +26,11 @@ func (b *OptionsBuilder) Copy() *OptionsBuilder {
 // Build returns built Options.
 func (b *OptionsBuilder) Build() (*success_with_options.Options, error) {
 	b = b.GetDefaultString().GetDefaultContext()
-
-	result := (*success_with_options.Options)(b)
-	if err := validator.New().Struct(result); err != nil {
+	c := (success_with_options.Options)(*b)
+	if err := validator.New().Struct(c); err != nil {
 		return nil, fmt.Errorf("failed to validate 'Options' struct: %w", err)
 	}
-	return result, nil
+	return &c, nil
 }
 
 // SetDefaultField sets Options's DefaultField.

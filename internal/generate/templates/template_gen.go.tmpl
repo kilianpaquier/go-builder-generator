@@ -38,14 +38,14 @@ func (b *{{ $builder }}) Build() (*{{ $fullname }}{{ if and .UseValidator .HasVa
     b = b{{ range .DefaultFuncs }}.{{ . }}(){{ end }}
     {{ end -}}
 
+    c := ({{ $fullname }})(*b)
     {{- if and .UseValidator .HasValidate  }}
-    result := (*{{ $fullname }})(b)
-    if err := validator.New().Struct(result); err != nil {
+    if err := validator.New().Struct(c); err != nil {
         return nil, fmt.Errorf("failed to validate '{{ .Name }}' struct: %w", err)
     }
-    return result, nil
+    return &c, nil
     {{- else }}
-    return (*{{ $fullname }})(b)
+    return &c
     {{- end }}
 }
 

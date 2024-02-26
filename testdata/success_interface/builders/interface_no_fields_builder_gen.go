@@ -22,7 +22,8 @@ func (b *InterfaceNoFieldsBuilder) Copy() *InterfaceNoFieldsBuilder {
 
 // Build returns built InterfaceNoFields.
 func (b *InterfaceNoFieldsBuilder) Build() *success_interface.InterfaceNoFields {
-	return (*success_interface.InterfaceNoFields)(b)
+	c := (success_interface.InterfaceNoFields)(*b)
+	return &c
 }
 
 // SetNoFields sets InterfaceNoFields's NoFields.

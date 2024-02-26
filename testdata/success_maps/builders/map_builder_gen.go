@@ -24,7 +24,8 @@ func (b *MapBuilder) Copy() *MapBuilder {
 
 // Build returns built Map.
 func (b *MapBuilder) Build() *success_maps.Map {
-	return (*success_maps.Map)(b)
+	c := (success_maps.Map)(*b)
+	return &c
 }
 
 // SetMapField sets Map's MapField.

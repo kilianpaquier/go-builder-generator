@@ -22,7 +22,8 @@ func (b *ExportBuilder) Copy() *ExportBuilder {
 
 // Build returns built Export.
 func (b *ExportBuilder) Build() *success_export.Export {
-	return (*success_export.Export)(b)
+	c := (success_export.Export)(*b)
+	return &c
 }
 
 // SetInt64Alias sets Export's Int64Alias.

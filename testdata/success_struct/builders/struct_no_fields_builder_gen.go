@@ -22,7 +22,8 @@ func (b *StructNoFieldsBuilder) Copy() *StructNoFieldsBuilder {
 
 // Build returns built StructNoFields.
 func (b *StructNoFieldsBuilder) Build() *success_struct.StructNoFields {
-	return (*success_struct.StructNoFields)(b)
+	c := (success_struct.StructNoFields)(*b)
+	return &c
 }
 
 // SetNoFields sets StructNoFields's NoFields.
