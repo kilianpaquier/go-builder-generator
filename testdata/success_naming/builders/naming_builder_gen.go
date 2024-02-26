@@ -3,7 +3,7 @@
 package builders
 
 import (
-	"net/http"
+	net_http "net/http"
 	"net/url"
 
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_naming"
@@ -53,7 +53,7 @@ func (b *NamingBuilder) SetID(id int64) *NamingBuilder {
 }
 
 // SetSomeClientHTTP sets Naming's SomeClientHTTP.
-func (b *NamingBuilder) SetSomeClientHTTP(someClientHTTP http.Client) *NamingBuilder {
+func (b *NamingBuilder) SetSomeClientHTTP(someClientHTTP net_http.Client) *NamingBuilder {
 	b.SomeClientHTTP = &someClientHTTP
 	return b
 }

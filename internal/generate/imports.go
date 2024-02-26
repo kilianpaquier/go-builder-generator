@@ -20,6 +20,10 @@ func getImports(file *ast.File, srcdir, destdir string) ([]string, error) {
 	// get file imports as string
 	fileImports := make([]string, 0, len(file.Imports))
 	for _, item := range file.Imports {
+		if item.Name != nil {
+			fileImports = append(fileImports, fmt.Sprint(item.Name.Name, " ", item.Path.Value))
+			continue
+		}
 		fileImports = append(fileImports, item.Path.Value)
 	}
 
