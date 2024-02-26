@@ -289,6 +289,14 @@ issues:
         - funlen
         - goconst
         - maintidx
+  # Maximum issues count per one linter.
+  # Set to 0 to disable.
+  # Default: 50
+  max-issues-per-linter: 0
+  # Maximum count of issues with the same text.
+  # Set to 0 to disable.
+  # Default: 3
+  max-same-issues: 0
 
 linters:
   # please, do not use `enable-all`: it's deprecated and will be removed soon.

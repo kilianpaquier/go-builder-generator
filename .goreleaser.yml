@@ -7,7 +7,7 @@ builds:
     env:
       - CGO_ENABLED=0
     ldflags:
-      - -X github.com/kilianpaquier/go-builder-generator/internal/cobra.version={{ .Version }}
+      - -X github.com/kilianpaquier/go-builder-generator/internal/cobra.version={{ .Env.VERSION }}
     goos:
       - linux
       - windows
@@ -35,7 +35,7 @@ archives:
         format: zip
 
 checksum:
-  name_template: "checksums.txt"
+  name_template: checksums.txt
   
 nfpms:
   - maintainer: kilianpaquier
