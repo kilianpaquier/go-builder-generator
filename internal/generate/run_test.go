@@ -35,6 +35,23 @@ func TestRun(t *testing.T) {
 		assert.NoDirExists(t, destdir)
 	})
 
+	t.Run("error_invalid_tags", func(t *testing.T) {
+		// Arrange
+		destdir := filepath.Join(t.TempDir(), "builders")
+		options := generate.CLIOptions{
+			Destdir: destdir,
+			File:    filepath.Join(testdata, "errors", "invalid_tags.go"),
+			Structs: []string{"Invalid"},
+		}
+
+		// Act
+		err := generate.Run(options)
+
+		// Assert
+		assert.ErrorContains(t, err, "failed to parse tags")
+		assert.ErrorContains(t, err, "failed to parse builder for struct Invalid")
+	})
+
 	t.Run("success_channels", func(t *testing.T) {
 		// Arrange
 		assertdir := filepath.Join(testdata, "success_channels", "builders")
@@ -211,7 +228,7 @@ func TestRun(t *testing.T) {
 		options := generate.CLIOptions{
 			Destdir:       destdir,
 			File:          filepath.Join(testdata, "success_with_options", "types.go"),
-			Structs:       []string{"Options"},
+			Structs:       []string{"Options", "Empty"},
 			UserValidator: true,
 		}
 

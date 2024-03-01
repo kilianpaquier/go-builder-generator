@@ -24,7 +24,14 @@ func generateStructs(file *ast.File, structs []string, destdir string, opts genO
 	// inspect whole file an retrieve all associated builders
 	var errs []error
 	builders := make([]*implBuilder, 0, len(structs))
+
+	var validNodes int
 	ast.Inspect(file, func(node ast.Node) bool {
+		// stop recursive calls once all structs are retrieved
+		if len(structs) == validNodes {
+			return false
+		}
+
 		// go through next nodes if the current is not a `type`
 		spec, ok := node.(*ast.TypeSpec)
 		if !ok || !slices.Contains(structs, spec.Name.String()) {
@@ -33,9 +40,10 @@ func generateStructs(file *ast.File, structs []string, destdir string, opts genO
 
 		// go through next nodes if current is not a struct
 		s, ok := spec.Type.(*ast.StructType)
-		if !ok || s.Fields == nil {
+		if !ok || s.Fields == nil || len(s.Fields.List) == 0 {
 			return true
 		}
+		validNodes++
 
 		// initialize builder to avoid too many params in generateStruct
 		builder := genBuilder{
@@ -133,18 +141,19 @@ func generateAny(tmplName string, dest string, data any) error {
 	}
 
 	// optimize file imports
-	bytes, err := imports.Process(dest, []byte(content.String()), nil)
+	bytes := []byte(content.String())
+	formatted, err := imports.Process(dest, bytes, nil)
 	if err != nil {
 		// also write file when imports optimization failed
 		// better for debugging
-		if err := os.WriteFile(dest, []byte(content.String()), filesystem.RwRR); err != nil {
+		if err := os.WriteFile(dest, bytes, filesystem.RwRR); err != nil {
 			return fmt.Errorf("failed to write file %s: %w", dest, err)
 		}
 		return fmt.Errorf("generated go file %s is incorrect: %w", dest, err)
 	}
 
 	// write file
-	if err := os.WriteFile(dest, bytes, filesystem.RwRR); err != nil {
+	if err := os.WriteFile(dest, formatted, filesystem.RwRR); err != nil {
 		return fmt.Errorf("failed to write file %s: %w", dest, err)
 	}
 	return nil

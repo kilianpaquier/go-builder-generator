@@ -3,5 +3,6 @@
 ignore:
   - "cmd"
   - "**/cobra"
+  - "**/examples"
   - "**/tests"
   - "**/testutils"

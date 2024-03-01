@@ -2,9 +2,11 @@ package success_with_options
 
 import "context"
 
-//go:generate ../../go-builder-generator generate -f types.go -s Options -d builders --use-validator
+//go:generate ../../go-builder-generator generate -f types.go -s Options,Empty -d builders --use-validator
 
 type Int64Alias int64
+
+type Empty struct{}
 
 type Options struct {
 	DefaultField              int64           `builder:"default=10"`
