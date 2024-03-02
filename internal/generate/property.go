@@ -4,11 +4,11 @@ import (
 	"errors"
 	"fmt"
 	"go/ast"
+	"slices"
 	"strings"
 
 	"github.com/fatih/structtag"
 	"github.com/huandu/xstrings"
-	"golang.org/x/exp/slices"
 
 	"github.com/kilianpaquier/go-builder-generator/internal/generate/models"
 	"github.com/kilianpaquier/go-builder-generator/internal/generate/prefixer"
