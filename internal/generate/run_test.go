@@ -35,6 +35,32 @@ func TestRun(t *testing.T) {
 		assert.NoDirExists(t, destdir)
 	})
 
+	t.Run("error_no_gomod", func(t *testing.T) {
+		// Arrange
+		src := filepath.Join(t.TempDir(), "no_gomod.go")
+		err := os.WriteFile(src, []byte(
+			`package no_gomod
+			type NoGomod struct {
+				Field string
+			}
+			`,
+		), filesystem.RwRR)
+		require.NoError(t, err)
+
+		destdir := filepath.Join(t.TempDir(), "builders")
+		options := generate.CLIOptions{
+			Destdir: destdir,
+			File:    src,
+			Structs: []string{"Invalid"},
+		}
+
+		// Act
+		err = generate.Run(options)
+
+		// Assert
+		assert.ErrorContains(t, err, "no go.mod found")
+	})
+
 	t.Run("error_invalid_tags", func(t *testing.T) {
 		// Arrange
 		destdir := filepath.Join(t.TempDir(), "builders")
@@ -157,6 +183,60 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.NoError(t, err)
+		filesystem_tests.AssertEqualDir(t, assertdir, destdir)
+	})
+
+	t.Run("success_pkg", func(t *testing.T) {
+		// Arrange
+		assertdir := filepath.Join(testdata, "success_pkg", "builders")
+		destdir := filepath.Join(t.TempDir(), "builders")
+
+		t.Run("std_error", func(t *testing.T) {
+			// Arrange
+			options := generate.CLIOptions{
+				Destdir: destdir,
+				File:    "~/.local/go/src/os/error.go",
+				Structs: []string{"SyscallError"},
+			}
+
+			// Act
+			err := generate.Run(options)
+
+			// Assert
+			require.NoError(t, err)
+		})
+
+		t.Run("std_database", func(t *testing.T) {
+			// Arrange
+			options := generate.CLIOptions{
+				Destdir: destdir,
+				File:    "~/.local/go/src/database/sql/sql.go",
+				Structs: []string{"NamedArg"},
+			}
+
+			// Act
+			err := generate.Run(options)
+
+			// Assert
+			require.NoError(t, err)
+		})
+
+		t.Run("go_pkg", func(t *testing.T) {
+			// Arrange
+			options := generate.CLIOptions{
+				Destdir: destdir,
+				File:    "~/go/pkg/mod/github.com/go-playground/validator/v10@v10.19.0/errors.go",
+				Structs: []string{"InvalidValidationError"},
+			}
+
+			// Act
+			err := generate.Run(options)
+
+			// Assert
+			require.NoError(t, err)
+		})
+
+		// Assert
 		filesystem_tests.AssertEqualDir(t, assertdir, destdir)
 	})
 

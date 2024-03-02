@@ -13,6 +13,25 @@ import (
 	"golang.org/x/mod/modfile"
 )
 
+func parseSrc(input string) (srcdir string, src string, err error) {
+	src = input
+
+	// handle home directory
+	if strings.HasPrefix(input, "~") {
+		home, _ := os.UserHomeDir()
+		src = filepath.Join(home, src[2:])
+	}
+
+	// retrieve source file full path
+	src, err = filepath.Abs(src)
+	if err != nil {
+		return "", "", fmt.Errorf("failed to retrieve full %s path: %w", input, err)
+	}
+	srcdir = filepath.Dir(src)
+
+	return srcdir, src, nil
+}
+
 // getImports returns the slice of imports associated to input ast file.
 //
 // If srcdir and destdir are different, it will search for the first go.mod in parent folders to retrieve the module name.
@@ -68,7 +87,10 @@ func findSourceImport(srcdir string, packages ...string) (string, error) {
 		return "", errors.New("invalid go.mod, module statement is missing")
 	}
 
-	packages = append(packages, file.Module.Mod.Path) // nolint:revive
+	if file.Module.Mod.Path != "std" { // specific exclusion for builtin
+		packages = append(packages, file.Module.Mod.Path) // nolint:revive
+	}
+
 	slices.Reverse(packages)
 	return strings.Join(packages, "/"), nil
 }
