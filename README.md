@@ -2,8 +2,8 @@
 
 - [How to use ?](#how-to-use-)
 - [Commands](#commands)
-  - [Generate](#generate)
-    - [Tags](#tags)
+	- [Generate](#generate)
+		- [Tags](#tags)
 
 ## How to use ?
 
@@ -53,14 +53,14 @@ Example:
 package pkg
 
 type StructName struct {
-		Pointer               *int64   `builder:"pointer"` // generated builder will be 'SetPointer(pointer *int64)'
-		NoPointer             *int64   // generated builder will be 'SetNoPointer(noPointer int64)'
-		ASlice                []string `builder:"append"` // generated builder will be 'SetASlice(aSlice ...string)', additionally the affectation will be `b.ASlice = append(b.ASlice, aSlice...)`
-		NoAppend              []string // generated builder will be 'SetASlice(noAppend []string)', additionally the affectation will be `b.NoAppend = noAppend`
-		Ignore                int64    `builder:"ignore"`                            // no builder will be generated on this field
-		DefaultFunc           int64    `builder:"default_func=SomeFuncName"`         // an additional function named 'SomeFuncName' will be generated in target package file '_impl.go' and associated to builder struct
-		IgnoreWithDefaultFunc int64    `builder:"ignore,default_func=SomeOtherFunc"` // no builder will be generated and the additional function will be generated
-		UseValidator          *string  `validate:"required"`                         // validator from go-playground (https://github.com/go-playground/validator) will be added to Build function to validate the whole struct (only if --use-validator argument is given)
+	Pointer               *int64   `builder:"pointer"` // generated builder will be 'SetPointer(pointer *int64)'
+	NoPointer             *int64   // generated builder will be 'SetNoPointer(noPointer int64)'
+	ASlice                []string `builder:"append"` // generated builder will be 'SetASlice(aSlice ...string)', additionally the affectation will be `b.ASlice = append(b.ASlice, aSlice...)`
+	NoAppend              []string // generated builder will be 'SetASlice(noAppend []string)', additionally the affectation will be `b.NoAppend = noAppend`
+	Ignore                int64    `builder:"ignore"`                            // no builder will be generated on this field
+	DefaultFunc           int64    `builder:"default_func=SomeFuncName"`         // an additional function named 'SomeFuncName' will be generated in target package file '_impl.go' and associated to builder struct
+	IgnoreWithDefaultFunc int64    `builder:"ignore,default_func=SomeOtherFunc"` // no builder will be generated and the additional function will be generated
+	UseValidator          *string  `validate:"required"`                         // validator from go-playground (https://github.com/go-playground/validator) will be added to Build function to validate the whole struct (only if --use-validator argument is given)
 }
 ```
 
