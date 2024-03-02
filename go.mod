@@ -6,10 +6,10 @@ require (
 	github.com/fatih/structtag v1.2.0
 	github.com/go-playground/validator/v10 v10.18.0
 	github.com/huandu/xstrings v1.4.0
-	github.com/kilianpaquier/filesystem v0.0.0-20240219113037-5c8632111ed7
+	github.com/kilianpaquier/filesystem v0.0.0-20240302124528-9cb3eb63b4f6
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.8.0
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 	golang.org/x/mod v0.15.0
 	golang.org/x/tools v0.18.0
 )
@@ -25,7 +25,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/sergi/go-diff v1.3.1 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	golang.org/x/crypto v0.19.0 // indirect
+	golang.org/x/crypto v0.20.0 // indirect
 	golang.org/x/net v0.21.0 // indirect
 	golang.org/x/sys v0.17.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
