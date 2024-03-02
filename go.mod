@@ -4,9 +4,9 @@ go 1.22
 
 require (
 	github.com/fatih/structtag v1.2.0
-	github.com/go-playground/validator/v10 v10.18.0
+	github.com/go-playground/validator/v10 v10.19.0
 	github.com/huandu/xstrings v1.4.0
-	github.com/kilianpaquier/filesystem v0.0.0-20240302124528-9cb3eb63b4f6
+	github.com/kilianpaquier/filesystem v0.0.0-20240302190559-f1d55dfaf07d
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.8.0
 	github.com/stretchr/testify v1.9.0
