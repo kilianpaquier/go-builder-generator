@@ -8,7 +8,9 @@ import (
 
 	"github.com/fatih/structtag"
 	"github.com/huandu/xstrings"
+	"golang.org/x/exp/slices"
 
+	"github.com/kilianpaquier/go-builder-generator/internal/generate/models"
 	"github.com/kilianpaquier/go-builder-generator/internal/generate/prefixer"
 )
 
@@ -77,12 +79,21 @@ func computeProperty(field *ast.Field, sourcePackage string) (property, error) {
 	}
 
 	paramName := func() string {
+		// transform into camel case then put first letter in lowercase
+		initial := xstrings.FirstRuneToLower(xstrings.ToCamelCase(name))
+
+		// handle builtin reserved keywords or functions
+		if slices.Contains(models.Builtin(), initial) {
+			return string(initial[0])
+		}
+
 		// for names full uppercase, change them to full lowercase
 		if strings.ToUpper(name) == name {
 			return strings.ToLower(name)
 		}
-		// for all other names, transform into camel case then put first letter in lowercase
-		return xstrings.FirstRuneToLower(xstrings.ToCamelCase(name))
+
+		// for all other names, keep initial value which is camelCase format
+		return initial
 	}()
 
 	// returning property with computed types and options
