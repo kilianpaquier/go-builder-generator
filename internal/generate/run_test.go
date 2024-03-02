@@ -160,6 +160,24 @@ func TestRun(t *testing.T) {
 		filesystem_tests.AssertEqualDir(t, assertdir, destdir)
 	})
 
+	t.Run("success_root_gomod", func(t *testing.T) {
+		// Arrange
+		assertdir := filepath.Join(testdata, "success_root_gomod", "builders")
+		destdir := filepath.Join(t.TempDir(), "builders")
+		options := generate.CLIOptions{
+			Destdir: destdir,
+			File:    filepath.Join(testdata, "success_root_gomod", "types.go"),
+			Structs: []string{"RootType"},
+		}
+
+		// Act
+		err := generate.Run(options)
+
+		// Assert
+		assert.NoError(t, err)
+		filesystem_tests.AssertEqualDir(t, assertdir, destdir)
+	})
+
 	t.Run("success_same_package", func(t *testing.T) {
 		// Arrange
 		tmp := t.TempDir()

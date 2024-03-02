@@ -43,13 +43,17 @@ func getImports(file *ast.File, srcdir, destdir string) ([]string, error) {
 // findSourceImport iterates over itself with input src package name to find the full package import path.
 //
 // Main purpose is to find the first parent go.mod and retrieve its module name to concatenate it with input src string.
-func findSourceImport(src string, packages ...string) (string, error) {
-	dir := filepath.Dir(src)
-	gomod := filepath.Join(dir, "go.mod")
+func findSourceImport(srcdir string, packages ...string) (string, error) {
+	gomod := filepath.Join(srcdir, "go.mod")
 
-	packages = append(packages, filepath.Base(src)) // nolint:revive
+	// go through parent directory to find go.mod in case it doesn't exist in current directory
 	if !filesystem.Exists(gomod) {
-		return findSourceImport(dir, packages...)
+		if slices.Contains([]string{".", "/"}, srcdir) {
+			return "", errors.New("no go.mod found")
+		}
+
+		packages := append(packages, filepath.Base(srcdir)) // nolint:revive
+		return findSourceImport(filepath.Dir(srcdir), packages...)
 	}
 
 	bytes, err := os.ReadFile(gomod)
