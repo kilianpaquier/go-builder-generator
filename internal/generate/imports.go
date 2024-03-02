@@ -13,23 +13,23 @@ import (
 	"golang.org/x/mod/modfile"
 )
 
-func parseSrc(input string) (srcdir string, src string, err error) {
-	src = input
+// parseSrc parses the input src and returns its absolute path.
+func parseSrc(src string) (string, error) {
+	file := src
 
 	// handle home directory
-	if strings.HasPrefix(input, "~") {
+	if strings.HasPrefix(file, "~") {
 		home, _ := os.UserHomeDir()
-		src = filepath.Join(home, src[2:])
+		file = filepath.Join(home, file[2:])
 	}
 
-	// retrieve source file full path
-	src, err = filepath.Abs(src)
+	// retrieve source file absolute path
+	file, err := filepath.Abs(file)
 	if err != nil {
-		return "", "", fmt.Errorf("failed to retrieve full %s path: %w", input, err)
+		return "", fmt.Errorf("failed to retrieve absolute '%s' path: %w", file, err)
 	}
-	srcdir = filepath.Dir(src)
 
-	return srcdir, src, nil
+	return file, nil
 }
 
 // getImports returns the slice of imports associated to input ast file.
@@ -63,6 +63,7 @@ func getImports(file *ast.File, srcdir, destdir string) ([]string, error) {
 //
 // Main purpose is to find the first parent go.mod and retrieve its module name to concatenate it with input src string.
 func findSourceImport(srcdir string, packages ...string) (string, error) {
+	imports := packages
 	gomod := filepath.Join(srcdir, "go.mod")
 
 	// go through parent directory to find go.mod in case it doesn't exist in current directory
@@ -71,8 +72,8 @@ func findSourceImport(srcdir string, packages ...string) (string, error) {
 			return "", errors.New("no go.mod found")
 		}
 
-		packages := append(packages, filepath.Base(srcdir)) // nolint:revive
-		return findSourceImport(filepath.Dir(srcdir), packages...)
+		imports := append(imports, filepath.Base(srcdir))
+		return findSourceImport(filepath.Dir(srcdir), imports...)
 	}
 
 	bytes, err := os.ReadFile(gomod)
@@ -88,9 +89,9 @@ func findSourceImport(srcdir string, packages ...string) (string, error) {
 	}
 
 	if file.Module.Mod.Path != "std" { // specific exclusion for builtin
-		packages = append(packages, file.Module.Mod.Path) // nolint:revive
+		imports = append(imports, file.Module.Mod.Path)
 	}
 
-	slices.Reverse(packages)
-	return strings.Join(packages, "/"), nil
+	slices.Reverse(imports)
+	return strings.Join(imports, "/"), nil
 }

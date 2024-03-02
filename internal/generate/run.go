@@ -19,13 +19,14 @@ func Run(options CLIOptions) error {
 	// retrieve destination full path
 	destdir, err := filepath.Abs(options.Destdir)
 	if err != nil {
-		return fmt.Errorf("failed to retrieve full %s path: %w", options.Destdir, err)
+		return fmt.Errorf("failed to retrieve absolute '%s' path: %w", options.Destdir, err)
 	}
 
-	srcdir, src, err := parseSrc(options.File)
+	src, err := parseSrc(options.File)
 	if err != nil {
 		return err // error wrapping is handled in parseSrc function
 	}
+	srcdir := filepath.Dir(src)
 
 	// parse source file as ast to retrieve golang code
 	file, err := parser.ParseFile(token.NewFileSet(), src, nil, parser.SkipObjectResolution)
