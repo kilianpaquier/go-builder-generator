@@ -69,7 +69,15 @@ jobs:
           args: --config .golangci.yml --timeout 240s --fast --sort-results --out-format colored-line-number
 
   go-test:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+    runs-on: ${{ matrix.os }}
+    env:
+      GOPATH: ${{ github.workspace }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
