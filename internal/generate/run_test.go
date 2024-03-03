@@ -7,6 +7,7 @@ import (
 
 	filesystem "github.com/kilianpaquier/filesystem/pkg"
 	filesystem_tests "github.com/kilianpaquier/filesystem/pkg/tests"
+	"github.com/sergi/go-diff/diffmatchpatch"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -16,6 +17,11 @@ import (
 func TestRun(t *testing.T) {
 	pwd, _ := os.Getwd()
 	testdata := filepath.Join(pwd, "..", "..", "testdata")
+
+	// ignore windows and linux differences
+	ignore := func(_ string, item diffmatchpatch.Diff) bool {
+		return item.Text == "\r"
+	}
 
 	t.Run("error_no_file", func(t *testing.T) {
 		// Arrange
@@ -31,8 +37,33 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.ErrorContains(t, err, "failed to parse")
-		assert.ErrorContains(t, err, "no such file or directory")
 		assert.NoDirExists(t, destdir)
+	})
+
+	t.Run("error_no_gomod", func(t *testing.T) {
+		// Arrange
+		src := filepath.Join(t.TempDir(), "no_gomod.go")
+		err := os.WriteFile(src, []byte(
+			`package no_gomod
+			type NoGomod struct {
+				Field string
+			}
+			`,
+		), filesystem.RwRR)
+		require.NoError(t, err)
+
+		destdir := filepath.Join(t.TempDir(), "builders")
+		options := generate.CLIOptions{
+			Destdir: destdir,
+			File:    src,
+			Structs: []string{"Invalid"},
+		}
+
+		// Act
+		err = generate.Run(options)
+
+		// Assert
+		assert.ErrorContains(t, err, "no go.mod found")
 	})
 
 	t.Run("error_invalid_tags", func(t *testing.T) {
@@ -67,7 +98,7 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.NoError(t, err)
-		filesystem_tests.AssertEqualDir(t, assertdir, destdir)
+		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
 	})
 
 	t.Run("success_export", func(t *testing.T) {
@@ -85,7 +116,7 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.NoError(t, err)
-		filesystem_tests.AssertEqualDir(t, assertdir, destdir)
+		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
 	})
 
 	t.Run("success_funcs", func(t *testing.T) {
@@ -103,7 +134,7 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.NoError(t, err)
-		filesystem_tests.AssertEqualDir(t, assertdir, destdir)
+		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
 	})
 
 	t.Run("success_interface", func(t *testing.T) {
@@ -121,7 +152,7 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.NoError(t, err)
-		filesystem_tests.AssertEqualDir(t, assertdir, destdir)
+		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
 	})
 
 	t.Run("success_maps", func(t *testing.T) {
@@ -139,7 +170,7 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.NoError(t, err)
-		filesystem_tests.AssertEqualDir(t, assertdir, destdir)
+		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
 	})
 
 	t.Run("success_naming", func(t *testing.T) {
@@ -157,22 +188,60 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.NoError(t, err)
-		filesystem_tests.AssertEqualDir(t, assertdir, destdir)
+		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
+	})
+
+	t.Run("success_pkg", func(t *testing.T) {
+		// Arrange
+		assertdir := filepath.Join(testdata, "success_pkg", "builders")
+		destdir := filepath.Join(t.TempDir(), "builders")
+		options := generate.CLIOptions{
+			Destdir: destdir,
+			File:    "git::github.com/go-playground/validator/errors.go?ref=master",
+			Structs: []string{"InvalidValidationError"},
+		}
+
+		// Act
+		err := generate.Run(options)
+
+		// Assert
+		require.NoError(t, err)
+
+		// Assert
+		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
+	})
+
+	t.Run("success_root_gomod", func(t *testing.T) {
+		// Arrange
+		assertdir := filepath.Join(testdata, "success_root_gomod", "builders")
+		destdir := filepath.Join(t.TempDir(), "builders")
+		options := generate.CLIOptions{
+			Destdir: destdir,
+			File:    filepath.Join(testdata, "success_root_gomod", "types.go"),
+			Structs: []string{"RootType"},
+		}
+
+		// Act
+		err := generate.Run(options)
+
+		// Assert
+		assert.NoError(t, err)
+		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
 	})
 
 	t.Run("success_same_package", func(t *testing.T) {
 		// Arrange
-		tmp := t.TempDir()
+		destdir := t.TempDir()
 		assertdir := filepath.Join(testdata, "success_same_package")
 
 		src := filepath.Join(testdata, "success_same_package", "types.go")
-		dest := filepath.Join(tmp, "types.go")
+		dest := filepath.Join(destdir, "types.go")
 
 		err := filesystem.CopyFile(src, dest)
 		require.NoError(t, err)
 
 		options := generate.CLIOptions{
-			Destdir: tmp,
+			Destdir: destdir,
 			File:    dest,
 			Structs: []string{"SamePackage"},
 		}
@@ -182,7 +251,7 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.NoError(t, err)
-		filesystem_tests.AssertEqualDir(t, assertdir, tmp)
+		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
 	})
 
 	t.Run("success_slices", func(t *testing.T) {
@@ -200,7 +269,7 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.NoError(t, err)
-		filesystem_tests.AssertEqualDir(t, assertdir, destdir)
+		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
 	})
 
 	t.Run("success_struct", func(t *testing.T) {
@@ -218,7 +287,7 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.NoError(t, err)
-		filesystem_tests.AssertEqualDir(t, assertdir, destdir)
+		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
 	})
 
 	t.Run("success_with_options", func(t *testing.T) {
@@ -237,6 +306,6 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.NoError(t, err)
-		filesystem_tests.AssertEqualDir(t, assertdir, destdir)
+		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
 	})
 }

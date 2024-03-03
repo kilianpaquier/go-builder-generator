@@ -140,21 +140,21 @@ func generateAny(tmplName string, dest string, data any) error {
 		return fmt.Errorf("failed to apply template %s: %w", tmplName, err)
 	}
 
+	writeFile := func(bytes []byte) error {
+		if err := os.WriteFile(dest, bytes, filesystem.RwRR); err != nil {
+			return fmt.Errorf("failed to write file %s: %w", dest, err)
+		}
+		return nil
+	}
+
 	// optimize file imports
 	bytes := []byte(content.String())
 	formatted, err := imports.Process(dest, bytes, nil)
 	if err != nil {
 		// also write file when imports optimization failed
 		// better for debugging
-		if err := os.WriteFile(dest, bytes, filesystem.RwRR); err != nil {
-			return fmt.Errorf("failed to write file %s: %w", dest, err)
-		}
-		return fmt.Errorf("generated go file %s is incorrect: %w", dest, err)
+		_ = writeFile(bytes)
+		return fmt.Errorf("generated builder '%s' is incorrect: %w", dest, err)
 	}
-
-	// write file
-	if err := os.WriteFile(dest, formatted, filesystem.RwRR); err != nil {
-		return fmt.Errorf("failed to write file %s: %w", dest, err)
-	}
-	return nil
+	return writeFile(formatted)
 }

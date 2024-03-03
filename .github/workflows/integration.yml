@@ -69,19 +69,32 @@ jobs:
           args: --config .golangci.yml --timeout 240s --fast --sort-results --out-format colored-line-number
 
   go-test:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - on: macos-latest
+            args: CGO_ENABLED="0"
+          - on: ubuntu-latest
+            args: CGO_ENABLED="0"
+          - on: windows-latest
+            args: env CGO_ENABLED="0"
+    runs-on: ${{ matrix.os.on }}
+    env:
+      OS: ${{ matrix.os.on }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
           token: ${{ secrets.GITHUB_TOKEN }}
-      - run: CGO_ENABLED="0" go test ./... -coverpkg=./... -covermode=count -coverprofile=coverage.out
+      - run: ${{ matrix.os.args }} go test ./... -coverpkg="./..." -covermode="count" -coverprofile="coverage.out"
       - uses: codecov/codecov-action@v4
         if: ${{ ! startsWith(github.ref_name, 'dependabot') }} # ignore codecov on dependabot branches
         with:
           codecov_yml_path: codecov.yml
           disable_search: true
+          env_vars: OS
           fail_ci_if_error: true
           file: coverage.out
           slug: ${{ github.repository }}
