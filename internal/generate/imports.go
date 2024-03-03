@@ -4,23 +4,49 @@ import (
 	"errors"
 	"fmt"
 	"go/ast"
+	"net/url"
 	"os"
+	"path"
 	"path/filepath"
 	"slices"
 	"strings"
 
+	"github.com/hashicorp/go-getter"
 	filesystem "github.com/kilianpaquier/filesystem/pkg"
+	"github.com/samber/lo"
 	"golang.org/x/mod/modfile"
 )
+
+const git = "git::"
 
 // parseSrc parses the input src and returns its absolute path.
 func parseSrc(src string) (string, error) {
 	file := src
 
-	// handle home directory
+	// handle home relative paths
 	if strings.HasPrefix(file, "~") {
 		home, _ := os.UserHomeDir()
-		file = filepath.Join(home, file[2:])
+		file = filepath.Join(home, file[1:])
+	}
+
+	// handle git repositories files
+	if strings.HasPrefix(file, git) {
+		u := strings.TrimPrefix(file, git)
+
+		// parse file as URL since it's a remote file
+		initial, err := url.Parse(u)
+		if err != nil {
+			return "", fmt.Errorf("failed to parse url '%s': %w", file, err)
+		}
+		remote, _ := url.Parse(initial.String()) // ignoring error since it's sure initial is an URL
+		remote.Path = path.Dir(remote.Path)      // remove filename from URL
+
+		// download remote git repository into temporary dir update file to read
+		destdir := filepath.Join(os.TempDir(), remote.Path)
+		if err := getter.Get(destdir, git+remote.String()); err != nil {
+			return "", fmt.Errorf("failed to download git repository '%s': %w", remote.String(), err)
+		}
+		file = filepath.Join(destdir, filepath.Base(initial.Path))
 	}
 
 	// retrieve source file absolute path
@@ -28,7 +54,6 @@ func parseSrc(src string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("failed to retrieve absolute '%s' path: %w", file, err)
 	}
-
 	return file, nil
 }
 
@@ -68,30 +93,25 @@ func findSourceImport(srcdir string, packages ...string) (string, error) {
 
 	// go through parent directory to find go.mod in case it doesn't exist in current directory
 	if !filesystem.Exists(gomod) {
-		if slices.Contains([]string{".", "/"}, srcdir) {
+		// handle root directory -> VolumeName (e.g "C:") + os.PathSeparator
+		if srcdir == filepath.VolumeName(srcdir)+string(os.PathSeparator) {
 			return "", errors.New("no go.mod found")
 		}
-
 		imports := append(imports, filepath.Base(srcdir))
 		return findSourceImport(filepath.Dir(srcdir), imports...)
 	}
+	bytes, _ := os.ReadFile(gomod) // don't need to handle error since file exists
 
-	bytes, err := os.ReadFile(gomod)
-	if err != nil {
-		return "", fmt.Errorf("failed to read go.mod: %w", err)
-	}
 	file, err := modfile.Parse(gomod, bytes, nil)
 	if err != nil {
-		return "", fmt.Errorf("failed to parse go.mod: %w", err)
+		return "", fmt.Errorf("failed to parse go.mod '%s': %w", gomod, err)
 	}
-	if file.Module == nil {
-		return "", errors.New("invalid go.mod, module statement is missing")
-	}
+	module := lo.FromPtr(file.Module)
 
-	if file.Module.Mod.Path != "std" { // specific exclusion for builtin
-		imports = append(imports, file.Module.Mod.Path)
+	// specific exclusion for builtin
+	if module.Mod.Path != "std" {
+		imports = append(imports, module.Mod.Path)
 	}
-
 	slices.Reverse(imports)
 	return strings.Join(imports, "/"), nil
 }
