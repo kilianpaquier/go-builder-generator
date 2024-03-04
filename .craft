@@ -1,10 +1,10 @@
+ci:
+  name: github
+  options:
+    - codecov
+    - dependabot
 license: mit
-ci: github
 maintainers:
-    - url: kilianpaquier.com
-      name: kilianpaquier
-codecov: true
-dependabot: true
-no_api: true
+  - url: kilianpaquier.com
+    name: kilianpaquier
 no_chart: true
-no_dockerfile: true

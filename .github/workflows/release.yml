@@ -5,6 +5,11 @@ run-name: Release
 
 on:
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Dry run
+        type: boolean
+        default: false
 
 jobs:
 
@@ -72,17 +77,16 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: executables
+          # order is important to filter unwanted globs after the filter or desired globs
           path: |
+            dist/*
             !dist/*.json
             !dist/*.yaml
             !dist/*/
-            checksums.txt
-            dist/*
           retention-days: 1
 
   release:
     runs-on: ubuntu-latest
-    environment: release
     if: github.ref_protected == true
     permissions:
       contents: write
@@ -113,6 +117,7 @@ jobs:
             @semantic-release/release-notes-generator
             conventional-changelog-conventionalcommits
             semantic-release-license
+          dry_run: ${{ inputs.dry_run }}
           tag_format: v${version}
           branches: |
             [

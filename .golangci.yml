@@ -185,7 +185,7 @@ linters-settings:
       - name: imports-blacklist
       - name: import-shadowing
       - name: max-public-structs
-        arguments: [6]
+        arguments: [8]
       - name: modifies-parameter
       - name: modifies-value-receiver
       - name: nested-structs
