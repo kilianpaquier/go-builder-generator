@@ -6,8 +6,7 @@ import (
 	"testing"
 
 	filesystem "github.com/kilianpaquier/filesystem/pkg"
-	filesystem_tests "github.com/kilianpaquier/filesystem/pkg/tests"
-	"github.com/sergi/go-diff/diffmatchpatch"
+	testfs "github.com/kilianpaquier/filesystem/pkg/tests"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -17,11 +16,6 @@ import (
 func TestRun(t *testing.T) {
 	pwd, _ := os.Getwd()
 	testdata := filepath.Join(pwd, "..", "..", "testdata")
-
-	// ignore windows and linux differences
-	ignore := func(_ string, item diffmatchpatch.Diff) bool {
-		return item.Text == "\r"
-	}
 
 	t.Run("error_no_file", func(t *testing.T) {
 		// Arrange
@@ -98,7 +92,7 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.NoError(t, err)
-		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
+		testfs.AssertEqualDir(t, assertdir, destdir)
 	})
 
 	t.Run("success_export", func(t *testing.T) {
@@ -116,7 +110,7 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.NoError(t, err)
-		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
+		testfs.AssertEqualDir(t, assertdir, destdir)
 	})
 
 	t.Run("success_funcs", func(t *testing.T) {
@@ -134,7 +128,7 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.NoError(t, err)
-		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
+		testfs.AssertEqualDir(t, assertdir, destdir)
 	})
 
 	t.Run("success_interface", func(t *testing.T) {
@@ -152,7 +146,7 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.NoError(t, err)
-		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
+		testfs.AssertEqualDir(t, assertdir, destdir)
 	})
 
 	t.Run("success_maps", func(t *testing.T) {
@@ -170,7 +164,7 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.NoError(t, err)
-		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
+		testfs.AssertEqualDir(t, assertdir, destdir)
 	})
 
 	t.Run("success_naming", func(t *testing.T) {
@@ -188,7 +182,7 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.NoError(t, err)
-		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
+		testfs.AssertEqualDir(t, assertdir, destdir)
 	})
 
 	t.Run("success_pkg", func(t *testing.T) {
@@ -208,7 +202,7 @@ func TestRun(t *testing.T) {
 		require.NoError(t, err)
 
 		// Assert
-		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
+		testfs.AssertEqualDir(t, assertdir, destdir)
 	})
 
 	t.Run("success_root_gomod", func(t *testing.T) {
@@ -226,7 +220,7 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.NoError(t, err)
-		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
+		testfs.AssertEqualDir(t, assertdir, destdir)
 	})
 
 	t.Run("success_same_package", func(t *testing.T) {
@@ -251,7 +245,7 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.NoError(t, err)
-		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
+		testfs.AssertEqualDir(t, assertdir, destdir)
 	})
 
 	t.Run("success_slices", func(t *testing.T) {
@@ -269,7 +263,7 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.NoError(t, err)
-		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
+		testfs.AssertEqualDir(t, assertdir, destdir)
 	})
 
 	t.Run("success_struct", func(t *testing.T) {
@@ -287,7 +281,7 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.NoError(t, err)
-		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
+		testfs.AssertEqualDir(t, assertdir, destdir)
 	})
 
 	t.Run("success_with_options", func(t *testing.T) {
@@ -306,6 +300,6 @@ func TestRun(t *testing.T) {
 
 		// Assert
 		assert.NoError(t, err)
-		filesystem_tests.AssertEqualDir(t, assertdir, destdir, filesystem_tests.WithIgnoreDiff(ignore))
+		testfs.AssertEqualDir(t, assertdir, destdir)
 	})
 }
