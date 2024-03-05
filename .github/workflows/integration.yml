@@ -51,7 +51,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - run: ${{ matrix.os.args }} go test ./... -coverpkg="./..." -covermode="count" -coverprofile="coverage.out"
       - uses: codecov/codecov-action@v4
-        if: ${{ ! startsWith(github.ref_name, 'dependabot') }} # ignore codecov on dependabot branches
+        if: ${{ ! startsWith(github.base_ref, 'dependabot') }} # ignore codecov on dependabot branches
         with:
           codecov_yml_path: codecov.yml
           disable_search: true
