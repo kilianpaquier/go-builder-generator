@@ -24,6 +24,7 @@ dist
 go.work
 
 # reports
+reports/
 *.json
 *.xml
 
