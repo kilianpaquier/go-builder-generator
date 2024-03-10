@@ -10,50 +10,62 @@ on:
       - main
       - staging
       - develop
-      - v[0-9]+.x
-      - v[0-9]+.[0-9]+.x
+      - v[0-9]+
   workflow_dispatch:
 
 jobs:
 
+  go-vulncheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: golang/govulncheck-action@v1
+        with:
+          check-latest: true
+          go-package: ./...
+          go-version-file: go.mod
+
   go-lint:
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
           cache: false
+          check-latest: true
           go-version-file: go.mod
           token: ${{ secrets.GITHUB_TOKEN }}
       - uses: golangci/golangci-lint-action@v4
         with:
-          args: --config .golangci.yml --timeout 240s --fast --sort-results --out-format colored-line-number
+          args: --config build/ci/.golangci.yml --timeout 240s --fast --sort-results --out-format colored-line-number
 
   go-test:
     strategy:
       fail-fast: false
       matrix:
-        os:
-          - on: macos-latest
+        include:
+          - os: macos-latest
             args: CGO_ENABLED="0"
-          - on: ubuntu-latest
+          - os: ubuntu-latest
             args: CGO_ENABLED="0"
-          - on: windows-latest
+          - os: windows-latest
             args: env CGO_ENABLED="0"
-    runs-on: ${{ matrix.os.on }}
+    runs-on: ${{ matrix.os }}
     env:
-      OS: ${{ matrix.os.on }}
+      OS: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
+          check-latest: true
           go-version-file: go.mod
           token: ${{ secrets.GITHUB_TOKEN }}
-      - run: ${{ matrix.os.args }} go test ./... -coverpkg="./..." -covermode="count" -coverprofile="coverage.out"
+      - run: ${{ matrix.args }} go test ./... -coverpkg="./..." -covermode="count" -coverprofile="coverage.out"
       - uses: codecov/codecov-action@v4
         if: ${{ ! startsWith(github.base_ref, 'dependabot') }} # ignore codecov on dependabot branches
         with:
-          codecov_yml_path: codecov.yml
+          codecov_yml_path: build/ci/codecov.yml
           disable_search: true
           env_vars: OS
           fail_ci_if_error: true

@@ -48,7 +48,8 @@ plugins:
     - assets:
         - { path: CHANGELOG.md, label: CHANGELOG.md }
         - { path: checksums.txt }
-        - { path: dist/* }
-      failComment: false,
+        - { path: dist }
+      failComment: true
+      failTitle: false
       successComment: 🎉 This issue has been resolved in version v${nextRelease.version} 🎉
   - "@semantic-release/exec"
