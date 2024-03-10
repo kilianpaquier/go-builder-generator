@@ -65,7 +65,7 @@ jobs:
       - uses: codecov/codecov-action@v4
         if: ${{ ! startsWith(github.base_ref, 'dependabot') }} # ignore codecov on dependabot branches
         with:
-          codecov_yml_path: build/ci/codecov.yml
+          codecov_yml_path: codecov.yml
           disable_search: true
           env_vars: OS
           fail_ci_if_error: true
