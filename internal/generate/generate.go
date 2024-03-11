@@ -13,6 +13,7 @@ import (
 	"text/template"
 
 	"github.com/huandu/xstrings"
+	filesystem "github.com/kilianpaquier/filesystem/pkg"
 	"golang.org/x/tools/imports"
 )
 
@@ -105,7 +106,7 @@ func generateStruct(builder genBuilder, fields []*ast.Field, destdir string) (*i
 	}
 
 	// create destination directory
-	if err := os.MkdirAll(destdir, 0o755); err != nil && !os.IsExist(err) {
+	if err := os.MkdirAll(destdir, filesystem.RwxRxRxRx); err != nil && !os.IsExist(err) {
 		return nil, fmt.Errorf("failed to create %s: %w", destdir, err)
 	}
 
@@ -140,7 +141,7 @@ func generateAny(tmplName string, dest string, data any) error {
 	}
 
 	writeFile := func(bytes []byte) error {
-		if err := os.WriteFile(dest, bytes, 0o644); err != nil {
+		if err := os.WriteFile(dest, bytes, filesystem.RwRR); err != nil {
 			return fmt.Errorf("failed to write file %s: %w", dest, err)
 		}
 		return nil

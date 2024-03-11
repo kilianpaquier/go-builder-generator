@@ -6,8 +6,9 @@ import (
 	"fmt"
 	"go/parser"
 	"go/token"
-	"os"
 	"path/filepath"
+
+	filesystem "github.com/kilianpaquier/filesystem/pkg"
 )
 
 //go:embed all:templates
@@ -60,9 +61,9 @@ func Run(options CLIOptions) error {
 		errs = append(errs, err)
 	}
 
-	// generate implementation file
+	// generate implementation file$
 	dest := filepath.Join(destdir, "builders_impl.go")
-	if _, err := os.Stat(dest); err != nil && len(builders) > 0 {
+	if len(builders) > 0 && !filesystem.Exists(dest) {
 		impl := &implData{
 			Builders:    builders,
 			DestPackage: filepath.Base(destdir),

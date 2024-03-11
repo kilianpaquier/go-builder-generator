@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/hashicorp/go-getter"
+	filesystem "github.com/kilianpaquier/filesystem/pkg"
 	"github.com/samber/lo"
 	"golang.org/x/mod/modfile"
 )
@@ -91,11 +92,7 @@ func findSourceImport(srcdir string, packages ...string) (string, error) {
 	gomod := filepath.Join(srcdir, "go.mod")
 
 	// go through parent directory to find go.mod in case it doesn't exist in current directory
-	if _, err := os.Stat(gomod); err != nil {
-		if !os.IsNotExist(err) {
-			return "", fmt.Errorf("go.mod seems to exist but is not readable: %w", err)
-		}
-
+	if !filesystem.Exists(gomod) {
 		// handle root directory -> VolumeName (e.g "C:") + os.PathSeparator
 		if srcdir == filepath.VolumeName(srcdir)+string(os.PathSeparator) {
 			return "", errors.New("no go.mod found")
