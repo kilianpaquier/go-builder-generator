@@ -74,7 +74,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - uses: goreleaser/goreleaser-action@v5
         with:
-          args: release --clean --config build/ci/.goreleaser.yml --skip=validate --skip=announce --skip=publish --snapshot
+          args: release --clean --config .goreleaser.yml --skip=validate --skip=announce --skip=publish --snapshot
         env:
           VERSION: ${{ needs.version.outputs.version }}
       - uses: actions/upload-artifact@v4
