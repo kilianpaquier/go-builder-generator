@@ -5,7 +5,6 @@ import (
 	"path/filepath"
 	"testing"
 
-	filesystem "github.com/kilianpaquier/filesystem/pkg"
 	testfs "github.com/kilianpaquier/filesystem/pkg/tests"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -43,7 +42,7 @@ func TestRun(t *testing.T) {
 				Field string
 			}
 			`,
-		), filesystem.RwRR)
+		), 0o644)
 		require.NoError(t, err)
 
 		destdir := filepath.Join(t.TempDir(), "builders")
@@ -231,8 +230,7 @@ func TestRun(t *testing.T) {
 		src := filepath.Join(testdata, "success_same_package", "types.go")
 		dest := filepath.Join(destdir, "types.go")
 
-		err := filesystem.CopyFile(src, dest)
-		require.NoError(t, err)
+		require.NoError(t, os.Link(src, dest))
 
 		options := generate.CLIOptions{
 			Destdir: destdir,
@@ -241,7 +239,7 @@ func TestRun(t *testing.T) {
 		}
 
 		// Act
-		err = generate.Run(options)
+		err := generate.Run(options)
 
 		// Assert
 		assert.NoError(t, err)

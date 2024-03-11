@@ -281,6 +281,7 @@ issues:
     # - EXC0015 # should have a package comment
   exclude:
     - G303 # file creation in shared tmp directory without using os.CreateTemp
+    - G306 # Expect WriteFile permissions to be 0600 or less
     - ST1003 # already covered by revive var-naming linter (package naming constraints)
   exclude-rules:
     # disable funlen for all _test.go files
