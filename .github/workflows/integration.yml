@@ -5,6 +5,11 @@ run-name: Integration
 
 on:
   pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
   push:
     branches:
       - main
@@ -15,8 +20,20 @@ on:
 
 jobs:
 
-  go-vulncheck:
+  run-workflow:
+    name: Run Workflow
     runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'pull_request' || (github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.ref_protected != true) }}
+    outputs:
+      skip: ${{ steps.skip.outputs.skip }}
+    steps:
+      - id: skip
+        run: echo "Running workflow" && echo "skip=false" >> $GITHUB_OUTPUT
+
+  go-vulncheck:
+    name: Go Vulnerability Check
+    runs-on: ubuntu-latest
+    needs: run-workflow
     steps:
       - uses: golang/govulncheck-action@v1
         with:
@@ -25,7 +42,9 @@ jobs:
           go-version-file: go.mod
 
   go-lint:
+    name: Go Lint
     runs-on: ubuntu-latest
+    needs: run-workflow
     permissions:
       checks: write
     steps:
@@ -36,22 +55,22 @@ jobs:
           check-latest: true
           go-version-file: go.mod
           token: ${{ secrets.GITHUB_TOKEN }}
+      - run: mkdir -p reports/
       - uses: golangci/golangci-lint-action@v4
         with:
-          args: --config .golangci.yml --timeout 240s --fast --sort-results --out-format colored-line-number
+          args: --config .golangci.yml --timeout 240s --fast --sort-results --out-format checkstyle:reports/go-ci-lint.checkstyle.xml,colored-line-number
 
   go-test:
+    name: Go Test
+    runs-on: ${{ matrix.os }}
+    needs: run-workflow
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - os: macos-latest
-            args: CGO_ENABLED="0"
-          - os: ubuntu-latest
-            args: CGO_ENABLED="0"
-          - os: windows-latest
-            args: env CGO_ENABLED="0"
-    runs-on: ${{ matrix.os }}
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
     env:
       OS: ${{ matrix.os }}
     steps:
@@ -61,14 +80,28 @@ jobs:
           check-latest: true
           go-version-file: go.mod
           token: ${{ secrets.GITHUB_TOKEN }}
-      - run: ${{ matrix.args }} go test ./... -coverpkg="./..." -covermode="count" -coverprofile="coverage.out"
+      - run: mkdir -p reports/
+      - run: go test ./... -coverpkg="./..." -covermode="count" -coverprofile="reports/go-coverage.native.out"
       - uses: codecov/codecov-action@v4
-        if: ${{ ! startsWith(github.base_ref, 'dependabot') }} # ignore codecov on dependabot branches
+        if: ${{ ! startsWith(github.head_ref, 'dependabot') }} # ignore codecov on dependabot branches
         with:
           codecov_yml_path: .codecov.yml
           disable_search: true
           env_vars: OS
           fail_ci_if_error: true
-          file: coverage.out
+          file: reports/go-coverage.native.out
           slug: ${{ github.repository }}
           token: ${{ secrets.CODECOV_TOKEN }}
+
+  workflow-result:
+    name: Workflow Result
+    runs-on: ubuntu-latest
+    if: ${{ needs.run-workflow.outputs.skip == 'false' && ! cancelled() }}
+    needs:
+      - run-workflow
+      - go-vulncheck
+      - go-lint
+      - go-test
+    steps:
+      - run: exit 1
+        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') || contains(needs.*.result, 'skipped') }}
