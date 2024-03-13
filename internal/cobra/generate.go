@@ -48,4 +48,8 @@ func init() {
 	// validate func flag
 	generateCmd.Flags().StringVar(&generateOpts.ValidateFunc, "validate-func", "",
 		"validate function name to be executed in Build, must have the signature 'func () error' and associated to built struct")
+
+	// setter prefix flag
+	generateCmd.Flags().StringVarP(&generateOpts.SetterPrefix, "prefix", "p", "",
+		"specific prefix to apply on setter functions")
 }

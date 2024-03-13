@@ -6,8 +6,10 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_export"
 )
 
-// ExportBuilder is an alias of Export to build Export with builder-pattern.
-type ExportBuilder success_export.Export
+// ExportBuilder represents the builder of Export to build Export with builder-pattern.
+type ExportBuilder struct {
+	build success_export.Export
+}
 
 // NewExportBuilder creates a new ExportBuilder.
 func NewExportBuilder() *ExportBuilder {
@@ -16,19 +18,17 @@ func NewExportBuilder() *ExportBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *ExportBuilder) Copy() *ExportBuilder {
-	result := *b
-	return &result
+	return &ExportBuilder{b.build}
 }
 
 // Build returns built Export.
 func (b *ExportBuilder) Build() *success_export.Export {
-
-	result := (success_export.Export)(*b)
-	return &result
+	result := &b.build
+	return result
 }
 
-// SetInt64Alias sets Export's Int64Alias.
-func (b *ExportBuilder) SetInt64Alias(int64Alias success_export.Int64Alias) *ExportBuilder {
-	b.Int64Alias = int64Alias
+// Int64Alias sets Export's Int64Alias.
+func (b *ExportBuilder) Int64Alias(int64Alias success_export.Int64Alias) *ExportBuilder {
+	b.build.Int64Alias = int64Alias
 	return b
 }

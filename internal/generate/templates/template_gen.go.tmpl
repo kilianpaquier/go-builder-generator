@@ -18,8 +18,10 @@ import (
 {{- $fullname = print .SourcePackage "." .Name }}
 {{- end }}
 
-// {{ $builder }} is an alias of {{ .Name }} to build {{ .Name }} with builder-pattern.
-type {{ $builder }} {{ $fullname }}
+// {{ $builder }} represents the builder of {{ .Name }} to build {{ .Name }} with builder-pattern.
+type {{ $builder }} struct {
+    build {{ $fullname }}
+}
 
 // New{{ $builder }} creates a new {{ $builder }}.
 func New{{ $builder }}() *{{ $builder }} {
@@ -28,43 +30,43 @@ func New{{ $builder }}() *{{ $builder }} {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *{{ $builder }}) Copy() *{{ $builder }} {
-    result := *b
-    return &result
+    return &{{ $builder }}{b.build}
 }
 
 // Build returns built {{ .Name }}.
 func (b *{{ $builder }}) Build() (*{{ $fullname }}{{ if .ValidateFunc }}, error{{ end }}) {
 {{- if gt (len .DefaultFuncs) 0 }}
     b = b{{ range .DefaultFuncs }}.{{ . }}(){{ end }}
-{{- end }}
 
-    result := ({{ $fullname }})(*b)
+{{ end -}}
+
+    result := &b.build
 {{- if .ValidateFunc }}
     if err := result.{{ .ValidateFunc }}(); err != nil {
         return nil, fmt.Errorf("failed to validate '{{ .Name }}' struct: %w", err)
     }
-    return &result, nil
+    return result, nil
 {{- else }}
-    return &result
+    return result
 {{- end }}
 }
 
 {{- range .Properties }}
 {{- if not .Ignore }}
 
-// Set{{ .Name }} sets {{ $.Name }}'s {{ .Name }}.
+// {{ title $.SetterPrefix }}{{ .Name }} sets {{ $.Name }}'s {{ .Name }}.
 {{- if .Append }}
-func (b *{{ $builder }}) Set{{ .Name }}({{ .ParamName }} ...{{ .AlteredType }}) *{{ $builder }} {
-{{- if hasPrefix .InitialType "*" }}
-    *b.{{ .Name }} = append(*b.{{ .Name }}, {{ .ParamName }}...)
+func (b *{{ $builder }}) {{ title $.SetterPrefix }}{{ .Name }}({{ .ParamName }} ...{{ .AlteredType }}) *{{ $builder }} {
+{{- if hasPrefix "*" .InitialType }}
+    *b.build.{{ .Name }} = append(*b.build.{{ .Name }}, {{ .ParamName }}...)
 {{- else }}
-    b.{{ .Name }} = append(b.{{ .Name }}, {{ .ParamName }}...)
+    b.build.{{ .Name }} = append(b.build.{{ .Name }}, {{ .ParamName }}...)
 {{- end }}
     return b
 }
 {{- else }}
-func (b *{{ $builder }}) Set{{ .Name }}({{ .ParamName }} {{ if .Pointer }}*{{ end }}{{ .AlteredType }}) *{{ $builder }} {
-    b.{{ .Name }} = {{ if and (not .Pointer) (hasPrefix .InitialType "*") }}&{{ end }}{{ .ParamName }}
+func (b *{{ $builder }}) {{ title $.SetterPrefix }}{{ .Name }}({{ .ParamName }} {{ if .Pointer }}*{{ end }}{{ .AlteredType }}) *{{ $builder }} {
+    b.build.{{ .Name }} = {{ if and (not .Pointer) (hasPrefix "*" .InitialType) }}&{{ end }}{{ .ParamName }}
     return b
 }
 {{- end }}

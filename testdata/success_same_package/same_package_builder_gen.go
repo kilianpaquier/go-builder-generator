@@ -6,8 +6,10 @@ import (
 	"context"
 )
 
-// SamePackageBuilder is an alias of SamePackage to build SamePackage with builder-pattern.
-type SamePackageBuilder SamePackage
+// SamePackageBuilder represents the builder of SamePackage to build SamePackage with builder-pattern.
+type SamePackageBuilder struct {
+	build SamePackage
+}
 
 // NewSamePackageBuilder creates a new SamePackageBuilder.
 func NewSamePackageBuilder() *SamePackageBuilder {
@@ -16,31 +18,29 @@ func NewSamePackageBuilder() *SamePackageBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *SamePackageBuilder) Copy() *SamePackageBuilder {
-	result := *b
-	return &result
+	return &SamePackageBuilder{b.build}
 }
 
 // Build returns built SamePackage.
 func (b *SamePackageBuilder) Build() *SamePackage {
-
-	result := (SamePackage)(*b)
-	return &result
+	result := &b.build
+	return result
 }
 
-// SetCtx sets SamePackage's Ctx.
-func (b *SamePackageBuilder) SetCtx(ctx context.Context) *SamePackageBuilder {
-	b.Ctx = ctx
+// Ctx sets SamePackage's Ctx.
+func (b *SamePackageBuilder) Ctx(ctx context.Context) *SamePackageBuilder {
+	b.build.Ctx = ctx
 	return b
 }
 
-// SetInt64Alias sets SamePackage's Int64Alias.
-func (b *SamePackageBuilder) SetInt64Alias(int64Alias Int64Alias) *SamePackageBuilder {
-	b.Int64Alias = int64Alias
+// Int64Alias sets SamePackage's Int64Alias.
+func (b *SamePackageBuilder) Int64Alias(int64Alias Int64Alias) *SamePackageBuilder {
+	b.build.Int64Alias = int64Alias
 	return b
 }
 
-// SetPrimitive sets SamePackage's Primitive.
-func (b *SamePackageBuilder) SetPrimitive(primitive string) *SamePackageBuilder {
-	b.Primitive = primitive
+// Primitive sets SamePackage's Primitive.
+func (b *SamePackageBuilder) Primitive(primitive string) *SamePackageBuilder {
+	b.build.Primitive = primitive
 	return b
 }

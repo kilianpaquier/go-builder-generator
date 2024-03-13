@@ -8,8 +8,10 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_interface"
 )
 
-// InterfaceBuilder is an alias of Interface to build Interface with builder-pattern.
-type InterfaceBuilder success_interface.Interface
+// InterfaceBuilder represents the builder of Interface to build Interface with builder-pattern.
+type InterfaceBuilder struct {
+	build success_interface.Interface
+}
 
 // NewInterfaceBuilder creates a new InterfaceBuilder.
 func NewInterfaceBuilder() *InterfaceBuilder {
@@ -18,23 +20,21 @@ func NewInterfaceBuilder() *InterfaceBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *InterfaceBuilder) Copy() *InterfaceBuilder {
-	result := *b
-	return &result
+	return &InterfaceBuilder{b.build}
 }
 
 // Build returns built Interface.
 func (b *InterfaceBuilder) Build() *success_interface.Interface {
-
-	result := (success_interface.Interface)(*b)
-	return &result
+	result := &b.build
+	return result
 }
 
-// SetAnotherInterface sets Interface's AnotherInterface.
-func (b *InterfaceBuilder) SetAnotherInterface(anotherInterface interface {
+// AnotherInterface sets Interface's AnotherInterface.
+func (b *InterfaceBuilder) AnotherInterface(anotherInterface interface {
 	SomeFunc() chan<- success_interface.Int64Alias
 	SomeOtherFunc(ctx context.Context, c <-chan int64) error
 	AFunc(i success_interface.Int64Alias) context.Context
 }) *InterfaceBuilder {
-	b.AnotherInterface = anotherInterface
+	b.build.AnotherInterface = anotherInterface
 	return b
 }

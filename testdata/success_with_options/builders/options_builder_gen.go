@@ -8,8 +8,10 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_with_options"
 )
 
-// OptionsBuilder is an alias of Options to build Options with builder-pattern.
-type OptionsBuilder success_with_options.Options
+// OptionsBuilder represents the builder of Options to build Options with builder-pattern.
+type OptionsBuilder struct {
+	build success_with_options.Options
+}
 
 // NewOptionsBuilder creates a new OptionsBuilder.
 func NewOptionsBuilder() *OptionsBuilder {
@@ -18,77 +20,76 @@ func NewOptionsBuilder() *OptionsBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *OptionsBuilder) Copy() *OptionsBuilder {
-	result := *b
-	return &result
+	return &OptionsBuilder{b.build}
 }
 
 // Build returns built Options.
 func (b *OptionsBuilder) Build() (*success_with_options.Options, error) {
 	b = b.GetDefaultString().GetDefaultContext()
 
-	result := (success_with_options.Options)(*b)
+	result := &b.build
 	if err := result.Validate(); err != nil {
 		return nil, fmt.Errorf("failed to validate 'Options' struct: %w", err)
 	}
-	return &result, nil
+	return result, nil
 }
 
-// SetDefaultField sets Options's DefaultField.
-func (b *OptionsBuilder) SetDefaultField(defaultField int64) *OptionsBuilder {
-	b.DefaultField = defaultField
+// DefaultField sets Options's DefaultField.
+func (b *OptionsBuilder) DefaultField(defaultField int64) *OptionsBuilder {
+	b.build.DefaultField = defaultField
 	return b
 }
 
-// SetDefaultFieldFunc sets Options's DefaultFieldFunc.
-func (b *OptionsBuilder) SetDefaultFieldFunc(defaultFieldFunc string) *OptionsBuilder {
-	b.DefaultFieldFunc = defaultFieldFunc
+// DefaultFieldFunc sets Options's DefaultFieldFunc.
+func (b *OptionsBuilder) DefaultFieldFunc(defaultFieldFunc string) *OptionsBuilder {
+	b.build.DefaultFieldFunc = defaultFieldFunc
 	return b
 }
 
-// SetPtrField sets Options's PtrField.
-func (b *OptionsBuilder) SetPtrField(ptrField *string) *OptionsBuilder {
-	b.PtrField = ptrField
+// PtrField sets Options's PtrField.
+func (b *OptionsBuilder) PtrField(ptrField *string) *OptionsBuilder {
+	b.build.PtrField = ptrField
 	return b
 }
 
-// SetPtrFieldValidatedToo sets Options's PtrFieldValidatedToo.
-func (b *OptionsBuilder) SetPtrFieldValidatedToo(ptrFieldValidatedToo string) *OptionsBuilder {
-	b.PtrFieldValidatedToo = &ptrFieldValidatedToo
+// PtrFieldValidatedToo sets Options's PtrFieldValidatedToo.
+func (b *OptionsBuilder) PtrFieldValidatedToo(ptrFieldValidatedToo string) *OptionsBuilder {
+	b.build.PtrFieldValidatedToo = &ptrFieldValidatedToo
 	return b
 }
 
-// SetSimpleFieldAppend sets Options's SimpleFieldAppend.
-func (b *OptionsBuilder) SetSimpleFieldAppend(simpleFieldAppend success_with_options.Int64Alias) *OptionsBuilder {
-	b.SimpleFieldAppend = simpleFieldAppend
+// SimpleFieldAppend sets Options's SimpleFieldAppend.
+func (b *OptionsBuilder) SimpleFieldAppend(simpleFieldAppend success_with_options.Int64Alias) *OptionsBuilder {
+	b.build.SimpleFieldAppend = simpleFieldAppend
 	return b
 }
 
-// SetSliceFieldAliasAppend sets Options's SliceFieldAliasAppend.
-func (b *OptionsBuilder) SetSliceFieldAliasAppend(sliceFieldAliasAppend ...success_with_options.Int64Alias) *OptionsBuilder {
-	b.SliceFieldAliasAppend = append(b.SliceFieldAliasAppend, sliceFieldAliasAppend...)
+// SliceFieldAliasAppend sets Options's SliceFieldAliasAppend.
+func (b *OptionsBuilder) SliceFieldAliasAppend(sliceFieldAliasAppend ...success_with_options.Int64Alias) *OptionsBuilder {
+	b.build.SliceFieldAliasAppend = append(b.build.SliceFieldAliasAppend, sliceFieldAliasAppend...)
 	return b
 }
 
-// SetSliceFieldAppend sets Options's SliceFieldAppend.
-func (b *OptionsBuilder) SetSliceFieldAppend(sliceFieldAppend ...int64) *OptionsBuilder {
-	b.SliceFieldAppend = append(b.SliceFieldAppend, sliceFieldAppend...)
+// SliceFieldAppend sets Options's SliceFieldAppend.
+func (b *OptionsBuilder) SliceFieldAppend(sliceFieldAppend ...int64) *OptionsBuilder {
+	b.build.SliceFieldAppend = append(b.build.SliceFieldAppend, sliceFieldAppend...)
 	return b
 }
 
-// SetSliceFieldAppendPtr sets Options's SliceFieldAppendPtr.
-func (b *OptionsBuilder) SetSliceFieldAppendPtr(sliceFieldAppendPtr ...*int64) *OptionsBuilder {
-	b.SliceFieldAppendPtr = append(b.SliceFieldAppendPtr, sliceFieldAppendPtr...)
+// SliceFieldAppendPtr sets Options's SliceFieldAppendPtr.
+func (b *OptionsBuilder) SliceFieldAppendPtr(sliceFieldAppendPtr ...*int64) *OptionsBuilder {
+	b.build.SliceFieldAppendPtr = append(b.build.SliceFieldAppendPtr, sliceFieldAppendPtr...)
 	return b
 }
 
-// SetSliceFieldNoPtrAppend sets Options's SliceFieldNoPtrAppend.
-func (b *OptionsBuilder) SetSliceFieldNoPtrAppend(sliceFieldNoPtrAppend ...int64) *OptionsBuilder {
-	*b.SliceFieldNoPtrAppend = append(*b.SliceFieldNoPtrAppend, sliceFieldNoPtrAppend...)
+// SliceFieldNoPtrAppend sets Options's SliceFieldNoPtrAppend.
+func (b *OptionsBuilder) SliceFieldNoPtrAppend(sliceFieldNoPtrAppend ...int64) *OptionsBuilder {
+	*b.build.SliceFieldNoPtrAppend = append(*b.build.SliceFieldNoPtrAppend, sliceFieldNoPtrAppend...)
 	return b
 }
 
-// SetSliceFieldPtrAppend sets Options's SliceFieldPtrAppend.
-func (b *OptionsBuilder) SetSliceFieldPtrAppend(sliceFieldPtrAppend ...int64) *OptionsBuilder {
-	*b.SliceFieldPtrAppend = append(*b.SliceFieldPtrAppend, sliceFieldPtrAppend...)
+// SliceFieldPtrAppend sets Options's SliceFieldPtrAppend.
+func (b *OptionsBuilder) SliceFieldPtrAppend(sliceFieldPtrAppend ...int64) *OptionsBuilder {
+	*b.build.SliceFieldPtrAppend = append(*b.build.SliceFieldPtrAppend, sliceFieldPtrAppend...)
 	return b
 }

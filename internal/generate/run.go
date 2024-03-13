@@ -52,8 +52,9 @@ func Run(options CLIOptions) error {
 		DestPackage:   destPackage,
 		Imports:       fileImports,
 		NoNotice:      options.NoNotice,
-		ValidateFunc:  options.ValidateFunc,
+		SetterPrefix:  options.SetterPrefix,
 		SourcePackage: sourcePackage,
+		ValidateFunc:  options.ValidateFunc,
 	}
 	var errs []error
 	builders, err := generateStructs(file, options.Structs, destdir, opts)

@@ -12,6 +12,7 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/Masterminds/sprig/v3"
 	"github.com/huandu/xstrings"
 	filesystem "github.com/kilianpaquier/filesystem/pkg"
 	"golang.org/x/tools/imports"
@@ -121,7 +122,7 @@ func generateStruct(builder genBuilder, fields []*ast.Field, destdir string) (*i
 func generateAny(tmplName string, dest string, data any) error {
 	// parse template file
 	tpl, err := template.New(tmplName).
-		Funcs(funcMap()).
+		Funcs(sprig.FuncMap()).
 		ParseFS(tmpl, path.Join("templates", tmplName))
 	if err != nil {
 		return fmt.Errorf("failed to parse template %s file: %w", tmplName, err)

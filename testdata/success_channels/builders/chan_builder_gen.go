@@ -8,8 +8,10 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_channels"
 )
 
-// ChanBuilder is an alias of Chan to build Chan with builder-pattern.
-type ChanBuilder success_channels.Chan
+// ChanBuilder represents the builder of Chan to build Chan with builder-pattern.
+type ChanBuilder struct {
+	build success_channels.Chan
+}
 
 // NewChanBuilder creates a new ChanBuilder.
 func NewChanBuilder() *ChanBuilder {
@@ -18,97 +20,95 @@ func NewChanBuilder() *ChanBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *ChanBuilder) Copy() *ChanBuilder {
-	result := *b
-	return &result
+	return &ChanBuilder{b.build}
 }
 
 // Build returns built Chan.
 func (b *ChanBuilder) Build() *success_channels.Chan {
-
-	result := (success_channels.Chan)(*b)
-	return &result
+	result := &b.build
+	return result
 }
 
-// SetChanField sets Chan's ChanField.
-func (b *ChanBuilder) SetChanField(chanField chan int64) *ChanBuilder {
-	b.ChanField = chanField
+// ChanField sets Chan's ChanField.
+func (b *ChanBuilder) ChanField(chanField chan int64) *ChanBuilder {
+	b.build.ChanField = chanField
 	return b
 }
 
-// SetChanFieldAlias sets Chan's ChanFieldAlias.
-func (b *ChanBuilder) SetChanFieldAlias(chanFieldAlias chan success_channels.Int64Alias) *ChanBuilder {
-	b.ChanFieldAlias = chanFieldAlias
+// ChanFieldAlias sets Chan's ChanFieldAlias.
+func (b *ChanBuilder) ChanFieldAlias(chanFieldAlias chan success_channels.Int64Alias) *ChanBuilder {
+	b.build.ChanFieldAlias = chanFieldAlias
 	return b
 }
 
-// SetChanFieldPtrAlias sets Chan's ChanFieldPtrAlias.
-func (b *ChanBuilder) SetChanFieldPtrAlias(chanFieldPtrAlias chan *success_channels.Int64Alias) *ChanBuilder {
-	b.ChanFieldPtrAlias = &chanFieldPtrAlias
+// ChanFieldPtrAlias sets Chan's ChanFieldPtrAlias.
+func (b *ChanBuilder) ChanFieldPtrAlias(chanFieldPtrAlias chan *success_channels.Int64Alias) *ChanBuilder {
+	b.build.ChanFieldPtrAlias = &chanFieldPtrAlias
 	return b
 }
 
-// SetChanFieldSliceAlias sets Chan's ChanFieldSliceAlias.
-func (b *ChanBuilder) SetChanFieldSliceAlias(chanFieldSliceAlias chan []success_channels.FuncAlias) *ChanBuilder {
-	b.ChanFieldSliceAlias = chanFieldSliceAlias
+// ChanFieldSliceAlias sets Chan's ChanFieldSliceAlias.
+func (b *ChanBuilder) ChanFieldSliceAlias(chanFieldSliceAlias chan []success_channels.FuncAlias) *ChanBuilder {
+	b.build.ChanFieldSliceAlias = chanFieldSliceAlias
 	return b
 }
 
-// SetChanFieldSliceFunc sets Chan's ChanFieldSliceFunc.
-func (b *ChanBuilder) SetChanFieldSliceFunc(chanFieldSliceFunc chan []func(success_channels.Int64Alias) (err error)) *ChanBuilder {
-	b.ChanFieldSliceFunc = chanFieldSliceFunc
+// ChanFieldSliceFunc sets Chan's ChanFieldSliceFunc.
+func (b *ChanBuilder) ChanFieldSliceFunc(chanFieldSliceFunc chan []func(success_channels.Int64Alias) (err error)) *ChanBuilder {
+	b.build.ChanFieldSliceFunc = chanFieldSliceFunc
 	return b
 }
 
-// SetChanFieldWithPkg sets Chan's ChanFieldWithPkg.
-func (b *ChanBuilder) SetChanFieldWithPkg(chanFieldWithPkg chan context.Context) *ChanBuilder {
-	b.ChanFieldWithPkg = chanFieldWithPkg
+// ChanFieldWithPkg sets Chan's ChanFieldWithPkg.
+func (b *ChanBuilder) ChanFieldWithPkg(chanFieldWithPkg chan context.Context) *ChanBuilder {
+	b.build.ChanFieldWithPkg = chanFieldWithPkg
 	return b
 }
 
-// SetRChanField sets Chan's RChanField.
-func (b *ChanBuilder) SetRChanField(rChanField <-chan int64) *ChanBuilder {
-	b.RChanField = rChanField
+// RChanField sets Chan's RChanField.
+func (b *ChanBuilder) RChanField(rChanField <-chan int64) *ChanBuilder {
+	b.build.RChanField = rChanField
 	return b
 }
 
-// SetRChanFieldAlias sets Chan's RChanFieldAlias.
-func (b *ChanBuilder) SetRChanFieldAlias(rChanFieldAlias <-chan success_channels.Int64Alias) *ChanBuilder {
-	b.RChanFieldAlias = rChanFieldAlias
+// RChanFieldAlias sets Chan's RChanFieldAlias.
+func (b *ChanBuilder) RChanFieldAlias(rChanFieldAlias <-chan success_channels.Int64Alias) *ChanBuilder {
+	b.build.RChanFieldAlias = rChanFieldAlias
 	return b
 }
 
-// SetRChanFieldPtrAlias sets Chan's RChanFieldPtrAlias.
-func (b *ChanBuilder) SetRChanFieldPtrAlias(rChanFieldPtrAlias <-chan *success_channels.Int64Alias) *ChanBuilder {
-	b.RChanFieldPtrAlias = &rChanFieldPtrAlias
+// RChanFieldPtrAlias sets Chan's RChanFieldPtrAlias.
+func (b *ChanBuilder) RChanFieldPtrAlias(rChanFieldPtrAlias <-chan *success_channels.Int64Alias) *ChanBuilder {
+	b.build.RChanFieldPtrAlias = &rChanFieldPtrAlias
 	return b
 }
 
-// SetRChanFieldWithPkg sets Chan's RChanFieldWithPkg.
-func (b *ChanBuilder) SetRChanFieldWithPkg(rChanFieldWithPkg <-chan context.Context) *ChanBuilder {
-	b.RChanFieldWithPkg = rChanFieldWithPkg
+// RChanFieldWithPkg sets Chan's RChanFieldWithPkg.
+func (b *ChanBuilder) RChanFieldWithPkg(rChanFieldWithPkg <-chan context.Context) *ChanBuilder {
+	b.build.RChanFieldWithPkg = rChanFieldWithPkg
 	return b
 }
 
-// SetSChanField sets Chan's SChanField.
-func (b *ChanBuilder) SetSChanField(sChanField chan<- int64) *ChanBuilder {
-	b.SChanField = sChanField
+// SChanField sets Chan's SChanField.
+func (b *ChanBuilder) SChanField(sChanField chan<- int64) *ChanBuilder {
+	b.build.SChanField = sChanField
 	return b
 }
 
-// SetSChanFieldAlias sets Chan's SChanFieldAlias.
-func (b *ChanBuilder) SetSChanFieldAlias(sChanFieldAlias chan<- success_channels.Int64Alias) *ChanBuilder {
-	b.SChanFieldAlias = sChanFieldAlias
+// SChanFieldAlias sets Chan's SChanFieldAlias.
+func (b *ChanBuilder) SChanFieldAlias(sChanFieldAlias chan<- success_channels.Int64Alias) *ChanBuilder {
+	b.build.SChanFieldAlias = sChanFieldAlias
 	return b
 }
 
-// SetSChanFieldPtrAlias sets Chan's SChanFieldPtrAlias.
-func (b *ChanBuilder) SetSChanFieldPtrAlias(sChanFieldPtrAlias chan<- *success_channels.Int64Alias) *ChanBuilder {
-	b.SChanFieldPtrAlias = &sChanFieldPtrAlias
+// SChanFieldPtrAlias sets Chan's SChanFieldPtrAlias.
+func (b *ChanBuilder) SChanFieldPtrAlias(sChanFieldPtrAlias chan<- *success_channels.Int64Alias) *ChanBuilder {
+	b.build.SChanFieldPtrAlias = &sChanFieldPtrAlias
 	return b
 }
 
-// SetSChanFieldWithPkg sets Chan's SChanFieldWithPkg.
-func (b *ChanBuilder) SetSChanFieldWithPkg(sChanFieldWithPkg chan<- context.Context) *ChanBuilder {
-	b.SChanFieldWithPkg = sChanFieldWithPkg
+// SChanFieldWithPkg sets Chan's SChanFieldWithPkg.
+func (b *ChanBuilder) SChanFieldWithPkg(sChanFieldWithPkg chan<- context.Context) *ChanBuilder {
+	b.build.SChanFieldWithPkg = sChanFieldWithPkg
 	return b
 }

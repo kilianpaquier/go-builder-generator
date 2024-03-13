@@ -6,8 +6,10 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_struct"
 )
 
-// StructNoFieldsBuilder is an alias of StructNoFields to build StructNoFields with builder-pattern.
-type StructNoFieldsBuilder success_struct.StructNoFields
+// StructNoFieldsBuilder represents the builder of StructNoFields to build StructNoFields with builder-pattern.
+type StructNoFieldsBuilder struct {
+	build success_struct.StructNoFields
+}
 
 // NewStructNoFieldsBuilder creates a new StructNoFieldsBuilder.
 func NewStructNoFieldsBuilder() *StructNoFieldsBuilder {
@@ -16,19 +18,17 @@ func NewStructNoFieldsBuilder() *StructNoFieldsBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *StructNoFieldsBuilder) Copy() *StructNoFieldsBuilder {
-	result := *b
-	return &result
+	return &StructNoFieldsBuilder{b.build}
 }
 
 // Build returns built StructNoFields.
 func (b *StructNoFieldsBuilder) Build() *success_struct.StructNoFields {
-
-	result := (success_struct.StructNoFields)(*b)
-	return &result
+	result := &b.build
+	return result
 }
 
-// SetNoFields sets StructNoFields's NoFields.
-func (b *StructNoFieldsBuilder) SetNoFields(noFields struct{}) *StructNoFieldsBuilder {
-	b.NoFields = noFields
+// NoFields sets StructNoFields's NoFields.
+func (b *StructNoFieldsBuilder) NoFields(noFields struct{}) *StructNoFieldsBuilder {
+	b.build.NoFields = noFields
 	return b
 }

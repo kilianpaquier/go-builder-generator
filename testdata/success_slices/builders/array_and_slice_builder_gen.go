@@ -8,8 +8,10 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_slices"
 )
 
-// ArrayAndSliceBuilder is an alias of ArrayAndSlice to build ArrayAndSlice with builder-pattern.
-type ArrayAndSliceBuilder success_slices.ArrayAndSlice
+// ArrayAndSliceBuilder represents the builder of ArrayAndSlice to build ArrayAndSlice with builder-pattern.
+type ArrayAndSliceBuilder struct {
+	build success_slices.ArrayAndSlice
+}
 
 // NewArrayAndSliceBuilder creates a new ArrayAndSliceBuilder.
 func NewArrayAndSliceBuilder() *ArrayAndSliceBuilder {
@@ -18,67 +20,65 @@ func NewArrayAndSliceBuilder() *ArrayAndSliceBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *ArrayAndSliceBuilder) Copy() *ArrayAndSliceBuilder {
-	result := *b
-	return &result
+	return &ArrayAndSliceBuilder{b.build}
 }
 
 // Build returns built ArrayAndSlice.
 func (b *ArrayAndSliceBuilder) Build() *success_slices.ArrayAndSlice {
-
-	result := (success_slices.ArrayAndSlice)(*b)
-	return &result
+	result := &b.build
+	return result
 }
 
-// SetArrayField sets ArrayAndSlice's ArrayField.
-func (b *ArrayAndSliceBuilder) SetArrayField(arrayField [10]int64) *ArrayAndSliceBuilder {
-	b.ArrayField = arrayField
+// ArrayField sets ArrayAndSlice's ArrayField.
+func (b *ArrayAndSliceBuilder) ArrayField(arrayField [10]int64) *ArrayAndSliceBuilder {
+	b.build.ArrayField = arrayField
 	return b
 }
 
-// SetArrayFieldAlias sets ArrayAndSlice's ArrayFieldAlias.
-func (b *ArrayAndSliceBuilder) SetArrayFieldAlias(arrayFieldAlias [10]success_slices.Int64Alias) *ArrayAndSliceBuilder {
-	b.ArrayFieldAlias = arrayFieldAlias
+// ArrayFieldAlias sets ArrayAndSlice's ArrayFieldAlias.
+func (b *ArrayAndSliceBuilder) ArrayFieldAlias(arrayFieldAlias [10]success_slices.Int64Alias) *ArrayAndSliceBuilder {
+	b.build.ArrayFieldAlias = arrayFieldAlias
 	return b
 }
 
-// SetArrayFieldPtrAlias sets ArrayAndSlice's ArrayFieldPtrAlias.
-func (b *ArrayAndSliceBuilder) SetArrayFieldPtrAlias(arrayFieldPtrAlias [10]*success_slices.Int64Alias) *ArrayAndSliceBuilder {
-	b.ArrayFieldPtrAlias = &arrayFieldPtrAlias
+// ArrayFieldPtrAlias sets ArrayAndSlice's ArrayFieldPtrAlias.
+func (b *ArrayAndSliceBuilder) ArrayFieldPtrAlias(arrayFieldPtrAlias [10]*success_slices.Int64Alias) *ArrayAndSliceBuilder {
+	b.build.ArrayFieldPtrAlias = &arrayFieldPtrAlias
 	return b
 }
 
-// SetArrayFieldWithPkg sets ArrayAndSlice's ArrayFieldWithPkg.
-func (b *ArrayAndSliceBuilder) SetArrayFieldWithPkg(arrayFieldWithPkg [10]context.Context) *ArrayAndSliceBuilder {
-	b.ArrayFieldWithPkg = arrayFieldWithPkg
+// ArrayFieldWithPkg sets ArrayAndSlice's ArrayFieldWithPkg.
+func (b *ArrayAndSliceBuilder) ArrayFieldWithPkg(arrayFieldWithPkg [10]context.Context) *ArrayAndSliceBuilder {
+	b.build.ArrayFieldWithPkg = arrayFieldWithPkg
 	return b
 }
 
-// SetSliceField sets ArrayAndSlice's SliceField.
-func (b *ArrayAndSliceBuilder) SetSliceField(sliceField []int64) *ArrayAndSliceBuilder {
-	b.SliceField = sliceField
+// SliceField sets ArrayAndSlice's SliceField.
+func (b *ArrayAndSliceBuilder) SliceField(sliceField []int64) *ArrayAndSliceBuilder {
+	b.build.SliceField = sliceField
 	return b
 }
 
-// SetSliceFieldAlias sets ArrayAndSlice's SliceFieldAlias.
-func (b *ArrayAndSliceBuilder) SetSliceFieldAlias(sliceFieldAlias []success_slices.Int64Alias) *ArrayAndSliceBuilder {
-	b.SliceFieldAlias = sliceFieldAlias
+// SliceFieldAlias sets ArrayAndSlice's SliceFieldAlias.
+func (b *ArrayAndSliceBuilder) SliceFieldAlias(sliceFieldAlias []success_slices.Int64Alias) *ArrayAndSliceBuilder {
+	b.build.SliceFieldAlias = sliceFieldAlias
 	return b
 }
 
-// SetSliceFieldAliasChan sets ArrayAndSlice's SliceFieldAliasChan.
-func (b *ArrayAndSliceBuilder) SetSliceFieldAliasChan(sliceFieldAliasChan []chan<- success_slices.Int64Alias) *ArrayAndSliceBuilder {
-	b.SliceFieldAliasChan = sliceFieldAliasChan
+// SliceFieldAliasChan sets ArrayAndSlice's SliceFieldAliasChan.
+func (b *ArrayAndSliceBuilder) SliceFieldAliasChan(sliceFieldAliasChan []chan<- success_slices.Int64Alias) *ArrayAndSliceBuilder {
+	b.build.SliceFieldAliasChan = sliceFieldAliasChan
 	return b
 }
 
-// SetSliceFieldPtrAlias sets ArrayAndSlice's SliceFieldPtrAlias.
-func (b *ArrayAndSliceBuilder) SetSliceFieldPtrAlias(sliceFieldPtrAlias []*success_slices.Int64Alias) *ArrayAndSliceBuilder {
-	b.SliceFieldPtrAlias = &sliceFieldPtrAlias
+// SliceFieldPtrAlias sets ArrayAndSlice's SliceFieldPtrAlias.
+func (b *ArrayAndSliceBuilder) SliceFieldPtrAlias(sliceFieldPtrAlias []*success_slices.Int64Alias) *ArrayAndSliceBuilder {
+	b.build.SliceFieldPtrAlias = &sliceFieldPtrAlias
 	return b
 }
 
-// SetSliceFieldWithPkg sets ArrayAndSlice's SliceFieldWithPkg.
-func (b *ArrayAndSliceBuilder) SetSliceFieldWithPkg(sliceFieldWithPkg []context.Context) *ArrayAndSliceBuilder {
-	b.SliceFieldWithPkg = sliceFieldWithPkg
+// SliceFieldWithPkg sets ArrayAndSlice's SliceFieldWithPkg.
+func (b *ArrayAndSliceBuilder) SliceFieldWithPkg(sliceFieldWithPkg []context.Context) *ArrayAndSliceBuilder {
+	b.build.SliceFieldWithPkg = sliceFieldWithPkg
 	return b
 }

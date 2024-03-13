@@ -6,8 +6,10 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_funcs"
 )
 
-// FuncBuilder is an alias of Func to build Func with builder-pattern.
-type FuncBuilder success_funcs.Func
+// FuncBuilder represents the builder of Func to build Func with builder-pattern.
+type FuncBuilder struct {
+	build success_funcs.Func
+}
 
 // NewFuncBuilder creates a new FuncBuilder.
 func NewFuncBuilder() *FuncBuilder {
@@ -16,67 +18,65 @@ func NewFuncBuilder() *FuncBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *FuncBuilder) Copy() *FuncBuilder {
-	result := *b
-	return &result
+	return &FuncBuilder{b.build}
 }
 
 // Build returns built Func.
 func (b *FuncBuilder) Build() *success_funcs.Func {
-
-	result := (success_funcs.Func)(*b)
-	return &result
+	result := &b.build
+	return result
 }
 
-// SetFuncField sets Func's FuncField.
-func (b *FuncBuilder) SetFuncField(funcField func(int64) string) *FuncBuilder {
-	b.FuncField = funcField
+// FuncField sets Func's FuncField.
+func (b *FuncBuilder) FuncField(funcField func(int64) string) *FuncBuilder {
+	b.build.FuncField = funcField
 	return b
 }
 
-// SetFuncFieldAlias sets Func's FuncFieldAlias.
-func (b *FuncBuilder) SetFuncFieldAlias(funcFieldAlias func(success_funcs.Int64Alias) string) *FuncBuilder {
-	b.FuncFieldAlias = funcFieldAlias
+// FuncFieldAlias sets Func's FuncFieldAlias.
+func (b *FuncBuilder) FuncFieldAlias(funcFieldAlias func(success_funcs.Int64Alias) string) *FuncBuilder {
+	b.build.FuncFieldAlias = funcFieldAlias
 	return b
 }
 
-// SetFuncFieldAliasMultiple sets Func's FuncFieldAliasMultiple.
-func (b *FuncBuilder) SetFuncFieldAliasMultiple(funcFieldAliasMultiple func(success_funcs.Int64Alias, success_funcs.FuncAlias) (string, error)) *FuncBuilder {
-	b.FuncFieldAliasMultiple = funcFieldAliasMultiple
+// FuncFieldAliasMultiple sets Func's FuncFieldAliasMultiple.
+func (b *FuncBuilder) FuncFieldAliasMultiple(funcFieldAliasMultiple func(success_funcs.Int64Alias, success_funcs.FuncAlias) (string, error)) *FuncBuilder {
+	b.build.FuncFieldAliasMultiple = funcFieldAliasMultiple
 	return b
 }
 
-// SetFuncFieldAliasNamed sets Func's FuncFieldAliasNamed.
-func (b *FuncBuilder) SetFuncFieldAliasNamed(funcFieldAliasNamed func(in success_funcs.Int64Alias) (out success_funcs.FuncAlias)) *FuncBuilder {
-	b.FuncFieldAliasNamed = funcFieldAliasNamed
+// FuncFieldAliasNamed sets Func's FuncFieldAliasNamed.
+func (b *FuncBuilder) FuncFieldAliasNamed(funcFieldAliasNamed func(in success_funcs.Int64Alias) (out success_funcs.FuncAlias)) *FuncBuilder {
+	b.build.FuncFieldAliasNamed = funcFieldAliasNamed
 	return b
 }
 
-// SetFuncFieldChan sets Func's FuncFieldChan.
-func (b *FuncBuilder) SetFuncFieldChan(funcFieldChan func(c chan<- success_funcs.Int64Alias) error) *FuncBuilder {
-	b.FuncFieldChan = funcFieldChan
+// FuncFieldChan sets Func's FuncFieldChan.
+func (b *FuncBuilder) FuncFieldChan(funcFieldChan func(c chan<- success_funcs.Int64Alias) error) *FuncBuilder {
+	b.build.FuncFieldChan = funcFieldChan
 	return b
 }
 
-// SetFuncFieldCResult sets Func's FuncFieldCResult.
-func (b *FuncBuilder) SetFuncFieldCResult(funcFieldCResult func(int64, string) (func(), error)) *FuncBuilder {
-	b.FuncFieldCResult = funcFieldCResult
+// FuncFieldCResult sets Func's FuncFieldCResult.
+func (b *FuncBuilder) FuncFieldCResult(funcFieldCResult func(int64, string) (func(), error)) *FuncBuilder {
+	b.build.FuncFieldCResult = funcFieldCResult
 	return b
 }
 
-// SetFuncFieldMultiple sets Func's FuncFieldMultiple.
-func (b *FuncBuilder) SetFuncFieldMultiple(funcFieldMultiple func(int64, string) (string, error)) *FuncBuilder {
-	b.FuncFieldMultiple = funcFieldMultiple
+// FuncFieldMultiple sets Func's FuncFieldMultiple.
+func (b *FuncBuilder) FuncFieldMultiple(funcFieldMultiple func(int64, string) (string, error)) *FuncBuilder {
+	b.build.FuncFieldMultiple = funcFieldMultiple
 	return b
 }
 
-// SetFuncFieldNamed sets Func's FuncFieldNamed.
-func (b *FuncBuilder) SetFuncFieldNamed(funcFieldNamed func(in int64) (out string)) *FuncBuilder {
-	b.FuncFieldNamed = funcFieldNamed
+// FuncFieldNamed sets Func's FuncFieldNamed.
+func (b *FuncBuilder) FuncFieldNamed(funcFieldNamed func(in int64) (out string)) *FuncBuilder {
+	b.build.FuncFieldNamed = funcFieldNamed
 	return b
 }
 
-// SetFuncFieldPtrAlias sets Func's FuncFieldPtrAlias.
-func (b *FuncBuilder) SetFuncFieldPtrAlias(funcFieldPtrAlias func(in *success_funcs.Int64Alias) (out *success_funcs.FuncAlias, err error)) *FuncBuilder {
-	b.FuncFieldPtrAlias = &funcFieldPtrAlias
+// FuncFieldPtrAlias sets Func's FuncFieldPtrAlias.
+func (b *FuncBuilder) FuncFieldPtrAlias(funcFieldPtrAlias func(in *success_funcs.Int64Alias) (out *success_funcs.FuncAlias, err error)) *FuncBuilder {
+	b.build.FuncFieldPtrAlias = &funcFieldPtrAlias
 	return b
 }

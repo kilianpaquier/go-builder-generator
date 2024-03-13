@@ -6,8 +6,10 @@ import (
 	"database/sql"
 )
 
-// NamedArgBuilder is an alias of NamedArg to build NamedArg with builder-pattern.
-type NamedArgBuilder sql.NamedArg
+// NamedArgBuilder represents the builder of NamedArg to build NamedArg with builder-pattern.
+type NamedArgBuilder struct {
+	build sql.NamedArg
+}
 
 // NewNamedArgBuilder creates a new NamedArgBuilder.
 func NewNamedArgBuilder() *NamedArgBuilder {
@@ -16,25 +18,23 @@ func NewNamedArgBuilder() *NamedArgBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *NamedArgBuilder) Copy() *NamedArgBuilder {
-	result := *b
-	return &result
+	return &NamedArgBuilder{b.build}
 }
 
 // Build returns built NamedArg.
 func (b *NamedArgBuilder) Build() *sql.NamedArg {
-
-	result := (sql.NamedArg)(*b)
-	return &result
+	result := &b.build
+	return result
 }
 
-// SetName sets NamedArg's Name.
-func (b *NamedArgBuilder) SetName(name string) *NamedArgBuilder {
-	b.Name = name
+// Name sets NamedArg's Name.
+func (b *NamedArgBuilder) Name(name string) *NamedArgBuilder {
+	b.build.Name = name
 	return b
 }
 
-// SetValue sets NamedArg's Value.
-func (b *NamedArgBuilder) SetValue(value any) *NamedArgBuilder {
-	b.Value = value
+// Value sets NamedArg's Value.
+func (b *NamedArgBuilder) Value(value any) *NamedArgBuilder {
+	b.build.Value = value
 	return b
 }

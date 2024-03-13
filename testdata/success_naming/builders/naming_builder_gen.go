@@ -9,8 +9,10 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_naming"
 )
 
-// NamingBuilder is an alias of Naming to build Naming with builder-pattern.
-type NamingBuilder success_naming.Naming
+// NamingBuilder represents the builder of Naming to build Naming with builder-pattern.
+type NamingBuilder struct {
+	build success_naming.Naming
+}
 
 // NewNamingBuilder creates a new NamingBuilder.
 func NewNamingBuilder() *NamingBuilder {
@@ -19,55 +21,53 @@ func NewNamingBuilder() *NamingBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *NamingBuilder) Copy() *NamingBuilder {
-	result := *b
-	return &result
+	return &NamingBuilder{b.build}
 }
 
 // Build returns built Naming.
 func (b *NamingBuilder) Build() *success_naming.Naming {
-
-	result := (success_naming.Naming)(*b)
-	return &result
+	result := &b.build
+	return result
 }
 
-// SetACRONYMOUS sets Naming's ACRONYMOUS.
-func (b *NamingBuilder) SetACRONYMOUS(acronymous string) *NamingBuilder {
-	b.ACRONYMOUS = acronymous
+// ACRONYMOUS sets Naming's ACRONYMOUS.
+func (b *NamingBuilder) ACRONYMOUS(acronymous string) *NamingBuilder {
+	b.build.ACRONYMOUS = acronymous
 	return b
 }
 
-// SetAnotherACRONYMOUS sets Naming's AnotherACRONYMOUS.
-func (b *NamingBuilder) SetAnotherACRONYMOUS(anotherACRONYMOUS string) *NamingBuilder {
-	b.AnotherACRONYMOUS = anotherACRONYMOUS
+// AnotherACRONYMOUS sets Naming's AnotherACRONYMOUS.
+func (b *NamingBuilder) AnotherACRONYMOUS(anotherACRONYMOUS string) *NamingBuilder {
+	b.build.AnotherACRONYMOUS = anotherACRONYMOUS
 	return b
 }
 
-// SetAnURL sets Naming's AnURL.
-func (b *NamingBuilder) SetAnURL(anURL url.URL) *NamingBuilder {
-	b.AnURL = &anURL
+// AnURL sets Naming's AnURL.
+func (b *NamingBuilder) AnURL(anURL url.URL) *NamingBuilder {
+	b.build.AnURL = &anURL
 	return b
 }
 
-// SetID sets Naming's ID.
-func (b *NamingBuilder) SetID(id int64) *NamingBuilder {
-	b.ID = id
+// ID sets Naming's ID.
+func (b *NamingBuilder) ID(id int64) *NamingBuilder {
+	b.build.ID = id
 	return b
 }
 
-// SetSomeClientHTTP sets Naming's SomeClientHTTP.
-func (b *NamingBuilder) SetSomeClientHTTP(someClientHTTP net_http.Client) *NamingBuilder {
-	b.SomeClientHTTP = &someClientHTTP
+// SomeClientHTTP sets Naming's SomeClientHTTP.
+func (b *NamingBuilder) SomeClientHTTP(someClientHTTP net_http.Client) *NamingBuilder {
+	b.build.SomeClientHTTP = &someClientHTTP
 	return b
 }
 
-// SetSomeID sets Naming's SomeID.
-func (b *NamingBuilder) SetSomeID(someID int64) *NamingBuilder {
-	b.SomeID = someID
+// SomeID sets Naming's SomeID.
+func (b *NamingBuilder) SomeID(someID int64) *NamingBuilder {
+	b.build.SomeID = someID
 	return b
 }
 
-// SetURL sets Naming's URL.
-func (b *NamingBuilder) SetURL(url url.URL) *NamingBuilder {
-	b.URL = &url
+// URL sets Naming's URL.
+func (b *NamingBuilder) URL(url url.URL) *NamingBuilder {
+	b.build.URL = &url
 	return b
 }

@@ -8,8 +8,10 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_struct"
 )
 
-// StructBuilder is an alias of Struct to build Struct with builder-pattern.
-type StructBuilder success_struct.Struct
+// StructBuilder represents the builder of Struct to build Struct with builder-pattern.
+type StructBuilder struct {
+	build success_struct.Struct
+}
 
 // NewStructBuilder creates a new StructBuilder.
 func NewStructBuilder() *StructBuilder {
@@ -18,19 +20,17 @@ func NewStructBuilder() *StructBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *StructBuilder) Copy() *StructBuilder {
-	result := *b
-	return &result
+	return &StructBuilder{b.build}
 }
 
 // Build returns built Struct.
 func (b *StructBuilder) Build() *success_struct.Struct {
-
-	result := (success_struct.Struct)(*b)
-	return &result
+	result := &b.build
+	return result
 }
 
-// SetAnotherStruct sets Struct's AnotherStruct.
-func (b *StructBuilder) SetAnotherStruct(anotherStruct struct {
+// AnotherStruct sets Struct's AnotherStruct.
+func (b *StructBuilder) AnotherStruct(anotherStruct struct {
 	Nested struct {
 		Field string
 		Ctx   context.Context
@@ -39,6 +39,6 @@ func (b *StructBuilder) SetAnotherStruct(anotherStruct struct {
 	Ctx       context.Context
 	Alias     success_struct.Int64Alias
 }) *StructBuilder {
-	b.AnotherStruct = anotherStruct
+	b.build.AnotherStruct = anotherStruct
 	return b
 }

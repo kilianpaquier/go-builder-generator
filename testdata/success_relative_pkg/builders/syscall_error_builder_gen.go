@@ -6,8 +6,10 @@ import (
 	"os"
 )
 
-// SyscallErrorBuilder is an alias of SyscallError to build SyscallError with builder-pattern.
-type SyscallErrorBuilder os.SyscallError
+// SyscallErrorBuilder represents the builder of SyscallError to build SyscallError with builder-pattern.
+type SyscallErrorBuilder struct {
+	build os.SyscallError
+}
 
 // NewSyscallErrorBuilder creates a new SyscallErrorBuilder.
 func NewSyscallErrorBuilder() *SyscallErrorBuilder {
@@ -16,25 +18,23 @@ func NewSyscallErrorBuilder() *SyscallErrorBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *SyscallErrorBuilder) Copy() *SyscallErrorBuilder {
-	result := *b
-	return &result
+	return &SyscallErrorBuilder{b.build}
 }
 
 // Build returns built SyscallError.
 func (b *SyscallErrorBuilder) Build() *os.SyscallError {
-
-	result := (os.SyscallError)(*b)
-	return &result
+	result := &b.build
+	return result
 }
 
-// SetErr sets SyscallError's Err.
-func (b *SyscallErrorBuilder) SetErr(err error) *SyscallErrorBuilder {
-	b.Err = err
+// Err sets SyscallError's Err.
+func (b *SyscallErrorBuilder) Err(err error) *SyscallErrorBuilder {
+	b.build.Err = err
 	return b
 }
 
-// SetSyscall sets SyscallError's Syscall.
-func (b *SyscallErrorBuilder) SetSyscall(syscall string) *SyscallErrorBuilder {
-	b.Syscall = syscall
+// Syscall sets SyscallError's Syscall.
+func (b *SyscallErrorBuilder) Syscall(syscall string) *SyscallErrorBuilder {
+	b.build.Syscall = syscall
 	return b
 }

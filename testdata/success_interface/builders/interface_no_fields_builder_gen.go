@@ -6,8 +6,10 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_interface"
 )
 
-// InterfaceNoFieldsBuilder is an alias of InterfaceNoFields to build InterfaceNoFields with builder-pattern.
-type InterfaceNoFieldsBuilder success_interface.InterfaceNoFields
+// InterfaceNoFieldsBuilder represents the builder of InterfaceNoFields to build InterfaceNoFields with builder-pattern.
+type InterfaceNoFieldsBuilder struct {
+	build success_interface.InterfaceNoFields
+}
 
 // NewInterfaceNoFieldsBuilder creates a new InterfaceNoFieldsBuilder.
 func NewInterfaceNoFieldsBuilder() *InterfaceNoFieldsBuilder {
@@ -16,19 +18,17 @@ func NewInterfaceNoFieldsBuilder() *InterfaceNoFieldsBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *InterfaceNoFieldsBuilder) Copy() *InterfaceNoFieldsBuilder {
-	result := *b
-	return &result
+	return &InterfaceNoFieldsBuilder{b.build}
 }
 
 // Build returns built InterfaceNoFields.
 func (b *InterfaceNoFieldsBuilder) Build() *success_interface.InterfaceNoFields {
-
-	result := (success_interface.InterfaceNoFields)(*b)
-	return &result
+	result := &b.build
+	return result
 }
 
-// SetNoFields sets InterfaceNoFields's NoFields.
-func (b *InterfaceNoFieldsBuilder) SetNoFields(noFields interface{}) *InterfaceNoFieldsBuilder {
-	b.NoFields = noFields
+// NoFields sets InterfaceNoFields's NoFields.
+func (b *InterfaceNoFieldsBuilder) NoFields(noFields interface{}) *InterfaceNoFieldsBuilder {
+	b.build.NoFields = noFields
 	return b
 }

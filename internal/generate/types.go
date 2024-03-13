@@ -12,6 +12,7 @@ type CLIOptions struct {
 	Destdir      string
 	File         string
 	NoNotice     bool
+	SetterPrefix string
 	Structs      []string
 	ValidateFunc string
 }
@@ -42,6 +43,7 @@ type genOpts struct {
 	DestPackage   string
 	Imports       []string
 	NoNotice      bool
+	SetterPrefix  string
 	SourcePackage string
 	ValidateFunc  string
 }

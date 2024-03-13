@@ -8,8 +8,10 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_maps"
 )
 
-// MapBuilder is an alias of Map to build Map with builder-pattern.
-type MapBuilder success_maps.Map
+// MapBuilder represents the builder of Map to build Map with builder-pattern.
+type MapBuilder struct {
+	build success_maps.Map
+}
 
 // NewMapBuilder creates a new MapBuilder.
 func NewMapBuilder() *MapBuilder {
@@ -18,43 +20,41 @@ func NewMapBuilder() *MapBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *MapBuilder) Copy() *MapBuilder {
-	result := *b
-	return &result
+	return &MapBuilder{b.build}
 }
 
 // Build returns built Map.
 func (b *MapBuilder) Build() *success_maps.Map {
-
-	result := (success_maps.Map)(*b)
-	return &result
+	result := &b.build
+	return result
 }
 
-// SetMapField sets Map's MapField.
-func (b *MapBuilder) SetMapField(mapField map[int64]string) *MapBuilder {
-	b.MapField = mapField
+// MapField sets Map's MapField.
+func (b *MapBuilder) MapField(mapField map[int64]string) *MapBuilder {
+	b.build.MapField = mapField
 	return b
 }
 
-// SetMapFieldAlias sets Map's MapFieldAlias.
-func (b *MapBuilder) SetMapFieldAlias(mapFieldAlias map[success_maps.Int64Alias]success_maps.FuncAlias) *MapBuilder {
-	b.MapFieldAlias = mapFieldAlias
+// MapFieldAlias sets Map's MapFieldAlias.
+func (b *MapBuilder) MapFieldAlias(mapFieldAlias map[success_maps.Int64Alias]success_maps.FuncAlias) *MapBuilder {
+	b.build.MapFieldAlias = mapFieldAlias
 	return b
 }
 
-// SetMapFieldFunc sets Map's MapFieldFunc.
-func (b *MapBuilder) SetMapFieldFunc(mapFieldFunc map[int64]func(in int64) error) *MapBuilder {
-	b.MapFieldFunc = mapFieldFunc
+// MapFieldFunc sets Map's MapFieldFunc.
+func (b *MapBuilder) MapFieldFunc(mapFieldFunc map[int64]func(in int64) error) *MapBuilder {
+	b.build.MapFieldFunc = mapFieldFunc
 	return b
 }
 
-// SetMapFieldPtrAlias sets Map's MapFieldPtrAlias.
-func (b *MapBuilder) SetMapFieldPtrAlias(mapFieldPtrAlias map[*success_maps.Int64Alias]*success_maps.FuncAlias) *MapBuilder {
-	b.MapFieldPtrAlias = &mapFieldPtrAlias
+// MapFieldPtrAlias sets Map's MapFieldPtrAlias.
+func (b *MapBuilder) MapFieldPtrAlias(mapFieldPtrAlias map[*success_maps.Int64Alias]*success_maps.FuncAlias) *MapBuilder {
+	b.build.MapFieldPtrAlias = &mapFieldPtrAlias
 	return b
 }
 
-// SetMapFieldWithPkg sets Map's MapFieldWithPkg.
-func (b *MapBuilder) SetMapFieldWithPkg(mapFieldWithPkg map[int64]context.Context) *MapBuilder {
-	b.MapFieldWithPkg = mapFieldWithPkg
+// MapFieldWithPkg sets Map's MapFieldWithPkg.
+func (b *MapBuilder) MapFieldWithPkg(mapFieldWithPkg map[int64]context.Context) *MapBuilder {
+	b.build.MapFieldWithPkg = mapFieldWithPkg
 	return b
 }
