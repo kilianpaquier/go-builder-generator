@@ -16,14 +16,15 @@ func NewFuncBuilder() *FuncBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *FuncBuilder) Copy() *FuncBuilder {
-	c := *b
-	return &c
+	result := *b
+	return &result
 }
 
 // Build returns built Func.
 func (b *FuncBuilder) Build() *success_funcs.Func {
-	c := (success_funcs.Func)(*b)
-	return &c
+
+	result := (success_funcs.Func)(*b)
+	return &result
 }
 
 // SetFuncField sets Func's FuncField.

@@ -19,14 +19,15 @@ func NewNamingBuilder() *NamingBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *NamingBuilder) Copy() *NamingBuilder {
-	c := *b
-	return &c
+	result := *b
+	return &result
 }
 
 // Build returns built Naming.
 func (b *NamingBuilder) Build() *success_naming.Naming {
-	c := (success_naming.Naming)(*b)
-	return &c
+
+	result := (success_naming.Naming)(*b)
+	return &result
 }
 
 // SetACRONYMOUS sets Naming's ACRONYMOUS.

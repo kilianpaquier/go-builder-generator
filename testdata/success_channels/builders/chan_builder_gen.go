@@ -18,14 +18,15 @@ func NewChanBuilder() *ChanBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *ChanBuilder) Copy() *ChanBuilder {
-	c := *b
-	return &c
+	result := *b
+	return &result
 }
 
 // Build returns built Chan.
 func (b *ChanBuilder) Build() *success_channels.Chan {
-	c := (success_channels.Chan)(*b)
-	return &c
+
+	result := (success_channels.Chan)(*b)
+	return &result
 }
 
 // SetChanField sets Chan's ChanField.

@@ -2,7 +2,7 @@ package success_with_options
 
 import "context"
 
-//go:generate ../../go-builder-generator generate -f types.go -s Options,Empty -d builders --use-validator
+//go:generate ../../go-builder-generator generate -f types.go -s Options,Empty -d builders --validate-func Validate
 
 type Int64Alias int64
 
@@ -15,7 +15,7 @@ type Options struct {
 	IgnoreField               string          `builder:"ignore"`
 
 	PtrField             *string `builder:"pointer" validate:"required"`
-	PtrFieldValidatedToo *string `validate:"required"`
+	PtrFieldValidatedToo *string
 
 	SimpleFieldAppend Int64Alias `builder:"append"` // option shouldn't be used
 
@@ -24,4 +24,8 @@ type Options struct {
 	SliceFieldAppendPtr   []*int64     `builder:"append"`
 	SliceFieldPtrAppend   *[]int64     `builder:"append,pointer"` // should be the same as below
 	SliceFieldNoPtrAppend *[]int64     `builder:"append"`         // should be the same as above
+}
+
+func (o *Options) Validate() error {
+	return nil
 }

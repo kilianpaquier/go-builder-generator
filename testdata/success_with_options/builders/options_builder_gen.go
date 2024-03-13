@@ -5,7 +5,6 @@ package builders
 import (
 	"fmt"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_with_options"
 )
 
@@ -19,18 +18,19 @@ func NewOptionsBuilder() *OptionsBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *OptionsBuilder) Copy() *OptionsBuilder {
-	c := *b
-	return &c
+	result := *b
+	return &result
 }
 
 // Build returns built Options.
 func (b *OptionsBuilder) Build() (*success_with_options.Options, error) {
 	b = b.GetDefaultString().GetDefaultContext()
-	c := (success_with_options.Options)(*b)
-	if err := validator.New().Struct(c); err != nil {
+
+	result := (success_with_options.Options)(*b)
+	if err := result.Validate(); err != nil {
 		return nil, fmt.Errorf("failed to validate 'Options' struct: %w", err)
 	}
-	return &c, nil
+	return &result, nil
 }
 
 // SetDefaultField sets Options's DefaultField.

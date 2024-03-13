@@ -287,10 +287,10 @@ func TestRun(t *testing.T) {
 		assertdir := filepath.Join(testdata, "success_with_options", "builders")
 		destdir := filepath.Join(t.TempDir(), "builders")
 		options := generate.CLIOptions{
-			Destdir:       destdir,
-			File:          filepath.Join(testdata, "success_with_options", "types.go"),
-			Structs:       []string{"Options", "Empty"},
-			UserValidator: true,
+			Destdir:      destdir,
+			File:         filepath.Join(testdata, "success_with_options", "types.go"),
+			Structs:      []string{"Options", "Empty"},
+			ValidateFunc: "Validate",
 		}
 
 		// Act

@@ -16,14 +16,15 @@ func NewStructNoFieldsBuilder() *StructNoFieldsBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *StructNoFieldsBuilder) Copy() *StructNoFieldsBuilder {
-	c := *b
-	return &c
+	result := *b
+	return &result
 }
 
 // Build returns built StructNoFields.
 func (b *StructNoFieldsBuilder) Build() *success_struct.StructNoFields {
-	c := (success_struct.StructNoFields)(*b)
-	return &c
+
+	result := (success_struct.StructNoFields)(*b)
+	return &result
 }
 
 // SetNoFields sets StructNoFields's NoFields.

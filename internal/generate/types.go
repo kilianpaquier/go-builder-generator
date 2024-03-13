@@ -9,11 +9,11 @@ const (
 
 // CLIOptions represents the struct of available options to be given to go-builder-generator.
 type CLIOptions struct {
-	Destdir       string
-	File          string
-	NoNotice      bool
-	UserValidator bool
-	Structs       []string
+	Destdir      string
+	File         string
+	NoNotice     bool
+	Structs      []string
+	ValidateFunc string
 }
 
 // implData represents the struct for the _impl file to generate.
@@ -42,8 +42,8 @@ type genOpts struct {
 	DestPackage   string
 	Imports       []string
 	NoNotice      bool
-	UseValidator  bool
 	SourcePackage string
+	ValidateFunc  string
 }
 
 // propertyOpts represents the available options to be put in `builder`
@@ -53,7 +53,6 @@ type propertyOpts struct {
 	DefaultFunc string
 	Ignore      bool
 	Pointer     bool
-	Validate    bool
 }
 
 // property represents one parsed struct field.

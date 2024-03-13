@@ -16,14 +16,15 @@ func NewSyscallErrorBuilder() *SyscallErrorBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *SyscallErrorBuilder) Copy() *SyscallErrorBuilder {
-	c := *b
-	return &c
+	result := *b
+	return &result
 }
 
 // Build returns built SyscallError.
 func (b *SyscallErrorBuilder) Build() *os.SyscallError {
-	c := (os.SyscallError)(*b)
-	return &c
+
+	result := (os.SyscallError)(*b)
+	return &result
 }
 
 // SetErr sets SyscallError's Err.

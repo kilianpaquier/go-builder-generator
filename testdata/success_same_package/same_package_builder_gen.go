@@ -16,14 +16,15 @@ func NewSamePackageBuilder() *SamePackageBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *SamePackageBuilder) Copy() *SamePackageBuilder {
-	c := *b
-	return &c
+	result := *b
+	return &result
 }
 
 // Build returns built SamePackage.
 func (b *SamePackageBuilder) Build() *SamePackage {
-	c := (SamePackage)(*b)
-	return &c
+
+	result := (SamePackage)(*b)
+	return &result
 }
 
 // SetCtx sets SamePackage's Ctx.

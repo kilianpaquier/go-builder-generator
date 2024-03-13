@@ -16,14 +16,15 @@ func NewExportBuilder() *ExportBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *ExportBuilder) Copy() *ExportBuilder {
-	c := *b
-	return &c
+	result := *b
+	return &result
 }
 
 // Build returns built Export.
 func (b *ExportBuilder) Build() *success_export.Export {
-	c := (success_export.Export)(*b)
-	return &c
+
+	result := (success_export.Export)(*b)
+	return &result
 }
 
 // SetInt64Alias sets Export's Int64Alias.

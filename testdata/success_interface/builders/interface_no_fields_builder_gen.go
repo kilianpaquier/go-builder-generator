@@ -16,14 +16,15 @@ func NewInterfaceNoFieldsBuilder() *InterfaceNoFieldsBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *InterfaceNoFieldsBuilder) Copy() *InterfaceNoFieldsBuilder {
-	c := *b
-	return &c
+	result := *b
+	return &result
 }
 
 // Build returns built InterfaceNoFields.
 func (b *InterfaceNoFieldsBuilder) Build() *success_interface.InterfaceNoFields {
-	c := (success_interface.InterfaceNoFields)(*b)
-	return &c
+
+	result := (success_interface.InterfaceNoFields)(*b)
+	return &result
 }
 
 // SetNoFields sets InterfaceNoFields's NoFields.

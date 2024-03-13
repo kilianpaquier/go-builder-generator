@@ -157,10 +157,5 @@ func parseOptions(tags *ast.BasicLit) (propertyOpts, error) {
 		}
 	}
 
-	// check if validator needs to be added to options
-	if _, err := structtags.Get("validate"); err == nil {
-		options.Validate = true
-	}
-
 	return options, errors.Join(errs...)
 }

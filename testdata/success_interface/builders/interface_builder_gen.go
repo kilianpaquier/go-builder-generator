@@ -18,14 +18,15 @@ func NewInterfaceBuilder() *InterfaceBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *InterfaceBuilder) Copy() *InterfaceBuilder {
-	c := *b
-	return &c
+	result := *b
+	return &result
 }
 
 // Build returns built Interface.
 func (b *InterfaceBuilder) Build() *success_interface.Interface {
-	c := (success_interface.Interface)(*b)
-	return &c
+
+	result := (success_interface.Interface)(*b)
+	return &result
 }
 
 // SetAnotherInterface sets Interface's AnotherInterface.

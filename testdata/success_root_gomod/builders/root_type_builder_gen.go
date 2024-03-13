@@ -16,14 +16,15 @@ func NewRootTypeBuilder() *RootTypeBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *RootTypeBuilder) Copy() *RootTypeBuilder {
-	c := *b
-	return &c
+	result := *b
+	return &result
 }
 
 // Build returns built RootType.
 func (b *RootTypeBuilder) Build() *root.RootType {
-	c := (root.RootType)(*b)
-	return &c
+
+	result := (root.RootType)(*b)
+	return &result
 }
 
 // SetField sets RootType's Field.

@@ -18,14 +18,15 @@ func NewArrayAndSliceBuilder() *ArrayAndSliceBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *ArrayAndSliceBuilder) Copy() *ArrayAndSliceBuilder {
-	c := *b
-	return &c
+	result := *b
+	return &result
 }
 
 // Build returns built ArrayAndSlice.
 func (b *ArrayAndSliceBuilder) Build() *success_slices.ArrayAndSlice {
-	c := (success_slices.ArrayAndSlice)(*b)
-	return &c
+
+	result := (success_slices.ArrayAndSlice)(*b)
+	return &result
 }
 
 // SetArrayField sets ArrayAndSlice's ArrayField.

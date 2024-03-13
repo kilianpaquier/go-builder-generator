@@ -18,14 +18,15 @@ func NewMapBuilder() *MapBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *MapBuilder) Copy() *MapBuilder {
-	c := *b
-	return &c
+	result := *b
+	return &result
 }
 
 // Build returns built Map.
 func (b *MapBuilder) Build() *success_maps.Map {
-	c := (success_maps.Map)(*b)
-	return &c
+
+	result := (success_maps.Map)(*b)
+	return &result
 }
 
 // SetMapField sets Map's MapField.

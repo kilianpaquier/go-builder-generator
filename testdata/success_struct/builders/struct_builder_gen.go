@@ -18,14 +18,15 @@ func NewStructBuilder() *StructBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *StructBuilder) Copy() *StructBuilder {
-	c := *b
-	return &c
+	result := *b
+	return &result
 }
 
 // Build returns built Struct.
 func (b *StructBuilder) Build() *success_struct.Struct {
-	c := (success_struct.Struct)(*b)
-	return &c
+
+	result := (success_struct.Struct)(*b)
+	return &result
 }
 
 // SetAnotherStruct sets Struct's AnotherStruct.

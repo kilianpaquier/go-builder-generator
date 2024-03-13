@@ -52,7 +52,7 @@ func Run(options CLIOptions) error {
 		DestPackage:   destPackage,
 		Imports:       fileImports,
 		NoNotice:      options.NoNotice,
-		UseValidator:  options.UserValidator,
+		ValidateFunc:  options.ValidateFunc,
 		SourcePackage: sourcePackage,
 	}
 	var errs []error

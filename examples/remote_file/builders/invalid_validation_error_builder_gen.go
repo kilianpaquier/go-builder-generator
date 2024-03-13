@@ -18,14 +18,15 @@ func NewInvalidValidationErrorBuilder() *InvalidValidationErrorBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *InvalidValidationErrorBuilder) Copy() *InvalidValidationErrorBuilder {
-	c := *b
-	return &c
+	result := *b
+	return &result
 }
 
 // Build returns built InvalidValidationError.
 func (b *InvalidValidationErrorBuilder) Build() *validator.InvalidValidationError {
-	c := (validator.InvalidValidationError)(*b)
-	return &c
+
+	result := (validator.InvalidValidationError)(*b)
+	return &result
 }
 
 // SetType sets InvalidValidationError's Type.

@@ -12,13 +12,15 @@ func NewSomeStructBuilder() *SomeStructBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *SomeStructBuilder) Copy() *SomeStructBuilder {
-	c := *b
-	return &c
+	result := *b
+	return &result
 }
 
 // Build returns built SomeStruct.
 func (b *SomeStructBuilder) Build() *SomeStruct {
-	return (*SomeStruct)(b)
+
+	result := (SomeStruct)(*b)
+	return &result
 }
 
 // SetSomeChan sets SomeStruct's SomeChan.

@@ -6,9 +6,9 @@ package {{ .DestPackage }}
 
 {{ if gt (len .Imports) 0 -}}
 import (
-    {{- range .Imports }}
+{{- range .Imports }}
     {{ . }}
-    {{- end }}
+{{- end }}
 )
 {{- end }}
 
@@ -28,25 +28,25 @@ func New{{ $builder }}() *{{ $builder }} {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *{{ $builder }}) Copy() *{{ $builder }} {
-    c := *b
-    return &c
+    result := *b
+    return &result
 }
 
 // Build returns built {{ .Name }}.
-func (b *{{ $builder }}) Build() (*{{ $fullname }}{{ if and .UseValidator .HasValidate }}, error{{ end }}) {
-    {{- if gt (len .DefaultFuncs) 0 }}
+func (b *{{ $builder }}) Build() (*{{ $fullname }}{{ if .ValidateFunc }}, error{{ end }}) {
+{{- if gt (len .DefaultFuncs) 0 }}
     b = b{{ range .DefaultFuncs }}.{{ . }}(){{ end }}
-    {{ end -}}
+{{- end }}
 
-    c := ({{ $fullname }})(*b)
-    {{- if and .UseValidator .HasValidate  }}
-    if err := validator.New().Struct(c); err != nil {
+    result := ({{ $fullname }})(*b)
+{{- if .ValidateFunc }}
+    if err := result.{{ .ValidateFunc }}(); err != nil {
         return nil, fmt.Errorf("failed to validate '{{ .Name }}' struct: %w", err)
     }
-    return &c, nil
-    {{- else }}
-    return &c
-    {{- end }}
+    return &result, nil
+{{- else }}
+    return &result
+{{- end }}
 }
 
 {{- range .Properties }}
@@ -55,11 +55,11 @@ func (b *{{ $builder }}) Build() (*{{ $fullname }}{{ if and .UseValidator .HasVa
 // Set{{ .Name }} sets {{ $.Name }}'s {{ .Name }}.
 {{- if .Append }}
 func (b *{{ $builder }}) Set{{ .Name }}({{ .ParamName }} ...{{ .AlteredType }}) *{{ $builder }} {
-    {{- if hasPrefix .InitialType "*" }}
+{{- if hasPrefix .InitialType "*" }}
     *b.{{ .Name }} = append(*b.{{ .Name }}, {{ .ParamName }}...)
-    {{- else }}
+{{- else }}
     b.{{ .Name }} = append(b.{{ .Name }}, {{ .ParamName }}...)
-    {{- end }}
+{{- end }}
     return b
 }
 {{- else }}

@@ -79,13 +79,6 @@ func generateStruct(builder genBuilder, fields []*ast.Field, destdir string) (*i
 			continue
 		}
 
-		// move up validate option because it's common to all struct (Build function)
-		// and not just the current field
-		if builder.UseValidator && property.Validate {
-			builder.HasValidate = true
-			builder.Imports = append(builder.Imports, `"github.com/go-playground/validator/v10"`)
-		}
-
 		// move up default_func option one function could be use for multiple fields
 		if property.DefaultFunc != "" && !slices.Contains(builder.DefaultFuncs, property.DefaultFunc) {
 			builder.DefaultFuncs = append(builder.DefaultFuncs, property.DefaultFunc)

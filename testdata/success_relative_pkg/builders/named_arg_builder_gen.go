@@ -16,14 +16,15 @@ func NewNamedArgBuilder() *NamedArgBuilder {
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
 func (b *NamedArgBuilder) Copy() *NamedArgBuilder {
-	c := *b
-	return &c
+	result := *b
+	return &result
 }
 
 // Build returns built NamedArg.
 func (b *NamedArgBuilder) Build() *sql.NamedArg {
-	c := (sql.NamedArg)(*b)
-	return &c
+
+	result := (sql.NamedArg)(*b)
+	return &result
 }
 
 // SetName sets NamedArg's Name.
