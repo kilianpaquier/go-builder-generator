@@ -2,6 +2,7 @@ ci:
   name: github
   options:
     - codecov
+    - codeql
     - dependabot
 license: mit
 maintainers:

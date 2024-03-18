@@ -13,7 +13,8 @@ permissions:
 
 jobs:
 
-  go-dependencies-submission:
+  go-dependency-submission:
+    name: Go Dependency Submission
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
