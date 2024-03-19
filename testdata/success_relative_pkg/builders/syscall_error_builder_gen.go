@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-// SyscallErrorBuilder represents the builder of SyscallError to build SyscallError with builder-pattern.
+// SyscallErrorBuilder represents SyscallError's builder.
 type SyscallErrorBuilder struct {
 	build os.SyscallError
 }
@@ -23,8 +23,8 @@ func (b *SyscallErrorBuilder) Copy() *SyscallErrorBuilder {
 
 // Build returns built SyscallError.
 func (b *SyscallErrorBuilder) Build() *os.SyscallError {
-	result := &b.build
-	return result
+	result := b.build
+	return &result
 }
 
 // Err sets SyscallError's Err.

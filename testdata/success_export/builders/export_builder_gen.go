@@ -6,7 +6,7 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_export"
 )
 
-// ExportBuilder represents the builder of Export to build Export with builder-pattern.
+// ExportBuilder represents Export's builder.
 type ExportBuilder struct {
 	build success_export.Export
 }
@@ -23,8 +23,8 @@ func (b *ExportBuilder) Copy() *ExportBuilder {
 
 // Build returns built Export.
 func (b *ExportBuilder) Build() *success_export.Export {
-	result := &b.build
-	return result
+	result := b.build
+	return &result
 }
 
 // Int64Alias sets Export's Int64Alias.

@@ -8,7 +8,7 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_struct"
 )
 
-// StructBuilder represents the builder of Struct to build Struct with builder-pattern.
+// StructBuilder represents Struct's builder.
 type StructBuilder struct {
 	build success_struct.Struct
 }
@@ -25,8 +25,8 @@ func (b *StructBuilder) Copy() *StructBuilder {
 
 // Build returns built Struct.
 func (b *StructBuilder) Build() *success_struct.Struct {
-	result := &b.build
-	return result
+	result := b.build
+	return &result
 }
 
 // AnotherStruct sets Struct's AnotherStruct.

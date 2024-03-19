@@ -25,8 +25,8 @@ func (b *SomeStructBuilder) Copy() *SomeStructBuilder {
 func (b *SomeStructBuilder) Build() *with_tag.SomeStruct {
 	b = b.SetTheChan()
 
-	result := &b.build
-	return result
+	result := b.build
+	return &result
 }
 
 // SomeSlice sets SomeStruct's SomeSlice.

@@ -8,7 +8,7 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_slices"
 )
 
-// ArrayAndSliceBuilder represents the builder of ArrayAndSlice to build ArrayAndSlice with builder-pattern.
+// ArrayAndSliceBuilder represents ArrayAndSlice's builder.
 type ArrayAndSliceBuilder struct {
 	build success_slices.ArrayAndSlice
 }
@@ -25,8 +25,8 @@ func (b *ArrayAndSliceBuilder) Copy() *ArrayAndSliceBuilder {
 
 // Build returns built ArrayAndSlice.
 func (b *ArrayAndSliceBuilder) Build() *success_slices.ArrayAndSlice {
-	result := &b.build
-	return result
+	result := b.build
+	return &result
 }
 
 // ArrayField sets ArrayAndSlice's ArrayField.

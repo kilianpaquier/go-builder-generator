@@ -6,7 +6,7 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/root"
 )
 
-// RootTypeBuilder represents the builder of RootType to build RootType with builder-pattern.
+// RootTypeBuilder represents RootType's builder.
 type RootTypeBuilder struct {
 	build root.RootType
 }
@@ -23,8 +23,8 @@ func (b *RootTypeBuilder) Copy() *RootTypeBuilder {
 
 // Build returns built RootType.
 func (b *RootTypeBuilder) Build() *root.RootType {
-	result := &b.build
-	return result
+	result := b.build
+	return &result
 }
 
 // Field sets RootType's Field.

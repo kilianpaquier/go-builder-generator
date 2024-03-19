@@ -19,8 +19,8 @@ func (b *SomeStructBuilder) Copy() *SomeStructBuilder {
 
 // Build returns built SomeStruct.
 func (b *SomeStructBuilder) Build() *SomeStruct {
-	result := &b.build
-	return result
+	result := b.build
+	return &result
 }
 
 // SomeChan sets SomeStruct's SomeChan.

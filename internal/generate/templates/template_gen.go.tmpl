@@ -18,7 +18,7 @@ import (
 {{- $fullname = print .SourcePackage "." .Name }}
 {{- end }}
 
-// {{ $builder }} represents the builder of {{ .Name }} to build {{ .Name }} with builder-pattern.
+// {{ $builder }} represents {{ .Name }}'s builder.
 type {{ $builder }} struct {
     build {{ $fullname }}
 }
@@ -40,14 +40,14 @@ func (b *{{ $builder }}) Build() (*{{ $fullname }}{{ if .ValidateFunc }}, error{
 
 {{ end -}}
 
-    result := &b.build
+    result := b.build
 {{- if .ValidateFunc }}
     if err := result.{{ .ValidateFunc }}(); err != nil {
         return nil, fmt.Errorf("failed to validate '{{ .Name }}' struct: %w", err)
     }
-    return result, nil
+    return &result, nil
 {{- else }}
-    return result
+    return &result
 {{- end }}
 }
 

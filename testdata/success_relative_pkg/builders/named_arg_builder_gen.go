@@ -6,7 +6,7 @@ import (
 	"database/sql"
 )
 
-// NamedArgBuilder represents the builder of NamedArg to build NamedArg with builder-pattern.
+// NamedArgBuilder represents NamedArg's builder.
 type NamedArgBuilder struct {
 	build sql.NamedArg
 }
@@ -23,8 +23,8 @@ func (b *NamedArgBuilder) Copy() *NamedArgBuilder {
 
 // Build returns built NamedArg.
 func (b *NamedArgBuilder) Build() *sql.NamedArg {
-	result := &b.build
-	return result
+	result := b.build
+	return &result
 }
 
 // Name sets NamedArg's Name.

@@ -8,7 +8,7 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_maps"
 )
 
-// MapBuilder represents the builder of Map to build Map with builder-pattern.
+// MapBuilder represents Map's builder.
 type MapBuilder struct {
 	build success_maps.Map
 }
@@ -25,8 +25,8 @@ func (b *MapBuilder) Copy() *MapBuilder {
 
 // Build returns built Map.
 func (b *MapBuilder) Build() *success_maps.Map {
-	result := &b.build
-	return result
+	result := b.build
+	return &result
 }
 
 // MapField sets Map's MapField.

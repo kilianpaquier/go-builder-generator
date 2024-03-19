@@ -9,7 +9,7 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_naming"
 )
 
-// NamingBuilder represents the builder of Naming to build Naming with builder-pattern.
+// NamingBuilder represents Naming's builder.
 type NamingBuilder struct {
 	build success_naming.Naming
 }
@@ -26,8 +26,8 @@ func (b *NamingBuilder) Copy() *NamingBuilder {
 
 // Build returns built Naming.
 func (b *NamingBuilder) Build() *success_naming.Naming {
-	result := &b.build
-	return result
+	result := b.build
+	return &result
 }
 
 // ACRONYMOUS sets Naming's ACRONYMOUS.

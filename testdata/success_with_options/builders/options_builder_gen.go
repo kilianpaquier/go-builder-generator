@@ -8,7 +8,7 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_with_options"
 )
 
-// OptionsBuilder represents the builder of Options to build Options with builder-pattern.
+// OptionsBuilder represents Options's builder.
 type OptionsBuilder struct {
 	build success_with_options.Options
 }
@@ -27,11 +27,11 @@ func (b *OptionsBuilder) Copy() *OptionsBuilder {
 func (b *OptionsBuilder) Build() (*success_with_options.Options, error) {
 	b = b.GetDefaultString().GetDefaultContext()
 
-	result := &b.build
+	result := b.build
 	if err := result.Validate(); err != nil {
 		return nil, fmt.Errorf("failed to validate 'Options' struct: %w", err)
 	}
-	return result, nil
+	return &result, nil
 }
 
 // DefaultField sets Options's DefaultField.

@@ -25,11 +25,11 @@ func (b *OptionsBuilder) Copy() *OptionsBuilder {
 
 // Build returns built Options.
 func (b *OptionsBuilder) Build() (*with_options.Options, error) {
-	result := &b.build
+	result := b.build
 	if err := result.Validate(); err != nil {
 		return nil, fmt.Errorf("failed to validate 'Options' struct: %w", err)
 	}
-	return result, nil
+	return &result, nil
 }
 
 // SetSomeField sets Options's SomeField.

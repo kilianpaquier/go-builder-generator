@@ -6,7 +6,7 @@ import (
 	"context"
 )
 
-// SamePackageBuilder represents the builder of SamePackage to build SamePackage with builder-pattern.
+// SamePackageBuilder represents SamePackage's builder.
 type SamePackageBuilder struct {
 	build SamePackage
 }
@@ -23,8 +23,8 @@ func (b *SamePackageBuilder) Copy() *SamePackageBuilder {
 
 // Build returns built SamePackage.
 func (b *SamePackageBuilder) Build() *SamePackage {
-	result := &b.build
-	return result
+	result := b.build
+	return &result
 }
 
 // Ctx sets SamePackage's Ctx.

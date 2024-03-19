@@ -8,7 +8,7 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_interface"
 )
 
-// InterfaceBuilder represents the builder of Interface to build Interface with builder-pattern.
+// InterfaceBuilder represents Interface's builder.
 type InterfaceBuilder struct {
 	build success_interface.Interface
 }
@@ -25,8 +25,8 @@ func (b *InterfaceBuilder) Copy() *InterfaceBuilder {
 
 // Build returns built Interface.
 func (b *InterfaceBuilder) Build() *success_interface.Interface {
-	result := &b.build
-	return result
+	result := b.build
+	return &result
 }
 
 // AnotherInterface sets Interface's AnotherInterface.

@@ -6,7 +6,7 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_funcs"
 )
 
-// FuncBuilder represents the builder of Func to build Func with builder-pattern.
+// FuncBuilder represents Func's builder.
 type FuncBuilder struct {
 	build success_funcs.Func
 }
@@ -23,8 +23,8 @@ func (b *FuncBuilder) Copy() *FuncBuilder {
 
 // Build returns built Func.
 func (b *FuncBuilder) Build() *success_funcs.Func {
-	result := &b.build
-	return result
+	result := b.build
+	return &result
 }
 
 // FuncField sets Func's FuncField.

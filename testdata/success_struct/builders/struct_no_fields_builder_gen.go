@@ -6,7 +6,7 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_struct"
 )
 
-// StructNoFieldsBuilder represents the builder of StructNoFields to build StructNoFields with builder-pattern.
+// StructNoFieldsBuilder represents StructNoFields's builder.
 type StructNoFieldsBuilder struct {
 	build success_struct.StructNoFields
 }
@@ -23,8 +23,8 @@ func (b *StructNoFieldsBuilder) Copy() *StructNoFieldsBuilder {
 
 // Build returns built StructNoFields.
 func (b *StructNoFieldsBuilder) Build() *success_struct.StructNoFields {
-	result := &b.build
-	return result
+	result := b.build
+	return &result
 }
 
 // NoFields sets StructNoFields's NoFields.

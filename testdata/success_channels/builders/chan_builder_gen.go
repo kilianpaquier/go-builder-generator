@@ -8,7 +8,7 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_channels"
 )
 
-// ChanBuilder represents the builder of Chan to build Chan with builder-pattern.
+// ChanBuilder represents Chan's builder.
 type ChanBuilder struct {
 	build success_channels.Chan
 }
@@ -25,8 +25,8 @@ func (b *ChanBuilder) Copy() *ChanBuilder {
 
 // Build returns built Chan.
 func (b *ChanBuilder) Build() *success_channels.Chan {
-	result := &b.build
-	return result
+	result := b.build
+	return &result
 }
 
 // ChanField sets Chan's ChanField.

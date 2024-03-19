@@ -6,7 +6,7 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_interface"
 )
 
-// InterfaceNoFieldsBuilder represents the builder of InterfaceNoFields to build InterfaceNoFields with builder-pattern.
+// InterfaceNoFieldsBuilder represents InterfaceNoFields's builder.
 type InterfaceNoFieldsBuilder struct {
 	build success_interface.InterfaceNoFields
 }
@@ -23,8 +23,8 @@ func (b *InterfaceNoFieldsBuilder) Copy() *InterfaceNoFieldsBuilder {
 
 // Build returns built InterfaceNoFields.
 func (b *InterfaceNoFieldsBuilder) Build() *success_interface.InterfaceNoFields {
-	result := &b.build
-	return result
+	result := b.build
+	return &result
 }
 
 // NoFields sets InterfaceNoFields's NoFields.

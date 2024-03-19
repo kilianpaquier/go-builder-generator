@@ -25,8 +25,8 @@ func (b *InvalidValidationErrorBuilder) Copy() *InvalidValidationErrorBuilder {
 
 // Build returns built InvalidValidationError.
 func (b *InvalidValidationErrorBuilder) Build() *validator.InvalidValidationError {
-	result := &b.build
-	return result
+	result := b.build
+	return &result
 }
 
 // Type sets InvalidValidationError's Type.
