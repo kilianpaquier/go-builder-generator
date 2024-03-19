@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/kilianpaquier/go-builder-generator/compare/v1.0.0...v1.0.1) (2024-03-19)
+
+
+### Bug Fixes
+
+* **generate:** ensure Build function returns a copy of built type ([4c29c0d](https://github.com/kilianpaquier/go-builder-generator/commit/4c29c0d51a3058fd5c685f4f8cfcedc221c3b8f5))
+
 ## 1.0.0 (2024-03-18)
 
 
