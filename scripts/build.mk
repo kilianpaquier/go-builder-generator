@@ -17,15 +17,15 @@ lint-fix: reports
 	@ARGS="--fix" make -s lint
 
 .PHONY: test
-test: lint
+test:
 	@go test ./... -count 1
 
 .PHONY: test-race
-test-race: lint
+test-race:
 	@go test ./... -race
 
 .PHONY: test-cover
-test-cover: lint reports
+test-cover: reports
 	@go test ./... -coverpkg="./..." -covermode="count" -coverprofile="reports/go-coverage.native.out"
 
 .PHONY: buildall

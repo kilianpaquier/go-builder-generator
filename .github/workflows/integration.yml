@@ -90,6 +90,7 @@ jobs:
           env_vars: OS
           fail_ci_if_error: true
           file: reports/go-coverage.native.out
+          flags: ${{ matrix.os }}
           slug: ${{ github.repository }}
           token: ${{ secrets.CODECOV_TOKEN }}
 
