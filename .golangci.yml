@@ -62,9 +62,6 @@ linters-settings:
     exclude-generated: true
 
   govet:
-    # Report about shadowed variables.
-    # Default: false
-    check-shadowing: false
     # Enable all analyzers.
     # Default: false
     enable-all: true
