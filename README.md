@@ -27,7 +27,7 @@ go install github.com/kilianpaquier/go-builder-generator/cmd/go-builder-generato
 
 ## Commands
 
-```sh
+```
 go-builder-generator stands here to easily generate builders for your golang struct types.
 
 Usage:
@@ -48,7 +48,7 @@ Use "go-builder-generator [command] --help" for more information about a command
 
 ### Generate
 
-```sh
+```
 Generate builders for structs arguments present in file argument.
 
 Usage:
