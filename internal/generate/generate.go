@@ -46,6 +46,14 @@ func generateStructs(file *ast.File, structs []string, destdir string, opts genO
 		}
 		validNodes++
 
+		// add an error if destination package is not the same as the source one
+		// and the struct to generate is not exported
+		exported := ast.IsExported(spec.Name.String())
+		if !opts.SamePackage && !exported {
+			errs = append(errs, fmt.Errorf("%s is not exported but generation destination is in an external package", spec.Name.String()))
+			return true
+		}
+
 		// initialize builder to avoid too many params in generateStruct
 		builder := genBuilder{
 			genOpts:     opts,

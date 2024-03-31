@@ -77,6 +77,22 @@ func TestRun(t *testing.T) {
 		assert.ErrorContains(t, err, "failed to parse builder for struct Invalid")
 	})
 
+	t.Run("error_unexported_type_generated_outside_package", func(t *testing.T) {
+		// Arrange
+		destdir := filepath.Join(t.TempDir(), "builders")
+		options := generate.CLIOptions{
+			Destdir: destdir,
+			File:    filepath.Join(testdata, "errors", "unexported_type.go"),
+			Structs: []string{"unexported"},
+		}
+
+		// Act
+		err := generate.Run(options)
+
+		// Assert
+		assert.ErrorContains(t, err, "is not exported but generation destination is in an external package")
+	})
+
 	t.Run("success_channels", func(t *testing.T) {
 		// Arrange
 		assertdir := filepath.Join(testdata, "success_channels", "builders")
