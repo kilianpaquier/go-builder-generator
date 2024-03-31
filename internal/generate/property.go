@@ -17,7 +17,7 @@ import (
 // computeProperty computes the property struct depending on inputs.
 //
 // It's a special function because the target type will be altered depending on options.
-func computeProperty(field *ast.Field, sourcePackage string, samePackage bool) (property, error) {
+func computeProperty(field *ast.Field, sourcePackage string) (property, error) {
 	// parse property tags
 	options, err := parseOptions(field.Tag)
 	if err != nil {
@@ -75,7 +75,7 @@ func computeProperty(field *ast.Field, sourcePackage string, samePackage bool) (
 
 	// check property export and ignore option in case generation is done in another package
 	exported := typeExported && ast.IsExported(propertyName)
-	if !samePackage && !exported {
+	if sourcePackage != "" && !exported {
 		options.Ignore = true
 	}
 

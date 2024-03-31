@@ -14,7 +14,7 @@ import (
 
 {{- $builder := print .Name "Builder" }}
 {{- $fullname := .Name }}
-{{- if not .SamePackage }}
+{{- if not (eq .SourcePackage "") }}
 {{- $fullname = print .SourcePackage "." .Name }}
 {{- end }}
 

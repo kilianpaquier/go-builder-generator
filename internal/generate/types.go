@@ -44,7 +44,6 @@ type genOpts struct {
 	DestPackage   string
 	Imports       []string
 	NoNotice      bool
-	SamePackage   bool
 	SetterPrefix  string
 	SourcePackage string
 	ValidateFunc  string

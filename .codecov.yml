@@ -16,7 +16,7 @@ coverage:
 ignore:
   - "cmd"
   - "examples"
-  - "**/cobra"
-  - "**/mocks"
-  - "**/tests"
-  - "**/testutils"
+  - "**/cobra/**"
+  - "**/mocks/**"
+  - "**/tests/**"
+  - "**/testutils/**"

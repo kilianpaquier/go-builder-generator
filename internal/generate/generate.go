@@ -49,7 +49,7 @@ func generateStructs(file *ast.File, structs []string, destdir string, opts genO
 		// add an error if destination package is not the same as the source one
 		// and the struct to generate is not exported
 		exported := ast.IsExported(spec.Name.String())
-		if !opts.SamePackage && !exported {
+		if opts.SourcePackage != "" && !exported {
 			errs = append(errs, fmt.Errorf("%s is not exported but generation destination is in an external package", spec.Name.String()))
 			return true
 		}
@@ -83,7 +83,7 @@ func generateStruct(builder genBuilder, fields []*ast.Field, destdir string) (*i
 	var errs []error
 	for _, field := range fields {
 		// compute property
-		property, err := computeProperty(field, builder.SourcePackage, builder.SamePackage)
+		property, err := computeProperty(field, builder.SourcePackage)
 		if err != nil {
 			errs = append(errs, err)
 			continue

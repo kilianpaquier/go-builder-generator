@@ -53,7 +53,6 @@ func Run(options CLIOptions) error {
 		DestPackage:   destPackage,
 		Imports:       fileImports,
 		NoNotice:      options.NoNotice,
-		SamePackage:   sourcePackage == "",
 		SourcePackage: sourcePackage,
 		ValidateFunc:  options.ValidateFunc,
 
