@@ -14,7 +14,7 @@ import (
 
 {{- $builder := print .Name "Builder" }}
 {{- $fullname := .Name }}
-{{- if not (eq .SourcePackage "") }}
+{{- if not .SamePackage }}
 {{- $fullname = print .SourcePackage "." .Name }}
 {{- end }}
 
@@ -23,8 +23,13 @@ type {{ $builder }} struct {
     build {{ $fullname }}
 }
 
-// New{{ $builder }} creates a new {{ $builder }}.
-func New{{ $builder }}() *{{ $builder }} {
+{{ $new := "new" }}
+{{ if .Exported }}
+{{ $new = "New" }}
+{{ end }}
+
+// {{ $new }}{{ title $builder }} creates a new {{ $builder }}.
+func {{ $new }}{{ title $builder }}() *{{ $builder }} {
     return &{{ $builder }}{}
 }
 
@@ -54,9 +59,29 @@ func (b *{{ $builder }}) Build() (*{{ $fullname }}{{ if .ValidateFunc }}, error{
 {{- range .Properties }}
 {{- if not .Ignore }}
 
-// {{ title $.SetterPrefix }}{{ .Name }} sets {{ $.Name }}'s {{ .Name }}.
+{{/*
+    put setter prefix first letter in upper:
+        - if the property is exported (logical, to be able to set the value)
+        - if the parent is unexported (exported function for an unexported type)
+*/}}
+{{ $prefix := $.SetterPrefix }}
+{{ if or .Exported (not $.Exported) }}
+{{ $prefix = title $.SetterPrefix }}
+{{ end }}
+
+{{/* 
+    put unexported name first letter in upper:
+        - if the prefix is present (beauty) 
+        - if the parent is unexported (exported function for an unexported type)
+*/}}
+{{ $name := .Name }}
+{{ if or (not (eq $prefix "")) (not $.Exported) }}
+{{ $name = title .Name }}
+{{ end }}
+
+// {{ $prefix }}{{ $name }} sets {{ $.Name }}'s {{ .Name }}.
 {{- if .Append }}
-func (b *{{ $builder }}) {{ title $.SetterPrefix }}{{ .Name }}({{ .ParamName }} ...{{ .AlteredType }}) *{{ $builder }} {
+func (b *{{ $builder }}) {{ $prefix }}{{ $name }}({{ .ParamName }} ...{{ .AlteredType }}) *{{ $builder }} {
 {{- if hasPrefix "*" .InitialType }}
     *b.build.{{ .Name }} = append(*b.build.{{ .Name }}, {{ .ParamName }}...)
 {{- else }}
@@ -65,7 +90,7 @@ func (b *{{ $builder }}) {{ title $.SetterPrefix }}{{ .Name }}({{ .ParamName }} 
     return b
 }
 {{- else }}
-func (b *{{ $builder }}) {{ title $.SetterPrefix }}{{ .Name }}({{ .ParamName }} {{ if .Pointer }}*{{ end }}{{ .AlteredType }}) *{{ $builder }} {
+func (b *{{ $builder }}) {{ $prefix }}{{ $name }}({{ .ParamName }} {{ if .Pointer }}*{{ end }}{{ .AlteredType }}) *{{ $builder }} {
     b.build.{{ .Name }} = {{ if and (not .Pointer) (hasPrefix "*" .InitialType) }}&{{ end }}{{ .ParamName }}
     return b
 }

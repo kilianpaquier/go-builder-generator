@@ -56,6 +56,7 @@ func generateStructs(file *ast.File, structs []string, destdir string, opts genO
 
 		// initialize builder to avoid too many params in generateStruct
 		builder := genBuilder{
+			Exported:    exported,
 			genOpts:     opts,
 			implBuilder: implBuilder{Name: spec.Name.String()},
 		}
@@ -82,7 +83,7 @@ func generateStruct(builder genBuilder, fields []*ast.Field, destdir string) (*i
 	var errs []error
 	for _, field := range fields {
 		// compute property
-		property, err := computeProperty(field, builder.SourcePackage)
+		property, err := computeProperty(field, builder.SourcePackage, builder.SamePackage)
 		if err != nil {
 			errs = append(errs, err)
 			continue

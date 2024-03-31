@@ -248,17 +248,25 @@ func TestRun(t *testing.T) {
 		dest := filepath.Join(destdir, "types.go")
 		require.NoError(t, filesystem.CopyFile(src, dest))
 
-		options := generate.CLIOptions{
+		firstOptions := generate.CLIOptions{
 			Destdir: destdir,
 			File:    dest,
-			Structs: []string{"SamePackage"},
+			Structs: []string{"SamePackage", "unexportedType"},
+		}
+		secondOptions := generate.CLIOptions{
+			Destdir:      destdir,
+			File:         dest,
+			SetterPrefix: "Set",
+			Structs:      []string{"unexportedTypePrefix"},
 		}
 
 		// Act
-		err := generate.Run(options)
+		err := generate.Run(firstOptions)
+		require.NoError(t, err)
+		err = generate.Run(secondOptions)
+		require.NoError(t, err)
 
 		// Assert
-		assert.NoError(t, err)
 		testfs.AssertEqualDir(t, assertdir, destdir)
 	})
 

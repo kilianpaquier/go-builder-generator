@@ -39,6 +39,12 @@ func (b *SamePackageBuilder) Int64Alias(int64Alias Int64Alias) *SamePackageBuild
 	return b
 }
 
+// nonExported sets SamePackage's nonExported.
+func (b *SamePackageBuilder) nonExported(nonExported string) *SamePackageBuilder {
+	b.build.nonExported = nonExported
+	return b
+}
+
 // Primitive sets SamePackage's Primitive.
 func (b *SamePackageBuilder) Primitive(primitive string) *SamePackageBuilder {
 	b.build.Primitive = primitive

@@ -8,6 +8,7 @@ import (
 	"go/token"
 	"path/filepath"
 
+	"github.com/huandu/xstrings"
 	filesystem "github.com/kilianpaquier/filesystem/pkg"
 )
 
@@ -52,9 +53,13 @@ func Run(options CLIOptions) error {
 		DestPackage:   destPackage,
 		Imports:       fileImports,
 		NoNotice:      options.NoNotice,
-		SetterPrefix:  options.SetterPrefix,
+		SamePackage:   sourcePackage == "",
 		SourcePackage: sourcePackage,
 		ValidateFunc:  options.ValidateFunc,
+
+		// force first rune to lowercase in case of unexported types
+		// it will be titled in gen template in case the type is exported
+		SetterPrefix: xstrings.FirstRuneToLower(options.SetterPrefix),
 	}
 	var errs []error
 	builders, err := generateStructs(file, options.Structs, destdir, opts)

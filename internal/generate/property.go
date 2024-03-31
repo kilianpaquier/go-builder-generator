@@ -17,21 +17,21 @@ import (
 // computeProperty computes the property struct depending on inputs.
 //
 // It's a special function because the target type will be altered depending on options.
-func computeProperty(field *ast.Field, sourcePackage string) (property, error) {
+func computeProperty(field *ast.Field, sourcePackage string, samePackage bool) (property, error) {
 	// parse property tags
 	options, err := parseOptions(field.Tag)
 	if err != nil {
 		return property{}, fmt.Errorf("failed to parse field options: %w", err)
 	}
 
-	// retrieve tprefixer for field type
-	tprefixer := prefixer.NewPrefixer(field.Type)
-	if err := tprefixer.Valid(); err != nil {
+	// retrieve typePrefixer for field type
+	typePrefixer := prefixer.NewPrefixer(field.Type)
+	if err := typePrefixer.Valid(); err != nil {
 		return property{}, fmt.Errorf("property type prefixer is not implemented: %w", err)
 	}
 
 	// retrieve computed string type
-	initialType, exported := tprefixer.ToString(sourcePackage)
+	initialType, typeExported := typePrefixer.ToString(sourcePackage)
 	alteredType := initialType
 
 	switch {
@@ -59,7 +59,7 @@ func computeProperty(field *ast.Field, sourcePackage string) (property, error) {
 		alteredType = strings.TrimPrefix(alteredType, "*")
 	}
 
-	name := func() string {
+	propertyName := func() string {
 		// returning name if it exists
 		if len(field.Names) > 0 {
 			return field.Names[0].Name
@@ -73,14 +73,15 @@ func computeProperty(field *ast.Field, sourcePackage string) (property, error) {
 		return split[len(split)-1]
 	}()
 
-	// check property export and ignore option
-	if !exported || !ast.IsExported(name) {
+	// check property export and ignore option in case generation is done in another package
+	exported := typeExported && ast.IsExported(propertyName)
+	if !samePackage && !exported {
 		options.Ignore = true
 	}
 
 	paramName := func() string {
 		// transform into camel case then put first letter in lowercase
-		initial := xstrings.FirstRuneToLower(xstrings.ToCamelCase(name))
+		initial := xstrings.FirstRuneToLower(xstrings.ToCamelCase(propertyName))
 
 		// handle builtin reserved keywords or functions
 		if slices.Contains(models.Builtin(), initial) {
@@ -88,8 +89,8 @@ func computeProperty(field *ast.Field, sourcePackage string) (property, error) {
 		}
 
 		// for names full uppercase, change them to full lowercase
-		if strings.ToUpper(name) == name {
-			return strings.ToLower(name)
+		if strings.ToUpper(propertyName) == propertyName {
+			return strings.ToLower(propertyName)
 		}
 
 		// for all other names, keep initial value which is camelCase format
@@ -99,8 +100,9 @@ func computeProperty(field *ast.Field, sourcePackage string) (property, error) {
 	// returning property with computed types and options
 	return property{
 		AlteredType:  alteredType,
+		Exported:     exported,
 		InitialType:  initialType,
-		Name:         name,
+		Name:         propertyName,
 		ParamName:    paramName,
 		propertyOpts: options,
 	}, nil

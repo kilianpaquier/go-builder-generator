@@ -34,8 +34,9 @@ type genBuilder struct {
 	genOpts
 	implBuilder
 
-	Properties  []property
+	Exported    bool
 	HasValidate bool
+	Properties  []property
 }
 
 // genOpts represents the global parsed options that are given to all builders when generating.
@@ -43,6 +44,7 @@ type genOpts struct {
 	DestPackage   string
 	Imports       []string
 	NoNotice      bool
+	SamePackage   bool
 	SetterPrefix  string
 	SourcePackage string
 	ValidateFunc  string
@@ -62,6 +64,7 @@ type property struct {
 	propertyOpts
 
 	AlteredType string
+	Exported    bool
 	InitialType string
 	Name        string
 	ParamName   string
