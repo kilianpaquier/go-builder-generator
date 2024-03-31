@@ -1,6 +1,8 @@
 <!-- This file is safe to edit. Once it exists it will not be overwritten. -->
 
 # go-builder-generator <!-- omit in toc -->
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkilianpaquier%2Fgo-builder-generator.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkilianpaquier%2Fgo-builder-generator?ref=badge_shield)
+
 
 <p align="center">
   <img alt="GitHub Actions" src="https://img.shields.io/github/actions/workflow/status/kilianpaquier/go-builder-generator/integration.yml?branch=main&style=for-the-badge">
@@ -18,6 +20,9 @@
 - [Commands](#commands)
   - [Generate](#generate)
     - [Tags](#tags)
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkilianpaquier%2Fgo-builder-generator.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkilianpaquier%2Fgo-builder-generator?ref=badge_large)
 
 ## How to use ?
 
