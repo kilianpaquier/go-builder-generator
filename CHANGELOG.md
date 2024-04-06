@@ -1,3 +1,22 @@
+## [1.0.2](https://github.com/kilianpaquier/go-builder-generator/compare/v1.0.1...v1.0.2) (2024-04-06)
+
+
+### Bug Fixes
+
+* **deps:** upgrade to go1.22.2 ([3dc05d7](https://github.com/kilianpaquier/go-builder-generator/commit/3dc05d7d93ec4d2d01513983d5dd3a62d532c326))
+* **generate:** add unexported property to builder when generation is done in the same package and handle properly function name ([cdf58da](https://github.com/kilianpaquier/go-builder-generator/commit/cdf58da363374f91b8fa30996a3182e1f1da37a6))
+* **generate:** throw an error in case an unexported struct is given in generation in another package ([4f60bb3](https://github.com/kilianpaquier/go-builder-generator/commit/4f60bb3e52b1bdb2629a5b063b11c2ef7d4f4cd6))
+
+
+### Documentation
+
+* **readme:** remove code section language to avoid weird colors ([9c05df7](https://github.com/kilianpaquier/go-builder-generator/commit/9c05df7f12cf3778b06c5342ad05b109829babac))
+
+
+### Chores
+
+* **golangci:** remove govet deleted option ([6c690b9](https://github.com/kilianpaquier/go-builder-generator/commit/6c690b9dbc4ca7513e5d1dedafe46cd00073b785))
+
 ## [1.0.1](https://github.com/kilianpaquier/go-builder-generator/compare/v1.0.0...v1.0.1) (2024-03-19)
 
 
