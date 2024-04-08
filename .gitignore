@@ -3,7 +3,7 @@
 # If you prefer the allow list template instead of the deny list, see community template:
 # https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
 #
-# Binaries for programs and plugins
+# Binaries for programs
 *.exe
 *.exe~
 *.dll
@@ -28,7 +28,6 @@ reports/
 
 # configs
 .env
-*.toml
 
 # binaries
 go-builder-generator

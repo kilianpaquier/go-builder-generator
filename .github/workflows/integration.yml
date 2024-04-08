@@ -12,9 +12,12 @@ on:
       - ready_for_review
   push:
     branches:
-      - main
-      - staging
+      - alpha
+      - beta
       - develop
+      - main
+      - next
+      - staging
       - v[0-9]+
   workflow_dispatch:
 

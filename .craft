@@ -1,3 +1,5 @@
+# Craft configuration file (https://github.com/kilianpaquier/craft)
+---
 ci:
   name: github
   options:
@@ -9,3 +11,4 @@ maintainers:
   - url: kilianpaquier.com
     name: kilianpaquier
 no_chart: true
+platform: github

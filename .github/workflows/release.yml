@@ -25,6 +25,7 @@ jobs:
       - uses: actions/checkout@v4
       - id: sha
         run: echo "sha=$(echo "$GITHUB_REF_NAME" | sha256sum | cut -c -8)" >> $GITHUB_OUTPUT
+      # https://github.com/marketplace/actions/action-for-semantic-release
       - id: semantic_release
         uses: cycjimmy/semantic-release-action@v4
         with:
@@ -111,6 +112,7 @@ jobs:
         with:
           name: executables
           path: dist
+      # https://github.com/marketplace/actions/action-for-semantic-release
       - id: semantic-release
         uses: cycjimmy/semantic-release-action@v4
         with:
