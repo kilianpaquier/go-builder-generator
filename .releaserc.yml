@@ -52,7 +52,7 @@ plugins:
         - { path: CHANGELOG.md, label: CHANGELOG.md }
         - { path: checksums.txt }
         - { path: dist }
-      failComment: true
+      failComment: 💥 This release from branch ${branch.name} has failed due to the following errors:\n- ${errors.map(err => err.message).join('\\n- ')}
       failTitle: false
       successComment: 🎉 This issue has been resolved in version v${nextRelease.version} 🎉
   - "@semantic-release/exec"

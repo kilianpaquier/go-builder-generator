@@ -8,7 +8,6 @@ ci:
     - dependabot
 license: mit
 maintainers:
-  - url: kilianpaquier.com
-    name: kilianpaquier
+  - name: kilianpaquier
 no_chart: true
 platform: github
