@@ -8,7 +8,7 @@ require (
 	github.com/Masterminds/sprig/v3 v3.2.3
 	github.com/fatih/structtag v1.2.0
 	github.com/go-playground/validator/v10 v10.19.0
-	github.com/hashicorp/go-getter v1.7.3
+	github.com/hashicorp/go-getter v1.7.4
 	github.com/huandu/xstrings v1.4.0
 	github.com/kilianpaquier/filesystem v0.0.0-20240330121830-1322a9a3848f
 	github.com/samber/lo v1.39.0
