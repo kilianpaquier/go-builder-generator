@@ -27,3 +27,9 @@ func (b *OptionsBuilder) GetDefaultString() *OptionsBuilder {
 func (b *OptionsBuilder) GetDefaultContext() *OptionsBuilder {
 	return b
 }
+
+// SetDefaultForceFuncName will be executed during Build function. It allows defining
+// some properties of Options at the end of builder in case those would depend on other properties.
+func (b *OptionsBuilder) SetDefaultForceFuncName() *OptionsBuilder {
+	return b
+}

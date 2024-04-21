@@ -58,6 +58,7 @@ type propertyOpts struct {
 	DefaultFunc string
 	Ignore      bool
 	Pointer     bool
+	FuncName    string
 }
 
 // property represents one parsed struct field.

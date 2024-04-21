@@ -78,10 +78,11 @@ func (b *{{ $builder }}) Build() (*{{ $fullname }}{{ if .ValidateFunc }}, error{
 {{ if or (not (eq $prefix "")) (not $.Exported) }}
 {{ $name = title .Name }}
 {{ end }}
+{{ $funcName := .FuncName | default (printf "%s%s" $prefix $name) }}
 
-// {{ $prefix }}{{ $name }} sets {{ $.Name }}'s {{ .Name }}.
+// {{ $funcName }} sets {{ $.Name }}'s {{ .Name }}.
 {{- if .Append }}
-func (b *{{ $builder }}) {{ $prefix }}{{ $name }}({{ .ParamName }} ...{{ .AlteredType }}) *{{ $builder }} {
+func (b *{{ $builder }}) {{ $funcName }}({{ .ParamName }} ...{{ .AlteredType }}) *{{ $builder }} {
 {{- if $.ReturnCopy }}
     b = b.Copy()
 {{- end }}
@@ -93,7 +94,7 @@ func (b *{{ $builder }}) {{ $prefix }}{{ $name }}({{ .ParamName }} ...{{ .Altere
     return b
 }
 {{- else }}
-func (b *{{ $builder }}) {{ $prefix }}{{ $name }}({{ .ParamName }} {{ if .Pointer }}*{{ end }}{{ .AlteredType }}) *{{ $builder }} {
+func (b *{{ $builder }}) {{ $funcName }}({{ .ParamName }} {{ if .Pointer }}*{{ end }}{{ .AlteredType }}) *{{ $builder }} {
 {{- if $.ReturnCopy }}
     b = b.Copy()
 {{- end }}

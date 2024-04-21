@@ -25,7 +25,7 @@ func (b *OptionsBuilder) Copy() *OptionsBuilder {
 
 // Build returns built Options.
 func (b *OptionsBuilder) Build() (*success_with_options.Options, error) {
-	b = b.GetDefaultString().GetDefaultContext()
+	b = b.GetDefaultString().GetDefaultContext().SetDefaultForceFuncName()
 
 	result := b.build
 	if err := result.Validate(); err != nil {
@@ -43,6 +43,18 @@ func (b *OptionsBuilder) DefaultField(defaultField int64) *OptionsBuilder {
 // DefaultFieldFunc sets Options's DefaultFieldFunc.
 func (b *OptionsBuilder) DefaultFieldFunc(defaultFieldFunc string) *OptionsBuilder {
 	b.build.DefaultFieldFunc = defaultFieldFunc
+	return b
+}
+
+// FooBarForced sets Options's ForceFuncName.
+func (b *OptionsBuilder) FooBarForced(forceFuncName string) *OptionsBuilder {
+	b.build.ForceFuncName = forceFuncName
+	return b
+}
+
+// FooBarForceWithDefault sets Options's ForceFuncNameWithDefaultFunc.
+func (b *OptionsBuilder) FooBarForceWithDefault(forceFuncNameWithDefaultFunc string) *OptionsBuilder {
+	b.build.ForceFuncNameWithDefaultFunc = forceFuncNameWithDefaultFunc
 	return b
 }
 
