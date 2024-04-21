@@ -324,4 +324,23 @@ func TestRun(t *testing.T) {
 		assert.NoError(t, err)
 		testfs.AssertEqualDir(t, assertdir, destdir)
 	})
+
+	t.Run("success_return_copy", func(t *testing.T) {
+		// Arrange
+		assertdir := filepath.Join(testdata, "success_return_copy", "builders")
+		destdir := filepath.Join(t.TempDir(), "builders")
+		options := generate.CLIOptions{
+			Destdir:    destdir,
+			File:       filepath.Join(testdata, "success_return_copy", "types.go"),
+			Structs:    []string{"ReturnCopy"},
+			ReturnCopy: true,
+		}
+
+		// Act
+		err := generate.Run(options)
+
+		// Assert
+		assert.NoError(t, err)
+		testfs.AssertEqualDir(t, assertdir, destdir)
+	})
 }

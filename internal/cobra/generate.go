@@ -52,4 +52,8 @@ func init() {
 	// setter prefix flag
 	generateCmd.Flags().StringVarP(&generateOpts.SetterPrefix, "prefix", "p", "",
 		"specific prefix to apply on setter functions")
+
+	// copy before update and return copy
+	generateCmd.Flags().BoolVar(&generateOpts.ReturnCopy, "return-copy", false,
+		"returns a copy of the builder each time a setter function is called")
 }

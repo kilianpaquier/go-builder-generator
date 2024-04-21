@@ -82,6 +82,9 @@ func (b *{{ $builder }}) Build() (*{{ $fullname }}{{ if .ValidateFunc }}, error{
 // {{ $prefix }}{{ $name }} sets {{ $.Name }}'s {{ .Name }}.
 {{- if .Append }}
 func (b *{{ $builder }}) {{ $prefix }}{{ $name }}({{ .ParamName }} ...{{ .AlteredType }}) *{{ $builder }} {
+{{- if $.ReturnCopy }}
+    b = b.Copy()
+{{- end }}
 {{- if hasPrefix "*" .InitialType }}
     *b.build.{{ .Name }} = append(*b.build.{{ .Name }}, {{ .ParamName }}...)
 {{- else }}
@@ -91,6 +94,9 @@ func (b *{{ $builder }}) {{ $prefix }}{{ $name }}({{ .ParamName }} ...{{ .Altere
 }
 {{- else }}
 func (b *{{ $builder }}) {{ $prefix }}{{ $name }}({{ .ParamName }} {{ if .Pointer }}*{{ end }}{{ .AlteredType }}) *{{ $builder }} {
+{{- if $.ReturnCopy }}
+    b = b.Copy()
+{{- end }}
     b.build.{{ .Name }} = {{ if and (not .Pointer) (hasPrefix "*" .InitialType) }}&{{ end }}{{ .ParamName }}
     return b
 }
