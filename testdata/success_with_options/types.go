@@ -24,6 +24,9 @@ type Options struct {
 	SliceFieldAppendPtr   []*int64     `builder:"append"`
 	SliceFieldPtrAppend   *[]int64     `builder:"append,pointer"` // should be the same as below
 	SliceFieldNoPtrAppend *[]int64     `builder:"append"`         // should be the same as above
+
+	ForceFuncName                string `builder:"func_name=FooBarForced"`
+	ForceFuncNameWithDefaultFunc string `builder:"func_name=FooBarForceWithDefault,default_func=SetDefaultForceFuncName"`
 }
 
 func (o *Options) Validate() error {

@@ -138,6 +138,8 @@ func parseOptions(tags *ast.BasicLit) (propertyOpts, error) {
 	// parse string options
 	var errs []error
 	var options propertyOpts
+	// used for option value parsing
+	var ok bool
 	for _, option := range stringOptions {
 		switch {
 		case option == "pointer":
@@ -150,14 +152,23 @@ func parseOptions(tags *ast.BasicLit) (propertyOpts, error) {
 			options.Ignore = true
 
 		case strings.HasPrefix(option, "default_func"):
-			split := strings.Split(option, "=")
-			if len(split) != 2 {
+			if options.DefaultFunc, ok = getOptionValue(option); !ok {
 				errs = append(errs, errors.New("found 'default_func' option but format is invalid, it should be of `default_func=func_name`"))
-			} else {
-				options.DefaultFunc = split[1]
+			}
+
+		case strings.HasPrefix(option, "func_name"):
+			if options.FuncName, ok = getOptionValue(option); !ok {
+				errs = append(errs, errors.New("found 'func_name' option but format is invalid, it should be of `func_name=func_name`"))
 			}
 		}
 	}
-
 	return options, errors.Join(errs...)
+}
+
+func getOptionValue(option string) (string, bool) {
+	split := strings.Split(option, "=")
+	if len(split) != 2 {
+		return "", false
+	}
+	return split[1], true
 }
