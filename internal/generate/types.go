@@ -15,6 +15,7 @@ type CLIOptions struct {
 	SetterPrefix string
 	Structs      []string
 	ValidateFunc string
+	ReturnCopy   bool
 }
 
 // implData represents the struct for the _impl file to generate.
@@ -47,6 +48,7 @@ type genOpts struct {
 	SetterPrefix  string
 	SourcePackage string
 	ValidateFunc  string
+	ReturnCopy    bool
 }
 
 // propertyOpts represents the available options to be put in `builder`

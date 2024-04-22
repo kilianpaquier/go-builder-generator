@@ -55,6 +55,7 @@ func Run(options CLIOptions) error {
 		NoNotice:      options.NoNotice,
 		SourcePackage: sourcePackage,
 		ValidateFunc:  options.ValidateFunc,
+		ReturnCopy:    options.ReturnCopy,
 
 		// force first rune to lowercase in case of unexported types
 		// it will be titled in gen template in case the type is exported
