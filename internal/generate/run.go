@@ -16,14 +16,14 @@ import (
 var tmpl embed.FS
 
 // Run runs the builder generation with input options.
-func Run(options CLIOptions) error {
+func Run(pwd string, options CLIOptions) error {
 	// retrieve destination full path
 	destdir, err := filepath.Abs(options.Destdir)
 	if err != nil {
 		return fmt.Errorf("failed to retrieve absolute '%s' path: %w", options.Destdir, err)
 	}
 
-	src, err := parseSrc(options.File)
+	src, err := parseSrc(pwd, options.File)
 	if err != nil {
 		return err // error wrapping is handled in parseSrc function
 	}
@@ -35,8 +35,8 @@ func Run(options CLIOptions) error {
 		return fmt.Errorf("failed to parse %s: %w", src, err)
 	}
 
-	// retrieve file goImports to reuse them in template
-	fileImports, err := getImports(file, srcdir, destdir)
+	// retrieve file imports to reuse them in template
+	fileImports, err := fileImports(file, srcdir, destdir)
 	if err != nil {
 		return fmt.Errorf("failed to find %s module name: %w", srcdir, err)
 	}

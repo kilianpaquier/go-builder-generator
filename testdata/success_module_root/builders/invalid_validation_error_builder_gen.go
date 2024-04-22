@@ -8,7 +8,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-// InvalidValidationErrorBuilder represents the builder of InvalidValidationError to build InvalidValidationError with builder-pattern.
+// InvalidValidationErrorBuilder represents InvalidValidationError's builder.
 type InvalidValidationErrorBuilder struct {
 	build validator.InvalidValidationError
 }
