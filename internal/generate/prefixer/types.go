@@ -61,6 +61,10 @@ func NewPrefixer(input ast.Expr) Prefixer {
 	// field is just a string
 	case *ast.BasicLit:
 		return (*basicLitPrefixer)(expr)
+
+	// field is a generic type
+	case *ast.IndexExpr:
+		return &genericsPrefixer{IndexExpr: expr}
 	}
 
 	// any other unanticipated types that could exist

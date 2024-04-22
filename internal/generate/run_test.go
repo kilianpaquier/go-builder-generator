@@ -110,308 +110,146 @@ func TestRun(t *testing.T) {
 		assert.ErrorContains(t, err, "is not exported but generation destination is in an external package")
 	})
 
-	t.Run("success_channels", func(t *testing.T) {
-		// Arrange
-		assertdir := filepath.Join(testdata, "success_channels", "builders")
-		destdir := filepath.Join(t.TempDir(), "builders")
-		options := generate.CLIOptions{
-			Destdir: destdir,
-			File:    filepath.Join(testdata, "success_channels", "types.go"),
-			Structs: []string{"Chan"},
-		}
+	for _, tc := range []struct {
+		generate.CLIOptions
+		DirName     string
+		SamePackage bool
+	}{
+		{
+			DirName: "success_channels",
+			CLIOptions: generate.CLIOptions{
+				Structs: []string{"Chan"},
+			},
+		},
+		{
+			DirName: "success_export",
+			CLIOptions: generate.CLIOptions{
+				Structs: []string{"Export"},
+			},
+		},
+		{
+			DirName: "success_funcs",
+			CLIOptions: generate.CLIOptions{
+				Structs: []string{"Func"},
+			},
+		},
+		{
+			DirName: "success_interface",
+			CLIOptions: generate.CLIOptions{
+				Structs: []string{"Interface", "InterfaceNoFields"},
+			},
+		},
+		{
+			DirName: "success_maps",
+			CLIOptions: generate.CLIOptions{
+				Structs: []string{"Map"},
+			},
+		},
+		{
+			DirName: "success_module_replace",
+			CLIOptions: generate.CLIOptions{
+				File:    "module::github.com/sirupsen/logrus/hooks/test/test.go",
+				Structs: []string{"Hook"},
+			},
+		},
+		{
+			DirName: "success_module_root",
+			CLIOptions: generate.CLIOptions{
+				File:    "module::github.com/go-playground/validator/v10/errors.go",
+				Structs: []string{"InvalidValidationError"},
+			},
+		},
+		{
+			DirName: "success_module_subdir",
+			CLIOptions: generate.CLIOptions{
+				File:    "module::github.com/sirupsen/logrus/hooks/test/test.go",
+				Structs: []string{"Hook"},
+			},
+		},
+		{
+			DirName: "success_naming",
+			CLIOptions: generate.CLIOptions{
+				Structs: []string{"Naming"},
+			},
+		},
+		{
+			DirName: "success_root_gomod",
+			CLIOptions: generate.CLIOptions{
+				Structs: []string{"RootType"},
+			},
+		},
+		{
+			DirName: "success_same_package",
+			CLIOptions: generate.CLIOptions{
+				Structs: []string{"SamePackage", "unexportedType"},
+			},
+			SamePackage: true,
+		},
+		{
+			DirName: "success_same_package_prefix",
+			CLIOptions: generate.CLIOptions{
+				Structs:      []string{"unexportedTypePrefix"},
+				SetterPrefix: "Set",
+			},
+			SamePackage: true,
+		},
+		{
+			DirName: "success_slices",
+			CLIOptions: generate.CLIOptions{
+				Structs: []string{"ArrayAndSlice"},
+			},
+		},
+		{
+			DirName: "success_struct",
+			CLIOptions: generate.CLIOptions{
+				Structs: []string{"Struct", "StructNoFields"},
+			},
+		},
+		{
+			DirName: "success_with_options",
+			CLIOptions: generate.CLIOptions{
+				Structs:      []string{"Options", "Empty"},
+				ValidateFunc: "Validate",
+			},
+		},
+		{
+			DirName: "success_return_copy",
+			CLIOptions: generate.CLIOptions{
+				Structs:    []string{"ReturnCopy"},
+				ReturnCopy: true,
+			},
+		},
+		{
+			DirName: "success_generic_field",
+			CLIOptions: generate.CLIOptions{
+				Structs: []string{"Struct"},
+			},
+		},
+	} {
+		t.Run(tc.DirName, func(t *testing.T) {
+			// Arrange
+			if tc.CLIOptions.File == "" {
+				tc.CLIOptions.File = filepath.Join(testdata, tc.DirName, "types.go")
+			}
+			var assertdir, destdir string
+			if tc.SamePackage {
+				src := tc.CLIOptions.File
+				assertdir = filepath.Join(testdata, tc.DirName)
+				destdir = t.TempDir()
+				tc.CLIOptions.File = filepath.Join(destdir, "types.go")
+				require.NoError(t, filesystem.CopyFile(src, tc.File))
+			} else {
+				assertdir = filepath.Join(testdata, tc.DirName, "builders")
+				destdir = filepath.Join(t.TempDir(), "builders")
+			}
+			tc.CLIOptions.Destdir = destdir
 
-		// Act
-		err := generate.Run(pwd, options)
+			// Act
+			err := generate.Run(pwd, tc.CLIOptions)
 
-		// Assert
-		assert.NoError(t, err)
-		testfs.AssertEqualDir(t, assertdir, destdir)
-	})
-
-	t.Run("success_export", func(t *testing.T) {
-		// Arrange
-		assertdir := filepath.Join(testdata, "success_export", "builders")
-		destdir := filepath.Join(t.TempDir(), "builders")
-		options := generate.CLIOptions{
-			Destdir: destdir,
-			File:    filepath.Join(testdata, "success_export", "types.go"),
-			Structs: []string{"Export"},
-		}
-
-		// Act
-		err := generate.Run(pwd, options)
-
-		// Assert
-		assert.NoError(t, err)
-		testfs.AssertEqualDir(t, assertdir, destdir)
-	})
-
-	t.Run("success_funcs", func(t *testing.T) {
-		// Arrange
-		assertdir := filepath.Join(testdata, "success_funcs", "builders")
-		destdir := filepath.Join(t.TempDir(), "builders")
-		options := generate.CLIOptions{
-			Destdir: destdir,
-			File:    filepath.Join(testdata, "success_funcs", "types.go"),
-			Structs: []string{"Func"},
-		}
-
-		// Act
-		err := generate.Run(pwd, options)
-
-		// Assert
-		assert.NoError(t, err)
-		testfs.AssertEqualDir(t, assertdir, destdir)
-	})
-
-	t.Run("success_interface", func(t *testing.T) {
-		// Arrange
-		assertdir := filepath.Join(testdata, "success_interface", "builders")
-		destdir := filepath.Join(t.TempDir(), "builders")
-		options := generate.CLIOptions{
-			Destdir: destdir,
-			File:    filepath.Join(testdata, "success_interface", "types.go"),
-			Structs: []string{"Interface", "InterfaceNoFields"},
-		}
-
-		// Act
-		err := generate.Run(pwd, options)
-
-		// Assert
-		assert.NoError(t, err)
-		testfs.AssertEqualDir(t, assertdir, destdir)
-	})
-
-	t.Run("success_maps", func(t *testing.T) {
-		// Arrange
-		assertdir := filepath.Join(testdata, "success_maps", "builders")
-		destdir := filepath.Join(t.TempDir(), "builders")
-		options := generate.CLIOptions{
-			Destdir: destdir,
-			File:    filepath.Join(testdata, "success_maps", "types.go"),
-			Structs: []string{"Map"},
-		}
-
-		// Act
-		err := generate.Run(pwd, options)
-
-		// Assert
-		assert.NoError(t, err)
-		testfs.AssertEqualDir(t, assertdir, destdir)
-	})
-
-	t.Run("success_module_replace", func(t *testing.T) {
-		// Arrange
-		assertdir := filepath.Join(testdata, "success_module_replace", "builders")
-		destdir := filepath.Join(t.TempDir(), "builders")
-		options := generate.CLIOptions{
-			Destdir: destdir,
-			File:    "module::github.com/sirupsen/logrus/hooks/test/test.go",
-			Structs: []string{"Hook"},
-		}
-
-		// Act
-		err := generate.Run(assertdir, options)
-
-		// Assert
-		assert.NoError(t, err)
-		testfs.AssertEqualDir(t, assertdir, destdir)
-	})
-
-	t.Run("success_module_root", func(t *testing.T) {
-		// Arrange
-		assertdir := filepath.Join(testdata, "success_module_root", "builders")
-		destdir := filepath.Join(t.TempDir(), "builders")
-		options := generate.CLIOptions{
-			Destdir: destdir,
-			File:    "module::github.com/go-playground/validator/v10/errors.go",
-			Structs: []string{"InvalidValidationError"},
-		}
-
-		// Act
-		err := generate.Run(pwd, options)
-
-		// Assert
-		require.NoError(t, err)
-
-		// Assert
-		testfs.AssertEqualDir(t, assertdir, destdir)
-	})
-
-	t.Run("success_module_subdir", func(t *testing.T) {
-		// Arrange
-		assertdir := filepath.Join(testdata, "success_module_subdir", "builders")
-		destdir := filepath.Join(t.TempDir(), "builders")
-		options := generate.CLIOptions{
-			Destdir: destdir,
-			File:    "module::github.com/sirupsen/logrus/hooks/test/test.go",
-			Structs: []string{"Hook"},
-		}
-
-		// Act
-		err := generate.Run(pwd, options)
-
-		// Assert
-		require.NoError(t, err)
-
-		// Assert
-		testfs.AssertEqualDir(t, assertdir, destdir)
-	})
-
-	t.Run("success_naming", func(t *testing.T) {
-		// Arrange
-		assertdir := filepath.Join(testdata, "success_naming", "builders")
-		destdir := filepath.Join(t.TempDir(), "builders")
-		options := generate.CLIOptions{
-			Destdir: destdir,
-			File:    filepath.Join(testdata, "success_naming", "types.go"),
-			Structs: []string{"Naming"},
-		}
-
-		// Act
-		err := generate.Run(pwd, options)
-
-		// Assert
-		assert.NoError(t, err)
-		testfs.AssertEqualDir(t, assertdir, destdir)
-	})
-
-	t.Run("success_root_gomod", func(t *testing.T) {
-		// Arrange
-		assertdir := filepath.Join(testdata, "success_root_gomod", "builders")
-		destdir := filepath.Join(t.TempDir(), "builders")
-		options := generate.CLIOptions{
-			Destdir: destdir,
-			File:    filepath.Join(testdata, "success_root_gomod", "types.go"),
-			Structs: []string{"RootType"},
-		}
-
-		// Act
-		err := generate.Run(pwd, options)
-
-		// Assert
-		assert.NoError(t, err)
-		testfs.AssertEqualDir(t, assertdir, destdir)
-	})
-
-	t.Run("success_same_package", func(t *testing.T) {
-		// Arrange
-		destdir := t.TempDir()
-		assertdir := filepath.Join(testdata, "success_same_package")
-
-		src := filepath.Join(testdata, "success_same_package", "types.go")
-		dest := filepath.Join(destdir, "types.go")
-		require.NoError(t, filesystem.CopyFile(src, dest))
-
-		options := generate.CLIOptions{
-			Destdir: destdir,
-			File:    dest,
-			Structs: []string{"SamePackage", "unexportedType"},
-		}
-
-		// Act
-		err := generate.Run(pwd, options)
-		require.NoError(t, err)
-
-		// Assert
-		testfs.AssertEqualDir(t, assertdir, destdir)
-	})
-
-	t.Run("success_same_package_prefix", func(t *testing.T) {
-		// Arrange
-		destdir := t.TempDir()
-		assertdir := filepath.Join(testdata, "success_same_package_prefix")
-
-		src := filepath.Join(testdata, "success_same_package_prefix", "types.go")
-		dest := filepath.Join(destdir, "types.go")
-		require.NoError(t, filesystem.CopyFile(src, dest))
-
-		options := generate.CLIOptions{
-			Destdir:      destdir,
-			File:         dest,
-			SetterPrefix: "Set",
-			Structs:      []string{"unexportedTypePrefix"},
-		}
-
-		// Act
-		err := generate.Run(pwd, options)
-		require.NoError(t, err)
-
-		// Assert
-		testfs.AssertEqualDir(t, assertdir, destdir)
-	})
-
-	t.Run("success_slices", func(t *testing.T) {
-		// Arrange
-		assertdir := filepath.Join(testdata, "success_slices", "builders")
-		destdir := filepath.Join(t.TempDir(), "builders")
-		options := generate.CLIOptions{
-			Destdir: destdir,
-			File:    filepath.Join(testdata, "success_slices", "types.go"),
-			Structs: []string{"ArrayAndSlice"},
-		}
-
-		// Act
-		err := generate.Run(pwd, options)
-
-		// Assert
-		assert.NoError(t, err)
-		testfs.AssertEqualDir(t, assertdir, destdir)
-	})
-
-	t.Run("success_struct", func(t *testing.T) {
-		// Arrange
-		assertdir := filepath.Join(testdata, "success_struct", "builders")
-		destdir := filepath.Join(t.TempDir(), "builders")
-		options := generate.CLIOptions{
-			Destdir: destdir,
-			File:    filepath.Join(testdata, "success_struct", "types.go"),
-			Structs: []string{"Struct", "StructNoFields"},
-		}
-
-		// Act
-		err := generate.Run(pwd, options)
-
-		// Assert
-		assert.NoError(t, err)
-		testfs.AssertEqualDir(t, assertdir, destdir)
-	})
-
-	t.Run("success_with_options", func(t *testing.T) {
-		// Arrange
-		assertdir := filepath.Join(testdata, "success_with_options", "builders")
-		destdir := filepath.Join(t.TempDir(), "builders")
-		options := generate.CLIOptions{
-			Destdir:      destdir,
-			File:         filepath.Join(testdata, "success_with_options", "types.go"),
-			Structs:      []string{"Options", "Empty"},
-			ValidateFunc: "Validate",
-		}
-
-		// Act
-		err := generate.Run(pwd, options)
-
-		// Assert
-		assert.NoError(t, err)
-		testfs.AssertEqualDir(t, assertdir, destdir)
-	})
-
-	t.Run("success_return_copy", func(t *testing.T) {
-		// Arrange
-		assertdir := filepath.Join(testdata, "success_return_copy", "builders")
-		destdir := filepath.Join(t.TempDir(), "builders")
-		options := generate.CLIOptions{
-			Destdir:    destdir,
-			File:       filepath.Join(testdata, "success_return_copy", "types.go"),
-			Structs:    []string{"ReturnCopy"},
-			ReturnCopy: true,
-		}
-
-		// Act
-		err := generate.Run(pwd, options)
-
-		// Assert
-		assert.NoError(t, err)
-		testfs.AssertEqualDir(t, assertdir, destdir)
-	})
+			// Assert
+			assert.NoError(t, err)
+			testfs.AssertEqualDir(t, assertdir, destdir)
+		})
+	}
 }
