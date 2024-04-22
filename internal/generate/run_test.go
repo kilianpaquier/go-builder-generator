@@ -27,7 +27,7 @@ func TestRun(t *testing.T) {
 		}
 
 		// Act
-		err := generate.Run(options)
+		err := generate.Run(pwd, options)
 
 		// Assert
 		assert.ErrorContains(t, err, "failed to parse")
@@ -54,10 +54,27 @@ func TestRun(t *testing.T) {
 		}
 
 		// Act
-		err = generate.Run(options)
+		err = generate.Run(pwd, options)
 
 		// Assert
 		assert.ErrorContains(t, err, "no go.mod found")
+	})
+
+	t.Run("error_not_required_module", func(t *testing.T) {
+		// Arrange
+		destdir := filepath.Join(t.TempDir(), "builders")
+		options := generate.CLIOptions{
+			Destdir: destdir,
+			File:    "module::github.com/jarcoal/httpmock/match.go",
+			Structs: []string{"Matcher"},
+		}
+
+		// Act
+		err := generate.Run(pwd, options)
+
+		// Assert
+		assert.ErrorContains(t, err, "failed to find appropriate require")
+		assert.ErrorContains(t, err, "make sure you are importing this module")
 	})
 
 	t.Run("error_invalid_tags", func(t *testing.T) {
@@ -70,7 +87,7 @@ func TestRun(t *testing.T) {
 		}
 
 		// Act
-		err := generate.Run(options)
+		err := generate.Run(pwd, options)
 
 		// Assert
 		assert.ErrorContains(t, err, "failed to parse tags")
@@ -87,7 +104,7 @@ func TestRun(t *testing.T) {
 		}
 
 		// Act
-		err := generate.Run(options)
+		err := generate.Run(pwd, options)
 
 		// Assert
 		assert.ErrorContains(t, err, "is not exported but generation destination is in an external package")
@@ -104,7 +121,7 @@ func TestRun(t *testing.T) {
 		}
 
 		// Act
-		err := generate.Run(options)
+		err := generate.Run(pwd, options)
 
 		// Assert
 		assert.NoError(t, err)
@@ -122,7 +139,7 @@ func TestRun(t *testing.T) {
 		}
 
 		// Act
-		err := generate.Run(options)
+		err := generate.Run(pwd, options)
 
 		// Assert
 		assert.NoError(t, err)
@@ -140,7 +157,7 @@ func TestRun(t *testing.T) {
 		}
 
 		// Act
-		err := generate.Run(options)
+		err := generate.Run(pwd, options)
 
 		// Assert
 		assert.NoError(t, err)
@@ -158,7 +175,7 @@ func TestRun(t *testing.T) {
 		}
 
 		// Act
-		err := generate.Run(options)
+		err := generate.Run(pwd, options)
 
 		// Assert
 		assert.NoError(t, err)
@@ -176,10 +193,68 @@ func TestRun(t *testing.T) {
 		}
 
 		// Act
-		err := generate.Run(options)
+		err := generate.Run(pwd, options)
 
 		// Assert
 		assert.NoError(t, err)
+		testfs.AssertEqualDir(t, assertdir, destdir)
+	})
+
+	t.Run("success_module_replace", func(t *testing.T) {
+		// Arrange
+		assertdir := filepath.Join(testdata, "success_module_replace", "builders")
+		destdir := filepath.Join(t.TempDir(), "builders")
+		options := generate.CLIOptions{
+			Destdir: destdir,
+			File:    "module::github.com/sirupsen/logrus/hooks/test/test.go",
+			Structs: []string{"Hook"},
+		}
+
+		// Act
+		err := generate.Run(assertdir, options)
+
+		// Assert
+		assert.NoError(t, err)
+		testfs.AssertEqualDir(t, assertdir, destdir)
+	})
+
+	t.Run("success_module_root", func(t *testing.T) {
+		// Arrange
+		assertdir := filepath.Join(testdata, "success_module_root", "builders")
+		destdir := filepath.Join(t.TempDir(), "builders")
+		options := generate.CLIOptions{
+			Destdir: destdir,
+			File:    "module::github.com/go-playground/validator/v10/errors.go",
+			Structs: []string{"InvalidValidationError"},
+		}
+
+		// Act
+		err := generate.Run(pwd, options)
+
+		// Assert
+		require.NoError(t, err)
+
+		// Assert
+		testfs.AssertEqualDir(t, assertdir, destdir)
+	})
+
+	t.Run("success_module_subdir", func(t *testing.T) {
+		// Arrange
+		assertdir := filepath.Join(testdata, "success_module_subdir", "builders")
+		destdir := filepath.Join(t.TempDir(), "builders")
+		options := generate.CLIOptions{
+			Destdir: destdir,
+			File:    "module::github.com/sirupsen/logrus/hooks/test/test.go",
+			Structs: []string{"Hook"},
+		}
+
+		// Act
+		err := generate.Run(pwd, options)
+
+		// Assert
+		require.NoError(t, err)
+
+		// Assert
 		testfs.AssertEqualDir(t, assertdir, destdir)
 	})
 
@@ -194,30 +269,10 @@ func TestRun(t *testing.T) {
 		}
 
 		// Act
-		err := generate.Run(options)
+		err := generate.Run(pwd, options)
 
 		// Assert
 		assert.NoError(t, err)
-		testfs.AssertEqualDir(t, assertdir, destdir)
-	})
-
-	t.Run("success_pkg", func(t *testing.T) {
-		// Arrange
-		assertdir := filepath.Join(testdata, "success_pkg", "builders")
-		destdir := filepath.Join(t.TempDir(), "builders")
-		options := generate.CLIOptions{
-			Destdir: destdir,
-			File:    "git::github.com/go-playground/validator/errors.go?ref=master",
-			Structs: []string{"InvalidValidationError"},
-		}
-
-		// Act
-		err := generate.Run(options)
-
-		// Assert
-		require.NoError(t, err)
-
-		// Assert
 		testfs.AssertEqualDir(t, assertdir, destdir)
 	})
 
@@ -232,7 +287,7 @@ func TestRun(t *testing.T) {
 		}
 
 		// Act
-		err := generate.Run(options)
+		err := generate.Run(pwd, options)
 
 		// Assert
 		assert.NoError(t, err)
@@ -248,12 +303,30 @@ func TestRun(t *testing.T) {
 		dest := filepath.Join(destdir, "types.go")
 		require.NoError(t, filesystem.CopyFile(src, dest))
 
-		firstOptions := generate.CLIOptions{
+		options := generate.CLIOptions{
 			Destdir: destdir,
 			File:    dest,
 			Structs: []string{"SamePackage", "unexportedType"},
 		}
-		secondOptions := generate.CLIOptions{
+
+		// Act
+		err := generate.Run(pwd, options)
+		require.NoError(t, err)
+
+		// Assert
+		testfs.AssertEqualDir(t, assertdir, destdir)
+	})
+
+	t.Run("success_same_package_prefix", func(t *testing.T) {
+		// Arrange
+		destdir := t.TempDir()
+		assertdir := filepath.Join(testdata, "success_same_package_prefix")
+
+		src := filepath.Join(testdata, "success_same_package_prefix", "types.go")
+		dest := filepath.Join(destdir, "types.go")
+		require.NoError(t, filesystem.CopyFile(src, dest))
+
+		options := generate.CLIOptions{
 			Destdir:      destdir,
 			File:         dest,
 			SetterPrefix: "Set",
@@ -261,9 +334,7 @@ func TestRun(t *testing.T) {
 		}
 
 		// Act
-		err := generate.Run(firstOptions)
-		require.NoError(t, err)
-		err = generate.Run(secondOptions)
+		err := generate.Run(pwd, options)
 		require.NoError(t, err)
 
 		// Assert
@@ -281,7 +352,7 @@ func TestRun(t *testing.T) {
 		}
 
 		// Act
-		err := generate.Run(options)
+		err := generate.Run(pwd, options)
 
 		// Assert
 		assert.NoError(t, err)
@@ -299,7 +370,7 @@ func TestRun(t *testing.T) {
 		}
 
 		// Act
-		err := generate.Run(options)
+		err := generate.Run(pwd, options)
 
 		// Assert
 		assert.NoError(t, err)
@@ -318,7 +389,7 @@ func TestRun(t *testing.T) {
 		}
 
 		// Act
-		err := generate.Run(options)
+		err := generate.Run(pwd, options)
 
 		// Assert
 		assert.NoError(t, err)
@@ -337,7 +408,7 @@ func TestRun(t *testing.T) {
 		}
 
 		// Act
-		err := generate.Run(options)
+		err := generate.Run(pwd, options)
 
 		// Assert
 		assert.NoError(t, err)

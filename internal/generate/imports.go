@@ -4,49 +4,41 @@ import (
 	"errors"
 	"fmt"
 	"go/ast"
-	"net/url"
 	"os"
-	"path"
 	"path/filepath"
 	"slices"
 	"strings"
 
-	"github.com/hashicorp/go-getter"
 	filesystem "github.com/kilianpaquier/filesystem/pkg"
 	"github.com/samber/lo"
 	"golang.org/x/mod/modfile"
 )
 
-const git = "git::"
+const modulePrefix = "module::"
 
 // parseSrc parses the input src and returns its absolute path.
-func parseSrc(src string) (string, error) {
-	file := src
+func parseSrc(pwd, dest string) (string, error) {
+	file := dest
 
-	// handle home relative paths
-	if strings.HasPrefix(file, "~") {
-		home, _ := os.UserHomeDir()
-		file = filepath.Join(home, file[1:])
-	}
+	if strings.HasPrefix(file, modulePrefix) {
+		noPrefix := strings.TrimPrefix(file, modulePrefix)
 
-	// handle git repositories files
-	if strings.HasPrefix(file, git) {
-		u := strings.TrimPrefix(file, git)
-
-		// parse file as URL since it's a remote file
-		initial, err := url.Parse(u)
+		module, err := findModule(pwd, noPrefix)
 		if err != nil {
-			return "", fmt.Errorf("failed to parse url '%s': %w", file, err)
+			return "", err // err is wrapped in subfunction
 		}
-		remote, _ := url.Parse(initial.String()) // ignoring error since it's sure initial is an URL
-		remote.Path = path.Dir(remote.Path)      // remove filename from URL
 
-		// download remote git repository into temporary dir update file to read
-		destdir := filepath.Join(os.TempDir(), remote.Path)
-		if err := getter.Get(destdir, git+remote.String()); err != nil {
-			return "", fmt.Errorf("failed to download git repository '%s': %w", remote.String(), err)
-		}
-		file = filepath.Join(destdir, filepath.Base(initial.Path))
+		gopath := func() string {
+			gopath := os.Getenv("GOPATH")
+			if gopath != "" {
+				return gopath
+			}
+			home, _ := os.UserHomeDir()
+			return filepath.Join(home, "go")
+		}()
+		gopkg := filepath.Join(gopath, "pkg", "mod")
+
+		file = filepath.Join(gopkg, module.ModulePath, module.SubPath)
 	}
 
 	// retrieve source file absolute path
@@ -57,10 +49,10 @@ func parseSrc(src string) (string, error) {
 	return file, nil
 }
 
-// getImports returns the slice of imports associated to input ast file.
+// fileImports returns the slice of imports associated to input ast file.
 //
 // If srcdir and destdir are different, it will search for the first go.mod in parent folders to retrieve the module name.
-func getImports(file *ast.File, srcdir, destdir string) ([]string, error) {
+func fileImports(file *ast.File, srcdir, destdir string) ([]string, error) {
 	// get file imports as string
 	fileImports := make([]string, 0, len(file.Imports))
 	for _, item := range file.Imports {
@@ -82,6 +74,60 @@ func getImports(file *ast.File, srcdir, destdir string) ([]string, error) {
 	}
 
 	return fileImports, nil
+}
+
+type module struct {
+	ModulePath string
+	SubPath    string
+}
+
+// findModule returns the associated module in srcdir go.mod (or parent(s) directory) for dest.
+//
+// dest can be the direct module name or any subdirectory (or subfiles) of it (github.com/kilianpaquier/go-builder-generator/internal/generate/types.go).
+//
+// An error is returned in such case where no go.mod is found or where dest is not in the go.mod require imports.
+func findModule(srcdir, dest string) (*module, error) {
+	gomod := filepath.Join(srcdir, "go.mod")
+	if !filesystem.Exists(gomod) {
+		// handle root directory -> VolumeName (e.g "C:") + os.PathSeparator
+		if srcdir == filepath.VolumeName(srcdir)+string(os.PathSeparator) {
+			return nil, errors.New("current module go.mod not found")
+		}
+		return findModule(filepath.Dir(srcdir), dest)
+	}
+	bytes, _ := os.ReadFile(gomod) // don't need to handle error since file exists
+
+	file, err := modfile.Parse(gomod, bytes, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse go.mod '%s': %w", gomod, err)
+	}
+
+	// find appropriate require in go.mod file to retrieve the version
+	require, ok := lo.Find(file.Require, func(require *modfile.Require) bool {
+		return strings.HasPrefix(dest, require.Mod.Path)
+	})
+	if !ok {
+		return nil, fmt.Errorf("failed to find appropriate require in '%s', make sure you are importing this module", gomod)
+	}
+	p := strings.TrimPrefix(dest, require.Mod.Path)
+
+	// find the appropriate replace version in go.mod (in such case it could exist)
+	replace, ok := lo.Find(file.Replace, func(replace *modfile.Replace) bool {
+		return strings.HasPrefix(dest, replace.Old.Path)
+	})
+	if !ok {
+		// return required version if no replaced version found
+		return &module{
+			ModulePath: require.Mod.String(),
+			SubPath:    p,
+		}, nil
+	}
+
+	// return replaced version if provided
+	return &module{
+		ModulePath: replace.New.String(),
+		SubPath:    p,
+	}, nil
 }
 
 // findSourceImport iterates over itself with input src package name to find the full package import path.
