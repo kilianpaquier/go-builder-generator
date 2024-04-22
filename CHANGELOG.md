@@ -1,3 +1,22 @@
+## [1.1.0](https://github.com/kilianpaquier/go-builder-generator/compare/v1.0.2...v1.1.0) (2024-04-22)
+
+
+### Features
+
+* force function name ([cfbbda7](https://github.com/kilianpaquier/go-builder-generator/commit/cfbbda749e5071420ab77930e407f66a0cdae4bf))
+* option to return a copy of the builder each time a setter function is called ([273030a](https://github.com/kilianpaquier/go-builder-generator/commit/273030a178b9dde650434d92242b4b8ca2652e3f))
+
+
+### Chores
+
+* **deps:** bump github.com/hashicorp/go-getter in the all group ([1143c00](https://github.com/kilianpaquier/go-builder-generator/commit/1143c0052405170c80aff45765cf3c9ea050b45f))
+* **go:** update go to 1.22.2 ([3b79e8e](https://github.com/kilianpaquier/go-builder-generator/commit/3b79e8e9165a3d2dab2a1c1010542780ac94a768))
+
+
+### Code Refactoring
+
+* **module:** remove ~ and git:: in favor of module:: to handle current module imported modules types generations - [#9](https://github.com/kilianpaquier/go-builder-generator/issues/9) ([9b49445](https://github.com/kilianpaquier/go-builder-generator/commit/9b494459b95e0b7b03445892286f436b4374ef0d))
+
 ## [1.0.2](https://github.com/kilianpaquier/go-builder-generator/compare/v1.0.1...v1.0.2) (2024-04-06)
 
 
