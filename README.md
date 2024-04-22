@@ -83,7 +83,7 @@ Example:
 ```go
 package pkg
 
-//go:generate go-builder-generator -f types.go -s StructName -d builders
+//go:generate go-builder-generator generate -f types.go -s StructName -d builders
 
 type StructName struct {
 	Pointer               *int64   `builder:"pointer"` // generated builder will be 'SetPointer(pointer *int64)'
