@@ -36,72 +36,84 @@ func (b *OptionsBuilder) Build() (*success_with_options.Options, error) {
 
 // DefaultField sets Options's DefaultField.
 func (b *OptionsBuilder) DefaultField(defaultField int64) *OptionsBuilder {
+	b = b.Copy()
 	b.build.DefaultField = defaultField
 	return b
 }
 
 // DefaultFieldFunc sets Options's DefaultFieldFunc.
 func (b *OptionsBuilder) DefaultFieldFunc(defaultFieldFunc string) *OptionsBuilder {
+	b = b.Copy()
 	b.build.DefaultFieldFunc = defaultFieldFunc
 	return b
 }
 
 // FooBarForced sets Options's ForceFuncName.
 func (b *OptionsBuilder) FooBarForced(forceFuncName string) *OptionsBuilder {
+	b = b.Copy()
 	b.build.ForceFuncName = forceFuncName
 	return b
 }
 
 // FooBarForceWithDefault sets Options's ForceFuncNameWithDefaultFunc.
 func (b *OptionsBuilder) FooBarForceWithDefault(forceFuncNameWithDefaultFunc string) *OptionsBuilder {
+	b = b.Copy()
 	b.build.ForceFuncNameWithDefaultFunc = forceFuncNameWithDefaultFunc
 	return b
 }
 
 // PtrField sets Options's PtrField.
 func (b *OptionsBuilder) PtrField(ptrField *string) *OptionsBuilder {
+	b = b.Copy()
 	b.build.PtrField = ptrField
 	return b
 }
 
 // PtrFieldValidatedToo sets Options's PtrFieldValidatedToo.
 func (b *OptionsBuilder) PtrFieldValidatedToo(ptrFieldValidatedToo string) *OptionsBuilder {
+	b = b.Copy()
 	b.build.PtrFieldValidatedToo = &ptrFieldValidatedToo
 	return b
 }
 
 // SimpleFieldAppend sets Options's SimpleFieldAppend.
 func (b *OptionsBuilder) SimpleFieldAppend(simpleFieldAppend success_with_options.Int64Alias) *OptionsBuilder {
+	b = b.Copy()
 	b.build.SimpleFieldAppend = simpleFieldAppend
 	return b
 }
 
 // SliceFieldAliasAppend sets Options's SliceFieldAliasAppend.
 func (b *OptionsBuilder) SliceFieldAliasAppend(sliceFieldAliasAppend ...success_with_options.Int64Alias) *OptionsBuilder {
+	b = b.Copy()
 	b.build.SliceFieldAliasAppend = append(b.build.SliceFieldAliasAppend, sliceFieldAliasAppend...)
 	return b
 }
 
 // SliceFieldAppend sets Options's SliceFieldAppend.
 func (b *OptionsBuilder) SliceFieldAppend(sliceFieldAppend ...int64) *OptionsBuilder {
+	b = b.Copy()
 	b.build.SliceFieldAppend = append(b.build.SliceFieldAppend, sliceFieldAppend...)
 	return b
 }
 
 // SliceFieldAppendPtr sets Options's SliceFieldAppendPtr.
 func (b *OptionsBuilder) SliceFieldAppendPtr(sliceFieldAppendPtr ...*int64) *OptionsBuilder {
+	b = b.Copy()
 	b.build.SliceFieldAppendPtr = append(b.build.SliceFieldAppendPtr, sliceFieldAppendPtr...)
 	return b
 }
 
 // SliceFieldNoPtrAppend sets Options's SliceFieldNoPtrAppend.
 func (b *OptionsBuilder) SliceFieldNoPtrAppend(sliceFieldNoPtrAppend ...int64) *OptionsBuilder {
+	b = b.Copy()
 	*b.build.SliceFieldNoPtrAppend = append(*b.build.SliceFieldNoPtrAppend, sliceFieldNoPtrAppend...)
 	return b
 }
 
 // SliceFieldPtrAppend sets Options's SliceFieldPtrAppend.
 func (b *OptionsBuilder) SliceFieldPtrAppend(sliceFieldPtrAppend ...int64) *OptionsBuilder {
+	b = b.Copy()
 	*b.build.SliceFieldPtrAppend = append(*b.build.SliceFieldPtrAppend, sliceFieldPtrAppend...)
 	return b
 }

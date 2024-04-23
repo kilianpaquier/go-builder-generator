@@ -14,10 +14,10 @@ type Struct struct {
 
 	AnotherStruct struct {
 		Nested struct {
-			Field string
+			Field string `json:"field,omitempty"`
 			Ctx   context.Context
 		}
-		NotNested int64
+		NotNested int64 `json:"not_nested"`
 		Ctx       context.Context
 		Alias     Int64Alias
 	}

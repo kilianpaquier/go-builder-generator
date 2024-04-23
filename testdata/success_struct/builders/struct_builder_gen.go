@@ -32,10 +32,10 @@ func (b *StructBuilder) Build() *success_struct.Struct {
 // AnotherStruct sets Struct's AnotherStruct.
 func (b *StructBuilder) AnotherStruct(anotherStruct struct {
 	Nested struct {
-		Field string
+		Field string `json:"field,omitempty"`
 		Ctx   context.Context
 	}
-	NotNested int64
+	NotNested int64 `json:"not_nested"`
 	Ctx       context.Context
 	Alias     success_struct.Int64Alias
 }) *StructBuilder {

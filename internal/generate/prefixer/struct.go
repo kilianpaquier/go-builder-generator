@@ -25,24 +25,9 @@ func (s *structPrefixer) Valid() error {
 
 	// retrieve prefixers associated to struct fields
 	if s.Fields != nil {
-		editor := func(field *ast.Field) editor {
-			return func(stringType string, exported bool) (string, bool) {
-				if len(field.Names) > 0 {
-					// for an anonymous struct, exported means the field name
-					// starts with an uppercase and the string type is exported too
-					exported = exported && ast.IsExported(field.Names[0].Name)
-					return fmt.Sprint(field.Names[0].Name, " ", stringType), exported
-				}
-
-				// this case shouldn't happen since we're in a struct{}
-				return "", false
-			}
-		}
-
 		s.FieldFields = make([]Prefixer, 0, len(s.Fields.List))
 		for _, field := range s.Fields.List {
-			// create a prefixer editor to ensure struct export and fields' name are added / updated with name uppercasing (or not)
-			prefixer := NewPrefixerEditor(NewPrefixer(field.Type), editor(field))
+			prefixer := newStructFieldPrefixer(field)
 
 			errs = append(errs, prefixer.Valid())
 			s.FieldFields = append(s.FieldFields, prefixer)
