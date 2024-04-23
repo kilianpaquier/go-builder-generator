@@ -208,15 +208,9 @@ func TestRun(t *testing.T) {
 		{
 			DirName: "success_with_options",
 			CLIOptions: generate.CLIOptions{
+				ReturnCopy:   true,
 				Structs:      []string{"Options", "Empty"},
 				ValidateFunc: "Validate",
-			},
-		},
-		{
-			DirName: "success_return_copy",
-			CLIOptions: generate.CLIOptions{
-				Structs:    []string{"ReturnCopy"},
-				ReturnCopy: true,
 			},
 		},
 		{
