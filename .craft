@@ -1,6 +1,7 @@
 # Craft configuration file (https://github.com/kilianpaquier/craft)
 ---
 ci:
+  auto_release: true
   name: github
   options:
     - codecov
