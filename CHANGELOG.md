@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/kilianpaquier/go-builder-generator/compare/v1.1.0...v1.1.1) (2024-04-23)
+
+
+### Bug Fixes
+
+* error when using generic field ([5b322a7](https://github.com/kilianpaquier/go-builder-generator/commit/5b322a7257f240a645758dfd107d5484087b2c61))
+
 ## [1.1.0](https://github.com/kilianpaquier/go-builder-generator/compare/v1.0.2...v1.1.0) (2024-04-22)
 
 
