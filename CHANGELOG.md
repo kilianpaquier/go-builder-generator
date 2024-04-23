@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/kilianpaquier/go-builder-generator/compare/v1.1.1...v1.1.2) (2024-04-23)
+
+
+### Bug Fixes
+
+* **struct:** add tags to builders around anonymous struct ([712a4d9](https://github.com/kilianpaquier/go-builder-generator/commit/712a4d97af0485b32df9c81bfd7815d83b3737b1))
+
 ## [1.1.1](https://github.com/kilianpaquier/go-builder-generator/compare/v1.1.0...v1.1.1) (2024-04-23)
 
 
