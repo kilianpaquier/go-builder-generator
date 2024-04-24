@@ -29,16 +29,9 @@ func (b *OptionsBuilder) Build() (*success_with_options.Options, error) {
 
 	result := b.build
 	if err := result.Validate(); err != nil {
-		return nil, fmt.Errorf("failed to validate 'Options' struct: %w", err)
+		return nil, fmt.Errorf("validation of 'Options''s struct: %w", err)
 	}
 	return &result, nil
-}
-
-// DefaultField sets Options's DefaultField.
-func (b *OptionsBuilder) DefaultField(defaultField int64) *OptionsBuilder {
-	b = b.Copy()
-	b.build.DefaultField = defaultField
-	return b
 }
 
 // DefaultFieldFunc sets Options's DefaultFieldFunc.

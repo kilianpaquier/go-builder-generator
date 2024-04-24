@@ -15,7 +15,7 @@ var _ Prefixer = &unimplementedPrefixer{} // ensure interface is implemented
 
 // ToString transforms a Prefixer (ast.Expr) into its string representation.
 // It also returns a boolean indicating whether the type is exported.
-func (*unimplementedPrefixer) ToString(_ string, _ ...string) (_ string, _ bool) {
+func (*unimplementedPrefixer) ToString(_ string, _ []string, _ ...string) (_ string, _ bool) {
 	panic("should not be called")
 }
 
@@ -24,7 +24,7 @@ func (*unimplementedPrefixer) ToString(_ string, _ ...string) (_ string, _ bool)
 // An example would be a composition of a StarExpr with an ArrayType of an Ident.
 // In that case, all three prefixers computed from those ast.Expr will be validated with Valid.
 func (i *unimplementedPrefixer) Valid() error {
-	return fmt.Errorf("expression %T not implemented", i.Expr)
+	return fmt.Errorf("expression '%T' not implemented", i.Expr)
 }
 
 // nooPrefixer implements Prefixer for nil expressions.
@@ -42,6 +42,6 @@ func (*noopPrefixer) Valid() error {
 
 // ToString transforms a Prefixer (ast.Expr) into its string representation.
 // It also returns a boolean indicating whether the type is exported.
-func (*noopPrefixer) ToString(_ string, _ ...string) (stringType string, exported bool) {
+func (*noopPrefixer) ToString(_ string, _ []string, _ ...string) (_ string, _ bool) {
 	return "", true
 }

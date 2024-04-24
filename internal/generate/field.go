@@ -14,24 +14,22 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/internal/generate/prefixer"
 )
 
-// computeProperty computes the property struct depending on inputs.
-//
-// It's a special function because the target type will be altered depending on options.
-func computeProperty(field *ast.Field, sourcePackage string) (property, error) {
-	// parse property tags
-	options, err := parseOptions(field.Tag)
+// parseField parses and returns the struct field associated to input ast field.
+func parseField(astField *ast.Field, sourcePackage string, typeParams []string) (field, error) {
+	// parse field tags
+	options, err := parseOptions(astField.Tag)
 	if err != nil {
-		return property{}, fmt.Errorf("failed to parse field options: %w", err)
+		return field{}, fmt.Errorf("field options parsing: %w", err)
 	}
 
 	// retrieve typePrefixer for field type
-	typePrefixer := prefixer.NewPrefixer(field.Type)
+	typePrefixer := prefixer.NewPrefixer(astField.Type)
 	if err := typePrefixer.Valid(); err != nil {
-		return property{}, fmt.Errorf("property type prefixer is not implemented: %w", err)
+		return field{}, fmt.Errorf("field validation: %w", err)
 	}
 
 	// retrieve computed string type
-	initialType, typeExported := typePrefixer.ToString(sourcePackage)
+	initialType, typeExported := typePrefixer.ToString(sourcePackage, typeParams)
 	alteredType := initialType
 
 	switch {
@@ -59,10 +57,10 @@ func computeProperty(field *ast.Field, sourcePackage string) (property, error) {
 		alteredType = strings.TrimPrefix(alteredType, "*")
 	}
 
-	propertyName := func() string {
+	fieldName := func() string {
 		// returning name if it exists
-		if len(field.Names) > 0 {
-			return field.Names[0].Name
+		if len(astField.Names) > 0 {
+			return astField.Names[0].Name
 		}
 
 		// first split type into package + real type
@@ -73,15 +71,15 @@ func computeProperty(field *ast.Field, sourcePackage string) (property, error) {
 		return split[len(split)-1]
 	}()
 
-	// check property export and ignore option in case generation is done in another package
-	exported := typeExported && ast.IsExported(propertyName)
+	// check field export and ignore option in case generation is done in another package
+	exported := typeExported && ast.IsExported(fieldName)
 	if sourcePackage != "" && !exported {
 		options.Ignore = true
 	}
 
 	paramName := func() string {
 		// transform into camel case then put first letter in lowercase
-		initial := xstrings.FirstRuneToLower(xstrings.ToCamelCase(propertyName))
+		initial := xstrings.FirstRuneToLower(xstrings.ToCamelCase(fieldName))
 
 		// handle builtin reserved keywords or functions
 		if slices.Contains(models.Builtin(), initial) {
@@ -89,55 +87,56 @@ func computeProperty(field *ast.Field, sourcePackage string) (property, error) {
 		}
 
 		// for names full uppercase, change them to full lowercase
-		if strings.ToUpper(propertyName) == propertyName {
-			return strings.ToLower(propertyName)
+		if strings.ToUpper(fieldName) == fieldName {
+			return strings.ToLower(fieldName)
 		}
 
 		// for all other names, keep initial value which is camelCase format
 		return initial
 	}()
 
-	// returning property with computed types and options
-	return property{
-		AlteredType:  alteredType,
-		Exported:     exported,
-		InitialType:  initialType,
-		Name:         propertyName,
-		ParamName:    paramName,
-		propertyOpts: options,
+	// returning field with computed types and options
+	return field{
+		AlteredType: alteredType,
+		Exported:    exported,
+		InitialType: initialType,
+		Name:        fieldName,
+		ParamName:   paramName,
+
+		Opts: options,
 	}, nil
 }
 
-// parseOptions returns the property options for the input tags.
-func parseOptions(tags *ast.BasicLit) (propertyOpts, error) {
+// parseOptions returns the field options for the input tags.
+func parseOptions(astTags *ast.BasicLit) (fieldOpts, error) {
 	// check if there're tags
-	if tags == nil {
-		return propertyOpts{}, nil
+	if astTags == nil {
+		return fieldOpts{}, nil
 	}
-	value := strings.ReplaceAll(tags.Value, "`", "")
+	value := strings.ReplaceAll(astTags.Value, "`", "")
 
 	// parse tags into something useable
 	structtags, err := structtag.Parse(value)
 	if err != nil {
-		return propertyOpts{}, fmt.Errorf("failed to parse tags: %w", err)
+		return fieldOpts{}, fmt.Errorf("tags parsing: %w", err)
 	}
 
-	// retrieve go-builder-generator specific tag
-	builder, err := structtags.Get("builder")
+	// retrieve go-builderTag-generator specific tag
+	builderTag, err := structtags.Get("builder")
 	if err != nil && !strings.Contains(err.Error(), "tag does not exist") {
-		return propertyOpts{}, fmt.Errorf("failed to retrieve 'builder' tag: %w", err)
+		return fieldOpts{}, fmt.Errorf("tag 'builder' parsing: %w", err)
 	}
 
 	var stringOptions []string
-	if builder != nil {
+	if builderTag != nil {
 		// adding "Name" because for builder tag it's also an option
 		// and not a "Name" like it would be with 'json' or 'xml' tags
-		stringOptions = append([]string{builder.Name}, builder.Options...)
+		stringOptions = append([]string{builderTag.Name}, builderTag.Options...)
 	}
 
 	// parse string options
 	var errs []error
-	var options propertyOpts
+	var options fieldOpts
 	// used for option value parsing
 	var ok bool
 	for _, option := range stringOptions {
@@ -165,6 +164,7 @@ func parseOptions(tags *ast.BasicLit) (propertyOpts, error) {
 	return options, errors.Join(errs...)
 }
 
+// getOptionValue splits the input option to extract its value.
 func getOptionValue(option string) (string, bool) {
 	split := strings.Split(option, "=")
 	if len(split) != 2 {

@@ -1,6 +1,7 @@
 package generate_test
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
@@ -30,7 +31,7 @@ func TestRun(t *testing.T) {
 		err := generate.Run(pwd, options)
 
 		// Assert
-		assert.ErrorContains(t, err, "failed to parse")
+		assert.ErrorContains(t, err, fmt.Sprintf("file %s parsing", options.File))
 		assert.NoDirExists(t, destdir)
 	})
 
@@ -90,8 +91,8 @@ func TestRun(t *testing.T) {
 		err := generate.Run(pwd, options)
 
 		// Assert
-		assert.ErrorContains(t, err, "failed to parse tags")
-		assert.ErrorContains(t, err, "failed to parse builder for struct Invalid")
+		assert.ErrorContains(t, err, "field options parsing")
+		assert.ErrorContains(t, err, "tags parsing")
 	})
 
 	t.Run("error_unexported_type_generated_outside_package", func(t *testing.T) {
@@ -107,7 +108,7 @@ func TestRun(t *testing.T) {
 		err := generate.Run(pwd, options)
 
 		// Assert
-		assert.ErrorContains(t, err, "is not exported but generation destination is in an external package")
+		assert.ErrorContains(t, err, "is not exported (or one of its generic params is not) but generation destination is in an external package")
 	})
 
 	for _, tc := range []struct {
@@ -188,8 +189,8 @@ func TestRun(t *testing.T) {
 		{
 			DirName: "success_same_package_prefix",
 			CLIOptions: generate.CLIOptions{
-				Structs:      []string{"unexportedTypePrefix"},
-				SetterPrefix: "Set",
+				Structs: []string{"unexportedTypePrefix"},
+				Prefix:  "Set",
 			},
 			SamePackage: true,
 		},
@@ -209,14 +210,14 @@ func TestRun(t *testing.T) {
 			DirName: "success_with_options",
 			CLIOptions: generate.CLIOptions{
 				ReturnCopy:   true,
-				Structs:      []string{"Options", "Empty"},
+				Structs:      []string{"Options", "Empty", "GenericOptions"},
 				ValidateFunc: "Validate",
 			},
 		},
 		{
-			DirName: "success_generic_field",
+			DirName: "success_generic",
 			CLIOptions: generate.CLIOptions{
-				Structs: []string{"Struct"},
+				Structs: []string{"Struct", "SimpleGeneric", "AliasGeneric", "ComplexGeneric", "FuckedUpGeneric"},
 			},
 		},
 	} {

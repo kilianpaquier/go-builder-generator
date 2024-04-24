@@ -11,7 +11,7 @@ import (
 type structPrefixer struct {
 	*ast.StructType
 
-	FieldFields []Prefixer
+	FieldsPrefixers []Prefixer
 }
 
 var _ Prefixer = &structPrefixer{} // ensure interface is implemented
@@ -25,12 +25,12 @@ func (s *structPrefixer) Valid() error {
 
 	// retrieve prefixers associated to struct fields
 	if s.Fields != nil {
-		s.FieldFields = make([]Prefixer, 0, len(s.Fields.List))
+		s.FieldsPrefixers = make([]Prefixer, 0, len(s.Fields.List))
 		for _, field := range s.Fields.List {
 			prefixer := newStructFieldPrefixer(field)
 
 			errs = append(errs, prefixer.Valid())
-			s.FieldFields = append(s.FieldFields, prefixer)
+			s.FieldsPrefixers = append(s.FieldsPrefixers, prefixer)
 		}
 	}
 
@@ -39,25 +39,24 @@ func (s *structPrefixer) Valid() error {
 
 // ToString transforms a Prefixer (ast.Expr) into its string representation.
 // It also returns a boolean indicating whether the type is exported.
-func (s *structPrefixer) ToString(sourcePackage string, prefixes ...string) (_ string, _ bool) {
-	exported := true
-	types := make([]string, 0, len(s.FieldFields))
-
+func (s *structPrefixer) ToString(sourcePackage string, typeParams []string, prefixes ...string) (_ string, _ bool) {
 	// compute fields prefix
-	for _, field := range s.FieldFields {
-		stringType, fieldExported := field.ToString(sourcePackage)
+	exported := true
+	fieldsTypes := make([]string, 0, len(s.FieldsPrefixers))
+	for _, field := range s.FieldsPrefixers {
+		stringType, fieldExported := field.ToString(sourcePackage, typeParams)
 
 		// don't affect directly because once exported is false, it should stays even if other fields are exported
 		if !fieldExported {
 			exported = false
 		}
 
-		types = append(types, stringType)
+		fieldsTypes = append(fieldsTypes, stringType)
 	}
 
 	// specific case to avoid unnecessary newlines
-	if len(types) == 0 {
+	if len(fieldsTypes) == 0 {
 		return strings.Join(prefixes, "") + "struct{}", exported
 	}
-	return fmt.Sprintf("%sstruct{\n%s\n}", strings.Join(prefixes, ""), strings.Join(types, "\n")), exported
+	return fmt.Sprintf("%sstruct{\n%s\n}", strings.Join(prefixes, ""), strings.Join(fieldsTypes, "\n")), exported
 }

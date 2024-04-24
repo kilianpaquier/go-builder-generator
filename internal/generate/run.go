@@ -8,7 +8,6 @@ import (
 	"go/token"
 	"path/filepath"
 
-	"github.com/huandu/xstrings"
 	filesystem "github.com/kilianpaquier/filesystem/pkg"
 )
 
@@ -20,7 +19,7 @@ func Run(pwd string, options CLIOptions) error {
 	// retrieve destination full path
 	destdir, err := filepath.Abs(options.Destdir)
 	if err != nil {
-		return fmt.Errorf("failed to retrieve absolute '%s' path: %w", options.Destdir, err)
+		return fmt.Errorf("absolute '%s' path: %w", options.Destdir, err)
 	}
 
 	src, err := parseSrc(pwd, options.File)
@@ -32,13 +31,13 @@ func Run(pwd string, options CLIOptions) error {
 	// parse source file as ast to retrieve golang code
 	file, err := parser.ParseFile(token.NewFileSet(), src, nil, parser.SkipObjectResolution)
 	if err != nil {
-		return fmt.Errorf("failed to parse %s: %w", src, err)
+		return fmt.Errorf("file %s parsing: %w", src, err)
 	}
 
 	// retrieve file imports to reuse them in template
-	fileImports, err := fileImports(file, srcdir, destdir)
+	imports, err := parseImports(file, srcdir, destdir)
 	if err != nil {
-		return fmt.Errorf("failed to find %s module name: %w", srcdir, err)
+		return fmt.Errorf("find %s imports: %w", srcdir, err)
 	}
 
 	sourcePackage, destPackage := func() (string, string) {
@@ -48,21 +47,16 @@ func Run(pwd string, options CLIOptions) error {
 		return file.Name.String(), filepath.Base(destdir)
 	}()
 
-	// generate all builders for input structs
-	opts := genOpts{
-		DestPackage:   destPackage,
-		Imports:       fileImports,
-		NoNotice:      options.NoNotice,
-		SourcePackage: sourcePackage,
-		ValidateFunc:  options.ValidateFunc,
-		ReturnCopy:    options.ReturnCopy,
-
-		// force first rune to lowercase in case of unexported types
-		// it will be titled in gen template in case the type is exported
-		SetterPrefix: xstrings.FirstRuneToLower(options.SetterPrefix),
-	}
 	var errs []error
-	builders, err := generateStructs(file, options.Structs, destdir, opts)
+
+	// generate all builders for input structs
+	pkg := packageData{
+		DestDir:    destdir,
+		DestName:   destPackage,
+		Imports:    imports,
+		SourceName: sourcePackage,
+	}
+	builders, err := generateBuilders(file, pkg, options)
 	if err != nil {
 		errs = append(errs, err)
 	}

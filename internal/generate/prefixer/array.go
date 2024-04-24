@@ -37,15 +37,15 @@ func (a *arrayPrefixer) Valid() error {
 
 // ToString transforms a Prefixer (ast.Expr) into its string representation.
 // It also returns a boolean indicating whether the type is exported.
-func (a *arrayPrefixer) ToString(sourcePackage string, prefixes ...string) (_ string, _ bool) {
+func (a *arrayPrefixer) ToString(sourcePackage string, typeParams []string, prefixes ...string) (_ string, _ bool) {
 	var prefix string
 	if a.LenPrefixer == nil {
 		prefix = "[]"
 	} else {
-		ellipsis, _ := a.LenPrefixer.ToString("")
+		ellipsis, _ := a.LenPrefixer.ToString("", nil)
 		prefix = fmt.Sprintf("[%s]", ellipsis)
 	}
 
 	// retrieve prefixer associated to slice/array element
-	return a.EltPrefixer.ToString(sourcePackage, append(prefixes, prefix)...)
+	return a.EltPrefixer.ToString(sourcePackage, typeParams, append(prefixes, prefix)...)
 }

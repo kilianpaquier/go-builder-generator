@@ -76,7 +76,7 @@ It's possible to tune builders generation with the struct tag `builder`. The ava
 - `append`: when provided on a slice (only), the generated builder will append instead of reaffecting.
 - `pointer`: when provided on a pointer, the generated builder will keep it's pointer on the input parameter.
 - `default_func`: when provided, an additional function will be generated in another file suffixed with `_impl.go` to allow manual affectation of field (or even other fields).
-- `func_name`: when provided, the name of the function generated in the builder is set to the provided name, ignoring prefix or property name.
+- `func_name`: when provided, the name of the function generated in the builder is set to the provided name, ignoring prefix or field name.
 
 Example:
 

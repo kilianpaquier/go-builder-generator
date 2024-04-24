@@ -11,7 +11,7 @@ import (
 type interfacePrefixer struct {
 	*ast.InterfaceType
 
-	MethodFields []Prefixer
+	MethodsPrefixers []Prefixer
 }
 
 var _ Prefixer = &interfacePrefixer{} // ensure interface is implemented
@@ -41,13 +41,13 @@ func (i *interfacePrefixer) Valid() error {
 			}
 		}
 
-		i.MethodFields = make([]Prefixer, 0, len(i.Methods.List))
+		i.MethodsPrefixers = make([]Prefixer, 0, len(i.Methods.List))
 		for _, method := range i.Methods.List {
 			// create a prefixer prefixer to remove func( prefix and add name prefix
 			prefixer := NewPrefixerEditor(NewPrefixer(method.Type), editor(method))
 
 			errs = append(errs, prefixer.Valid())
-			i.MethodFields = append(i.MethodFields, prefixer)
+			i.MethodsPrefixers = append(i.MethodsPrefixers, prefixer)
 		}
 	}
 
@@ -56,25 +56,24 @@ func (i *interfacePrefixer) Valid() error {
 
 // ToString transforms a Prefixer (ast.Expr) into its string representation.
 // It also returns a boolean indicating whether the type is exported.
-func (i *interfacePrefixer) ToString(sourcePackage string, prefixes ...string) (_ string, _ bool) {
-	exported := true
-	types := make([]string, 0, len(i.MethodFields))
-
+func (i *interfacePrefixer) ToString(sourcePackage string, typeParams []string, prefixes ...string) (_ string, _ bool) {
 	// compute fields prefix
-	for _, field := range i.MethodFields {
-		stringType, fieldExported := field.ToString(sourcePackage)
+	exported := true
+	methodsTypes := make([]string, 0, len(i.MethodsPrefixers))
+	for _, field := range i.MethodsPrefixers {
+		stringType, fieldExported := field.ToString(sourcePackage, typeParams)
 
 		// don't affect directly because once exported is false, it should stays even if other fields are exported
 		if !fieldExported {
 			exported = false
 		}
 
-		types = append(types, stringType)
+		methodsTypes = append(methodsTypes, stringType)
 	}
 
 	// specific case to avoid unnecessary newlines
-	if len(types) == 0 {
+	if len(methodsTypes) == 0 {
 		return strings.Join(prefixes, "") + "interface{}", exported
 	}
-	return fmt.Sprintf("%sinterface{\n%s\n}", strings.Join(prefixes, ""), strings.Join(types, "\n")), exported
+	return fmt.Sprintf("%sinterface{\n%s\n}", strings.Join(prefixes, ""), strings.Join(methodsTypes, "\n")), exported
 }
