@@ -22,6 +22,6 @@ func (p *ptrPrefixer) Valid() error {
 
 // ToString transforms a Prefixer (ast.Expr) into its string representation.
 // It also returns a boolean indicating whether the type is exported.
-func (p *ptrPrefixer) ToString(sourcePackage string, prefixes ...string) (stringType string, exported bool) {
-	return p.XPrefixer.ToString(sourcePackage, append(prefixes, "*")...)
+func (p *ptrPrefixer) ToString(sourcePackage string, typeParams []string, prefixes ...string) (stringType string, exported bool) {
+	return p.XPrefixer.ToString(sourcePackage, typeParams, append(prefixes, "*")...)
 }

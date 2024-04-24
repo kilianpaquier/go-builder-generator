@@ -37,12 +37,12 @@ func (m *mapPrefixer) Valid() error {
 
 // ToString transforms a Prefixer (ast.Expr) into its string representation.
 // It also returns a boolean indicating whether the type is exported.
-func (m *mapPrefixer) ToString(sourcePackage string, prefixes ...string) (_ string, _ bool) {
+func (m *mapPrefixer) ToString(sourcePackage string, typeParams []string, prefixes ...string) (_ string, _ bool) {
 	// compute map key type
-	key, keyExported := m.KeyPrefixer.ToString(sourcePackage)
+	key, keyExported := m.KeyPrefixer.ToString(sourcePackage, typeParams)
 
 	// compute map value type
-	value, valueExported := m.ValuePrefixer.ToString(sourcePackage)
+	value, valueExported := m.ValuePrefixer.ToString(sourcePackage, typeParams)
 
 	// to be exported, both key and value of map must be exported
 	exported := keyExported && valueExported

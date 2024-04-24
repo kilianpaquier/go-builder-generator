@@ -34,8 +34,8 @@ func (i *editorPrefixer) Valid() error {
 
 // ToString transforms a Prefixer (ast.Expr) into its string representation.
 // It also returns a boolean indicating whether the type is exported.
-func (i *editorPrefixer) ToString(sourcePackage string, _ ...string) (_ string, _ bool) {
-	stringType, exported := i.Prefixer.ToString(sourcePackage)
+func (i *editorPrefixer) ToString(sourcePackage string, typeParams []string, _ ...string) (_ string, _ bool) {
+	stringType, exported := i.Prefixer.ToString(sourcePackage, typeParams)
 
 	// apply editor on computed string type
 	return i.Editor(stringType, exported)

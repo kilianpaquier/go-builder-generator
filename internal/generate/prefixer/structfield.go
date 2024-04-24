@@ -40,9 +40,9 @@ func (f *structFieldPrefixer) Valid() error {
 
 // ToString transforms a Prefixer (ast.Expr) into its string representation.
 // It also returns a boolean indicating whether the type is exported.
-func (f *structFieldPrefixer) ToString(sourcePackage string, prefixes ...string) (_ string, _ bool) {
-	stringType, exported := f.TypePrefixer.ToString(sourcePackage, prefixes...)
-	tag, _ := f.TagPrefixer.ToString("")
+func (f *structFieldPrefixer) ToString(sourcePackage string, typeParams []string, prefixes ...string) (_ string, _ bool) {
+	stringType, exported := f.TypePrefixer.ToString(sourcePackage, typeParams, prefixes...)
+	tag, _ := f.TagPrefixer.ToString("", nil)
 
 	if len(f.Names) > 0 {
 		// for an anonymous struct, exported means the field name

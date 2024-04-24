@@ -5,7 +5,7 @@ package no_dest
 
 /*
 Additional functions present here are called during a specific builder's
-Build function in the order of struct properties.
+Build function in the order of struct fields.
 
 For instance, with the below struct, `some_function` will be called first and
 then `some_other_function` will be called.

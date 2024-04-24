@@ -37,10 +37,10 @@ func (s *selectorPrefixer) Valid() error {
 
 // ToString transforms a Prefixer (ast.Expr) into its string representation.
 // It also returns a boolean indicating whether the type is exported.
-func (s *selectorPrefixer) ToString(_ string, prefixes ...string) (_ string, _ bool) {
+func (s *selectorPrefixer) ToString(_ string, typeParams []string, prefixes ...string) (_ string, _ bool) {
 	// parse package name
-	packageName, _ := s.XPrefixer.ToString("")
+	packageName, _ := s.XPrefixer.ToString("", nil)
 
 	// parse type name
-	return s.SelPrefixer.ToString(packageName, prefixes...)
+	return s.SelPrefixer.ToString(packageName, typeParams, prefixes...)
 }

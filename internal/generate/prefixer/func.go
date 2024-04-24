@@ -11,8 +11,8 @@ import (
 type funcPrefixer struct {
 	*ast.FuncType
 
-	InputFields  []Prefixer
-	OutputFields []Prefixer
+	ParamsPrefixers  []Prefixer
+	ResultsPrefixers []Prefixer
 }
 
 var _ Prefixer = &funcPrefixer{} // ensure interface is implemented
@@ -36,21 +36,21 @@ func (f *funcPrefixer) Valid() error {
 
 	// retrieve prefixers associated to func parameters
 	if f.Params != nil {
-		f.InputFields = make([]Prefixer, 0, len(f.Params.List))
+		f.ParamsPrefixers = make([]Prefixer, 0, len(f.Params.List))
 		for _, field := range f.Params.List {
 			prefixer := NewPrefixerEditor(NewPrefixer(field.Type), editor(field))
 			errs = append(errs, prefixer.Valid())
-			f.InputFields = append(f.InputFields, prefixer)
+			f.ParamsPrefixers = append(f.ParamsPrefixers, prefixer)
 		}
 	}
 
 	// retrieve prefixers associated to func outputs
 	if f.Results != nil {
-		f.OutputFields = make([]Prefixer, 0, len(f.Params.List))
+		f.ResultsPrefixers = make([]Prefixer, 0, len(f.Params.List))
 		for _, field := range f.Results.List {
 			prefixer := NewPrefixerEditor(NewPrefixer(field.Type), editor(field))
 			errs = append(errs, prefixer.Valid())
-			f.OutputFields = append(f.OutputFields, prefixer)
+			f.ResultsPrefixers = append(f.ResultsPrefixers, prefixer)
 		}
 	}
 
@@ -59,39 +59,39 @@ func (f *funcPrefixer) Valid() error {
 
 // ToString transforms a Prefixer (ast.Expr) into its string representation.
 // It also returns a boolean indicating whether the type is exported.
-func (f *funcPrefixer) ToString(sourcePackage string, prefixes ...string) (_ string, _ bool) {
+func (f *funcPrefixer) ToString(sourcePackage string, typeParams []string, prefixes ...string) (_ string, _ bool) {
 	exported := true
 
-	// compute inputs prefix part
-	inputs := make([]string, 0, len(f.InputFields))
-	for _, field := range f.InputFields {
-		stringType, fieldExported := field.ToString(sourcePackage)
+	// compute paramsTypes prefix part
+	paramsTypes := make([]string, 0, len(f.ParamsPrefixers))
+	for _, field := range f.ParamsPrefixers {
+		stringType, paramExported := field.ToString(sourcePackage, typeParams)
 
 		// don't affect directly because once exported is false, it should stays even if other fields are exported
-		if !fieldExported {
+		if !paramExported {
 			exported = false
 		}
 
-		inputs = append(inputs, stringType)
+		paramsTypes = append(paramsTypes, stringType)
 	}
 
-	// compute outputs prefix part
-	outputs := make([]string, 0, len(f.OutputFields))
-	for _, field := range f.OutputFields {
-		stringType, fieldExported := field.ToString(sourcePackage)
+	// compute resultsTypes prefix part
+	resultsTypes := make([]string, 0, len(f.ResultsPrefixers))
+	for _, field := range f.ResultsPrefixers {
+		stringType, resultExported := field.ToString(sourcePackage, typeParams)
 
 		// don't affect directly because once exported is false, it should stays even if other fields are exported
-		if !fieldExported {
+		if !resultExported {
 			exported = false
 		}
 
-		outputs = append(outputs, stringType)
+		resultsTypes = append(resultsTypes, stringType)
 	}
 
 	return fmt.Sprintf(
 		"%sfunc(%s) (%s)",
 		strings.Join(prefixes, ""),
-		strings.Join(inputs, ", "),
-		strings.Join(outputs, ", "),
+		strings.Join(paramsTypes, ", "),
+		strings.Join(resultsTypes, ", "),
 	), exported
 }

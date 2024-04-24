@@ -3,12 +3,12 @@
 package builders
 
 import (
-	"github.com/kilianpaquier/go-builder-generator/testdata/success_generic_field"
+	"github.com/kilianpaquier/go-builder-generator/testdata/success_generic"
 )
 
 // StructBuilder represents Struct's builder.
 type StructBuilder struct {
-	build success_generic_field.Struct
+	build success_generic.Struct
 }
 
 // NewStructBuilder creates a new StructBuilder.
@@ -22,19 +22,19 @@ func (b *StructBuilder) Copy() *StructBuilder {
 }
 
 // Build returns built Struct.
-func (b *StructBuilder) Build() *success_generic_field.Struct {
+func (b *StructBuilder) Build() *success_generic.Struct {
 	result := b.build
 	return &result
 }
 
 // GenericField sets Struct's GenericField.
-func (b *StructBuilder) GenericField(genericField success_generic_field.GenericType[int64]) *StructBuilder {
+func (b *StructBuilder) GenericField(genericField success_generic.SimpleGeneric[int64]) *StructBuilder {
 	b.build.GenericField = genericField
 	return b
 }
 
 // GenericFields sets Struct's GenericFields.
-func (b *StructBuilder) GenericFields(genericFields []*success_generic_field.GenericType[success_generic_field.GenericValue]) *StructBuilder {
+func (b *StructBuilder) GenericFields(genericFields []*success_generic.SimpleGeneric[success_generic.GenericValue]) *StructBuilder {
 	b.build.GenericFields = genericFields
 	return b
 }

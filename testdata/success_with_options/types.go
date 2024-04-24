@@ -2,14 +2,13 @@ package success_with_options
 
 import "context"
 
-//go:generate ../../go-builder-generator generate -f types.go -s Options,Empty -d builders --validate-func Validate --return-copy
+//go:generate ../../go-builder-generator generate -f types.go -s Options,Empty,GenericOptions -d builders --validate-func Validate --return-copy
 
 type Int64Alias int64
 
 type Empty struct{}
 
 type Options struct {
-	DefaultField              int64           `builder:"default=10"`
 	DefaultFieldFunc          string          `builder:"default_func=GetDefaultString"`
 	DefaultIgnoreAndFieldFunc context.Context `builder:"ignore,default_func=GetDefaultContext"`
 	IgnoreField               string          `builder:"ignore"`
@@ -30,5 +29,13 @@ type Options struct {
 }
 
 func (o *Options) Validate() error {
+	return nil
+}
+
+type GenericOptions[T any] struct {
+	DefaultFieldFunc T `builder:"default_func=GetDefaultString"`
+}
+
+func (o *GenericOptions[T]) Validate() error {
 	return nil
 }

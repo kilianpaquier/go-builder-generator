@@ -5,7 +5,7 @@ package builders
 
 /*
 Additional functions present here are called during a specific builder's
-Build function in the order of struct properties.
+Build function in the order of struct fields.
 
 For instance, with the below struct, `some_function` will be called first and
 then `some_other_function` will be called.
@@ -17,19 +17,25 @@ type MyStruct struct {
 */
 
 // GetDefaultString will be executed during Build function. It allows defining
-// some properties of Options at the end of builder in case those would depend on other properties.
+// some fields of Options at the end of builder in case those would depend on other fields.
 func (b *OptionsBuilder) GetDefaultString() *OptionsBuilder {
 	return b
 }
 
 // GetDefaultContext will be executed during Build function. It allows defining
-// some properties of Options at the end of builder in case those would depend on other properties.
+// some fields of Options at the end of builder in case those would depend on other fields.
 func (b *OptionsBuilder) GetDefaultContext() *OptionsBuilder {
 	return b
 }
 
 // SetDefaultForceFuncName will be executed during Build function. It allows defining
-// some properties of Options at the end of builder in case those would depend on other properties.
+// some fields of Options at the end of builder in case those would depend on other fields.
 func (b *OptionsBuilder) SetDefaultForceFuncName() *OptionsBuilder {
+	return b
+}
+
+// GetDefaultString will be executed during Build function. It allows defining
+// some fields of GenericOptions at the end of builder in case those would depend on other fields.
+func (b *GenericOptionsBuilder[T]) GetDefaultString() *GenericOptionsBuilder[T] {
 	return b
 }

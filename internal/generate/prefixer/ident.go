@@ -24,16 +24,17 @@ func (*identPrefixer) Valid() error {
 
 // ToString transforms a Prefixer (ast.Expr) into its string representation.
 // It also returns a boolean indicating whether the type is exported.
-func (i *identPrefixer) ToString(sourcePackage string, prefixes ...string) (_ string, _ bool) {
+func (i *identPrefixer) ToString(sourcePackage string, typeParams []string, prefixes ...string) (_ string, _ bool) {
 	// field type is a primary type, no package prefix is needed
-	if slices.Contains(models.PrimaryTypes(), i.Name) {
+	// field type is a reserved name (dyanmic type param - generic), no package prefix is needed
+	if slices.Contains(models.PrimaryTypes(), i.Name) || slices.Contains(typeParams, i.Name) {
 		return strings.Join(prefixes, "") + i.Name, true
 	}
 
 	// compute final type with package prefix if necessary
 	finalType := func() string {
 		if sourcePackage == "" {
-			return fmt.Sprint(strings.Join(prefixes, ""), i.Name)
+			return strings.Join(prefixes, "") + i.Name
 		}
 		return fmt.Sprint(strings.Join(prefixes, ""), sourcePackage, ".", i.Name)
 	}()

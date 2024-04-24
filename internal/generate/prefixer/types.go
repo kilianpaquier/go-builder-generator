@@ -14,7 +14,7 @@ type Prefixer interface {
 
 	// ToString transforms a Prefixer (ast.Expr) into its string representation.
 	// It also returns a boolean indicating whether the type is exported.
-	ToString(sourcePackage string, prefixes ...string) (stringType string, exported bool)
+	ToString(sourcePackage string, typeParams []string, prefixes ...string) (stringType string, exported bool)
 }
 
 // NewPrefixer transforms the input expression into it's corresponding Prefixer interface.
@@ -64,7 +64,11 @@ func NewPrefixer(input ast.Expr) Prefixer {
 
 	// field is a generic type
 	case *ast.IndexExpr:
-		return &genericsPrefixer{IndexExpr: expr}
+		return &indexPrefixer{IndexExpr: expr}
+
+	// field is a multiple generic type
+	case *ast.IndexListExpr:
+		return &indexListPrefixer{IndexListExpr: expr}
 	}
 
 	// any other unanticipated types that could exist

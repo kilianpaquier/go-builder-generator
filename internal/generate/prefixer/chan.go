@@ -24,7 +24,7 @@ func (c *chanPrefixer) Valid() error {
 
 // ToString transforms a Prefixer (ast.Expr) into its string representation.
 // It also returns a boolean indicating whether the type is exported.
-func (c *chanPrefixer) ToString(sourcePackage string, prefixes ...string) (_ string, _ bool) {
+func (c *chanPrefixer) ToString(sourcePackage string, typeParams []string, prefixes ...string) (_ string, _ bool) {
 	prefix := func() string {
 		if c.Dir == ast.SEND {
 			return "chan<- "
@@ -34,5 +34,5 @@ func (c *chanPrefixer) ToString(sourcePackage string, prefixes ...string) (_ str
 		}
 		return "chan "
 	}()
-	return c.ValuePrefixer.ToString(sourcePackage, append(prefixes, prefix)...)
+	return c.ValuePrefixer.ToString(sourcePackage, typeParams, append(prefixes, prefix)...)
 }
