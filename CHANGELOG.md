@@ -1,3 +1,10 @@
+## [1.2.0](https://github.com/kilianpaquier/go-builder-generator/compare/v1.1.2...v1.2.0) (2024-04-24)
+
+
+### Features
+
+* add generic struct builders generation ([db5a8f1](https://github.com/kilianpaquier/go-builder-generator/commit/db5a8f147bd9ab8525937824e2dfb42f8ba318b6))
+
 ## [1.1.2](https://github.com/kilianpaquier/go-builder-generator/compare/v1.1.1...v1.1.2) (2024-04-23)
 
 
