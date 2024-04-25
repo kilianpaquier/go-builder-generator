@@ -18,6 +18,10 @@
 - [Commands](#commands)
   - [Generate](#generate)
     - [Tags](#tags)
+  - [Generation cases](#generation-cases)
+    - [Simple struct](#simple-struct)
+    - [Generic struct](#generic-struct)
+    - [Imported module struct](#imported-module-struct)
 
 ## How to use ?
 
@@ -72,11 +76,11 @@ Global Flags:
 
 It's possible to tune builders generation with the struct tag `builder`. The available options are:
 
-- `ignore`: when provided, the field will be ignored in builder generation.
 - `append`: when provided on a slice (only), the generated builder will append instead of reaffecting.
-- `pointer`: when provided on a pointer, the generated builder will keep it's pointer on the input parameter.
 - `default_func`: when provided, an additional function will be generated in another file suffixed with `_impl.go` to allow manual affectation of field (or even other fields).
 - `func_name`: when provided, the name of the function generated in the builder is set to the provided name, ignoring prefix or field name.
+- `ignore`: when provided, the field will be ignored in builder generation.
+- `pointer`: when provided on a pointer, the generated builder will keep it's pointer on the input parameter.
 
 Example:
 
@@ -93,9 +97,51 @@ type StructName struct {
 	Ignore                int64    `builder:"ignore"`                            // no builder will be generated on this field
 	DefaultFunc           int64    `builder:"default_func=SomeFuncName"`         // an additional function named 'SomeFuncName' will be generated in target package file '_impl.go' and associated to builder struct
 	IgnoreWithDefaultFunc int64    `builder:"ignore,default_func=SomeOtherFunc"` // no builder will be generated and the additional function will be generated
+	CustomFuncName        string   `builder:"func_name=FuncNameOverride"`        // generated builder will be 'FuncNameOverride(customFuncName string)'
 }
 ```
 
 **Note:** `append` option and `pointer` option are exclusive with a priority for `append` if both provided. Also if `append` is provided on a field not being a slice, it will just be ignored.
 
-For more examples, you can check in `examples` package at project root !
+For more examples, you can check in `examples` package at project root!
+
+### Generation cases
+
+#### Simple struct
+
+```go
+//go:generate go-builder-generator generate -f types.go -s StructName -d builders
+
+type StructName struct {...}
+```
+
+#### Generic struct
+
+```go
+//go:generate go-builder-generator generate -f types.go -s GenericStruct,GenericStructUnary,GenericFieldStruct -d builders
+
+type GenericStruct[T any, ...] struct {...}
+
+type GenericStructUnary[T ~E, E any, ...] struct {...}
+
+type GenericFieldStruct struct {
+  Field GenericStruct[string, ...]
+}
+```
+
+#### Imported module struct
+
+In case it's needed to generate a builder on a struct not being one of the current module, it's possible to provide the `module::` prefix to tell `go-builder-generator` to generate the struct from an **imported** module.
+The provided module must be imported in the current module `go.mod`.
+
+This case works with both simple structs and generic structs. Under the hood, `go-builder-generator` will retrieve the appropriate version from the current module `go.mod` (it works with `replace` too) 
+and generate with those specific rules:
+- If `replace` is provided with a custom path, then it will retrieve the file from that path
+- If `GOPATH` environment variable exists, it will retrieve the file from `${GOPATH}/pkg/mod/module_name/...`
+- If `GOPATH` environment variable doesn't exist, it will retrieve the file from `${HOME}/go/pkg/mod/module_name/...`
+
+```go
+//go:generate go-builder-generator generate -f module::github.com/kilianpaquier/go-builder-generator/path/to/file.go -s ExternalStructName -d builders
+```
+
+You may see the [examples](./examples/) folder for real generation cases.
