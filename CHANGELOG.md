@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/kilianpaquier/go-builder-generator/compare/v1.2.1...v1.2.2) (2024-04-25)
+
+
+### Bug Fixes
+
+* prefix not taken into account anymore in generation ([827b842](https://github.com/kilianpaquier/go-builder-generator/commit/827b8425a87fc9ecdbd61a60db3b7c43c5566f82))
+
 ## [1.2.1](https://github.com/kilianpaquier/go-builder-generator/compare/v1.2.0...v1.2.1) (2024-04-25)
 
 
