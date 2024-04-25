@@ -8,8 +8,9 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/kilianpaquier/go-builder-generator/internal/generate/prefixer"
 	"github.com/samber/lo"
+
+	"github.com/kilianpaquier/go-builder-generator/internal/generate/prefixer"
 )
 
 // parseStruct parses and returns a gen data (to generate _gen file). Computing is done from input ast type spec and struct type.

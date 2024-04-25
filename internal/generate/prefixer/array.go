@@ -6,6 +6,7 @@ import (
 	"go/ast"
 )
 
+// Slice represents the token for a go slice prefix.
 const Slice = "[]"
 
 // arrayPrefixer implements Prefixer for ArrayType.

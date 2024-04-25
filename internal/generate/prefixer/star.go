@@ -4,6 +4,7 @@ import (
 	"go/ast"
 )
 
+// Star represents the pointer prefix.
 const Star = "*"
 
 // starPrefixer implements Prefixer for StarExpr.
