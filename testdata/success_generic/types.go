@@ -1,6 +1,6 @@
 package success_generic
 
-//go:generate ../../go-builder-generator generate -f types.go -s Struct,SimpleGeneric,AliasGeneric,FuckedUpGeneric,ComplexGeneric -d builders
+//go:generate ../../go-builder-generator generate -f types.go -s Struct,SimpleGeneric,AliasGeneric,FuckedUpGeneric,ComplexGeneric,ComplexSliceGeneric -d builders
 
 type SimpleGeneric[T any] struct {
 	Value T
@@ -19,9 +19,17 @@ type AliasGeneric[T any, X GenericValue] struct {
 }
 
 type ComplexGeneric[T Struct, Y comparable] struct {
-	ValueT map[Y]AliasGeneric[T, GenericValue]
-	ValueY [10]*[]SimpleGeneric[Y]
-	FuncT  func(T, SimpleGeneric[T]) (T, error)
+	ValueT             map[Y]AliasGeneric[T, GenericValue]
+	ValueY             [10]*[]SimpleGeneric[Y]
+	FuncT              func(T, SimpleGeneric[T]) (T, error)
+	AnonymousInterface interface {
+		HeyFunc(T) error
+		HeyFuncMulti(AliasGeneric[T, GenericValue]) AliasGeneric[T, GenericValue]
+	}
+}
+
+type ComplexSliceGeneric[S ~[]E, E Struct] struct {
+	ValueT func(S) E
 }
 
 type FuckedUpGeneric[T struct {

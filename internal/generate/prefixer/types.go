@@ -62,13 +62,18 @@ func NewPrefixer(input ast.Expr) Prefixer {
 	case *ast.BasicLit:
 		return (*basicLitPrefixer)(expr)
 
-	// field is a generic type
+	// field is a generic type (StructName[T])
 	case *ast.IndexExpr:
 		return &indexPrefixer{IndexExpr: expr}
 
-	// field is a multiple generic type
+	// field is a multiple generic type (StructName[T, V, ...])
 	case *ast.IndexListExpr:
 		return &indexListPrefixer{IndexListExpr: expr}
+
+	// field is type beginning with an operator like for generics (StructName[S ~[]E, E any]) for the S type part (~)
+	// more operators here https://github.com/golang/go/blob/master/src/go/token/token.go
+	case *ast.UnaryExpr:
+		return &unaryPrefixer{UnaryExpr: expr}
 	}
 
 	// any other unanticipated types that could exist

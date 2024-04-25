@@ -23,10 +23,22 @@ func parseStruct(typeSpec *ast.TypeSpec, structType *ast.StructType, pkg package
 	}
 
 	// compute generic params for builder structure
+	var typeParamsNames []string
 	if typeSpec.TypeParams != nil {
+		// first a first time over all type params (generic types) to retrieve only the names
+		// in case some type params depends on the others, we must build this slice before computing any field
+		typeParamsNames = make([]string, 0, len(typeSpec.TypeParams.List))
+		for _, typeParam := range typeSpec.TypeParams.List {
+			if len(typeParam.Names) == 0 {
+				continue
+			}
+			typeParamsNames = append(typeParamsNames, typeParam.Names[0].Name)
+		}
+
+		// build final type params with type prefixing if it applies
 		builder.TypeParams = make([]field, 0, len(typeSpec.TypeParams.List))
 		for _, typeParam := range typeSpec.TypeParams.List {
-			field, err := parseField(typeParam, pkg.SourceName, nil)
+			field, err := parseField(typeParam, pkg.SourceName, typeParamsNames)
 			if err != nil {
 				errs = append(errs, err)
 				continue
@@ -34,7 +46,6 @@ func parseStruct(typeSpec *ast.TypeSpec, structType *ast.StructType, pkg package
 			builder.TypeParams = append(builder.TypeParams, field)
 		}
 	}
-	typeParamsNames := lo.Map(builder.TypeParams, func(typeParam field, _ int) string { return typeParam.Name })
 	typeParamsExported := lo.CountBy(builder.TypeParams, func(param field) bool { return param.Exported }) == len(builder.TypeParams)
 
 	// add an error if destination package is not the same as the source one

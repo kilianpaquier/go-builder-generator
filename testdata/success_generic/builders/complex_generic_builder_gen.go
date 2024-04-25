@@ -27,6 +27,15 @@ func (b *ComplexGenericBuilder[T, Y]) Build() *success_generic.ComplexGeneric[T,
 	return &result
 }
 
+// AnonymousInterface sets ComplexGeneric's AnonymousInterface.
+func (b *ComplexGenericBuilder[T, Y]) AnonymousInterface(anonymousInterface interface {
+	HeyFunc(T) error
+	HeyFuncMulti(success_generic.AliasGeneric[T, success_generic.GenericValue]) success_generic.AliasGeneric[T, success_generic.GenericValue]
+}) *ComplexGenericBuilder[T, Y] {
+	b.build.AnonymousInterface = anonymousInterface
+	return b
+}
+
 // FuncT sets ComplexGeneric's FuncT.
 func (b *ComplexGenericBuilder[T, Y]) FuncT(funcT func(T, success_generic.SimpleGeneric[T]) (T, error)) *ComplexGenericBuilder[T, Y] {
 	b.build.FuncT = funcT

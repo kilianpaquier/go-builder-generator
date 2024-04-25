@@ -217,7 +217,7 @@ func TestRun(t *testing.T) {
 		{
 			DirName: "success_generic",
 			CLIOptions: generate.CLIOptions{
-				Structs: []string{"Struct", "SimpleGeneric", "AliasGeneric", "ComplexGeneric", "FuckedUpGeneric"},
+				Structs: []string{"Struct", "SimpleGeneric", "AliasGeneric", "ComplexGeneric", "FuckedUpGeneric", "ComplexSliceGeneric"},
 			},
 		},
 	} {
