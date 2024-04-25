@@ -6,6 +6,8 @@ import (
 	"go/ast"
 )
 
+const Slice = "[]"
+
 // arrayPrefixer implements Prefixer for ArrayType.
 type arrayPrefixer struct {
 	*ast.ArrayType
@@ -38,13 +40,14 @@ func (a *arrayPrefixer) Valid() error {
 // ToString transforms a Prefixer (ast.Expr) into its string representation.
 // It also returns a boolean indicating whether the type is exported.
 func (a *arrayPrefixer) ToString(sourcePackage string, typeParams []string, prefixes ...string) (_ string, _ bool) {
-	var prefix string
-	if a.LenPrefixer == nil {
-		prefix = "[]"
-	} else {
+	prefix := func() string {
+		if a.LenPrefixer == nil {
+			return Slice
+		}
+
 		ellipsis, _ := a.LenPrefixer.ToString("", nil)
-		prefix = fmt.Sprintf("[%s]", ellipsis)
-	}
+		return fmt.Sprintf("[%s]", ellipsis)
+	}()
 
 	// retrieve prefixer associated to slice/array element
 	return a.EltPrefixer.ToString(sourcePackage, typeParams, append(prefixes, prefix)...)

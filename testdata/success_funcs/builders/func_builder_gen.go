@@ -75,6 +75,12 @@ func (b *FuncBuilder) FuncFieldNamed(funcFieldNamed func(in int64) (out string))
 	return b
 }
 
+// FuncFieldNoNames sets Func's FuncFieldNoNames.
+func (b *FuncBuilder) FuncFieldNoNames(funcFieldNoNames func(map[string]int, func(success_funcs.Int64Alias)) error) *FuncBuilder {
+	b.build.FuncFieldNoNames = funcFieldNoNames
+	return b
+}
+
 // FuncFieldPtrAlias sets Func's FuncFieldPtrAlias.
 func (b *FuncBuilder) FuncFieldPtrAlias(funcFieldPtrAlias func(in *success_funcs.Int64Alias) (out *success_funcs.FuncAlias, err error)) *FuncBuilder {
 	b.build.FuncFieldPtrAlias = &funcFieldPtrAlias

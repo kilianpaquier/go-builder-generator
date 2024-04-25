@@ -14,6 +14,7 @@ type Func struct {
 
 	FuncFieldAlias         func(Int64Alias) string
 	FuncFieldAliasMultiple func(Int64Alias, FuncAlias) (string, error)
+	FuncFieldNoNames       func(map[string]int, func(Int64Alias)) error
 	FuncFieldAliasNamed    func(in Int64Alias) (out FuncAlias)
 	FuncFieldChan          func(c chan<- Int64Alias) error
 

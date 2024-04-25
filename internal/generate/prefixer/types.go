@@ -24,7 +24,7 @@ func NewPrefixer(input ast.Expr) Prefixer {
 	switch expr := input.(type) {
 	// field type is *...
 	case *ast.StarExpr:
-		return &ptrPrefixer{StarExpr: expr}
+		return &starPrefixer{StarExpr: expr}
 
 	// field type is []... or [X]...
 	case *ast.ArrayType:

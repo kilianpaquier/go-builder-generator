@@ -13,9 +13,9 @@ type Struct struct {
 	GenericFields []*SimpleGeneric[GenericValue]
 }
 
-type AliasGeneric[T any, X GenericValue] struct {
-	ValueT T
-	ValueX X
+type AliasGeneric[t any, GV GenericValue] struct {
+	ValueT t
+	ValueX GV
 }
 
 type ComplexGeneric[T Struct, Y comparable] struct {

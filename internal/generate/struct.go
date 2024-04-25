@@ -8,6 +8,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/kilianpaquier/go-builder-generator/internal/generate/prefixer"
 	"github.com/samber/lo"
 )
 
@@ -23,34 +24,45 @@ func parseStruct(typeSpec *ast.TypeSpec, structType *ast.StructType, pkg package
 	}
 
 	// compute generic params for builder structure
-	var typeParamsNames []string
+	var genericNames []string
 	if typeSpec.TypeParams != nil {
 		// first a first time over all type params (generic types) to retrieve only the names
 		// in case some type params depends on the others, we must build this slice before computing any field
-		typeParamsNames = make([]string, 0, len(typeSpec.TypeParams.List))
-		for _, typeParam := range typeSpec.TypeParams.List {
+		genericNames = make([]string, len(typeSpec.TypeParams.List))
+		for i, typeParam := range typeSpec.TypeParams.List {
 			if len(typeParam.Names) == 0 {
-				continue
+				errs = append(errs, fmt.Errorf("struct '%s' has unnamed type parameter (generic parameter)", builder.Name))
 			}
-			typeParamsNames = append(typeParamsNames, typeParam.Names[0].Name)
+			genericNames[i] = typeParam.Names[0].Name
 		}
 
 		// build final type params with type prefixing if it applies
 		builder.TypeParams = make([]field, 0, len(typeSpec.TypeParams.List))
-		for _, typeParam := range typeSpec.TypeParams.List {
-			field, err := parseField(typeParam, pkg.SourceName, typeParamsNames)
-			if err != nil {
-				errs = append(errs, err)
+		for _, typeParam := range lo.Zip2(genericNames, typeSpec.TypeParams.List) {
+			// retrieve typePrefixer for field type
+			typePrefixer := prefixer.NewPrefixer(typeParam.B.Type)
+			if err := typePrefixer.Valid(); err != nil {
+				errs = append(errs, fmt.Errorf("field validation: %w", err))
 				continue
+			}
+
+			// retrieve computed string type
+			finalType, exported := typePrefixer.ToString(pkg.SourceName, genericNames)
+			field := field{
+				AlteredType: finalType,
+				Exported:    exported,
+				InitialType: finalType,
+				Name:        typeParam.A,
+				ParamName:   paramName(typeParam.A),
 			}
 			builder.TypeParams = append(builder.TypeParams, field)
 		}
 	}
-	typeParamsExported := lo.CountBy(builder.TypeParams, func(param field) bool { return param.Exported }) == len(builder.TypeParams)
+	genericExported := lo.CountBy(builder.TypeParams, func(param field) bool { return param.Exported }) == len(builder.TypeParams)
 
 	// add an error if destination package is not the same as the source one
 	// and the struct to generate is not exported
-	builder.Exported = typeParamsExported && ast.IsExported(builder.Name)
+	builder.Exported = genericExported && ast.IsExported(builder.Name)
 	if pkg.SourceName != "" && !builder.Exported {
 		errs = append(errs, fmt.Errorf("%s is not exported (or one of its generic params is not) but generation destination is in an external package", builder.Name))
 	}
@@ -58,7 +70,7 @@ func parseStruct(typeSpec *ast.TypeSpec, structType *ast.StructType, pkg package
 	// compute all fields associated to builder
 	builder.Fields = make([]field, 0, len(structType.Fields.List))
 	for _, astField := range structType.Fields.List {
-		field, err := parseField(astField, pkg.SourceName, typeParamsNames)
+		field, err := parseField(astField, pkg.SourceName, genericNames)
 		if err != nil {
 			errs = append(errs, err)
 			continue

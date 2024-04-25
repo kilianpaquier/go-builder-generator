@@ -7,34 +7,34 @@ import (
 )
 
 // AliasGenericBuilder represents AliasGeneric's builder.
-type AliasGenericBuilder[T any, X success_generic.GenericValue] struct {
-	build success_generic.AliasGeneric[T, X]
+type AliasGenericBuilder[t any, GV success_generic.GenericValue] struct {
+	build success_generic.AliasGeneric[t, GV]
 }
 
 // NewAliasGenericBuilder creates a new AliasGenericBuilder.
-func NewAliasGenericBuilder[T any, X success_generic.GenericValue]() *AliasGenericBuilder[T, X] {
-	return &AliasGenericBuilder[T, X]{}
+func NewAliasGenericBuilder[t any, GV success_generic.GenericValue]() *AliasGenericBuilder[t, GV] {
+	return &AliasGenericBuilder[t, GV]{}
 }
 
 // Copy reassigns the builder struct (behind pointer) to a new pointer and returns it.
-func (b *AliasGenericBuilder[T, X]) Copy() *AliasGenericBuilder[T, X] {
-	return &AliasGenericBuilder[T, X]{b.build}
+func (b *AliasGenericBuilder[t, GV]) Copy() *AliasGenericBuilder[t, GV] {
+	return &AliasGenericBuilder[t, GV]{b.build}
 }
 
 // Build returns built AliasGeneric.
-func (b *AliasGenericBuilder[T, X]) Build() *success_generic.AliasGeneric[T, X] {
+func (b *AliasGenericBuilder[t, GV]) Build() *success_generic.AliasGeneric[t, GV] {
 	result := b.build
 	return &result
 }
 
 // ValueT sets AliasGeneric's ValueT.
-func (b *AliasGenericBuilder[T, X]) ValueT(valueT T) *AliasGenericBuilder[T, X] {
+func (b *AliasGenericBuilder[t, GV]) ValueT(valueT t) *AliasGenericBuilder[t, GV] {
 	b.build.ValueT = valueT
 	return b
 }
 
 // ValueX sets AliasGeneric's ValueX.
-func (b *AliasGenericBuilder[T, X]) ValueX(valueX X) *AliasGenericBuilder[T, X] {
+func (b *AliasGenericBuilder[t, GV]) ValueX(valueX GV) *AliasGenericBuilder[t, GV] {
 	b.build.ValueX = valueX
 	return b
 }

@@ -35,26 +35,26 @@ func parseField(astField *ast.Field, sourcePackage string, typeParams []string) 
 	switch {
 	// checking if field is a slice with append option
 	// append is exclusive with pointer
-	case options.Append && (strings.HasPrefix(initialType, "*[]") || strings.HasPrefix(initialType, "[]")):
+	case options.Append && (strings.HasPrefix(initialType, prefixer.Star+prefixer.Slice) || strings.HasPrefix(initialType, prefixer.Slice)):
 		options.Pointer = false
-		// removing * from type because it's handle in template
-		alteredType = strings.TrimPrefix(alteredType, "*")
+		// removing * from type because it's handled in template
+		alteredType = strings.TrimPrefix(alteredType, prefixer.Star)
 		// removing [] from type because template is gonna use ...{{ .AlteredType }}
 		// with append function for slices
-		alteredType = strings.TrimPrefix(alteredType, "[]")
+		alteredType = strings.TrimPrefix(alteredType, prefixer.Slice)
 
 	// checking is field is a pointer with the pointer option
 	// pointer is exclusive with append
-	case options.Pointer && strings.HasPrefix(initialType, "*"):
+	case options.Pointer && strings.HasPrefix(initialType, prefixer.Star):
 		options.Append = false
-		// removing * from type because it's handle in template
-		alteredType = strings.TrimPrefix(alteredType, "*")
+		// removing * from type because it's handled in template
+		alteredType = strings.TrimPrefix(alteredType, prefixer.Star)
 
 	default:
 		options.Append = false
 		options.Pointer = false
-		// removing * from type because it's handle in template
-		alteredType = strings.TrimPrefix(alteredType, "*")
+		// removing * from type because it's handled in template
+		alteredType = strings.TrimPrefix(alteredType, prefixer.Star)
 	}
 
 	fieldName := func() string {
@@ -63,11 +63,12 @@ func parseField(astField *ast.Field, sourcePackage string, typeParams []string) 
 			return astField.Names[0].Name
 		}
 
+		// handle composition fields (mainly those)
 		// first split type into package + real type
 		split := strings.Split(alteredType, ".")
 		// returning last element to cover two cases:
-		// when altered type is a type from other package (t.SamePackage would be false)
-		// when altered type is a type from the same package (t.SamePackage would be true)
+		// when altered type is a type from other package (sourcePackage would be false)
+		// when altered type is a type from the same package (sourcePackage would be true)
 		return split[len(split)-1]
 	}()
 
@@ -77,34 +78,44 @@ func parseField(astField *ast.Field, sourcePackage string, typeParams []string) 
 		options.Ignore = true
 	}
 
-	paramName := func() string {
-		// transform into camel case then put first letter in lowercase
-		initial := xstrings.FirstRuneToLower(xstrings.ToCamelCase(fieldName))
-
-		// handle builtin reserved keywords or functions
-		if slices.Contains(models.Builtin(), initial) {
-			return string(initial[0])
-		}
-
-		// for names full uppercase, change them to full lowercase
-		if strings.ToUpper(fieldName) == fieldName {
-			return strings.ToLower(fieldName)
-		}
-
-		// for all other names, keep initial value which is camelCase format
-		return initial
-	}()
-
 	// returning field with computed types and options
 	return field{
 		AlteredType: alteredType,
 		Exported:    exported,
 		InitialType: initialType,
 		Name:        fieldName,
-		ParamName:   paramName,
+		ParamName:   paramName(fieldName),
 
 		Opts: options,
 	}, nil
+}
+
+// paramName computes the parameter name for a function associated with the input fieldName.
+//
+// It takes care of acronyms, builtin reserved works and the simple cases.
+//
+// The resulted parameter name is in camelCase format.
+func paramName(fieldName string) string {
+	// for names full uppercase, change them to full lowercase
+	// a fieldName being 'ID' would give 'id'
+	// it's here to handle acronyms like ID, API, HTTP, etc.
+	if strings.ToUpper(fieldName) == fieldName {
+		return strings.ToLower(fieldName)
+	}
+
+	// transform into camel case then put first letter in lowercase
+	initial := xstrings.FirstRuneToLower(xstrings.ToCamelCase(fieldName))
+
+	// handle builtin reserved keywords or functions
+	// a fieldName being 'Any' would give an initial 'any' and as such the paramName would be 'a'
+	// it's not optimal but at least it works
+	if slices.Contains(models.Builtin(), initial) {
+		return string(initial[0])
+	}
+
+	// for all other names, keep initial value which is camelCase format
+	// a fieldName being 'InputField' would give 'inputField'
+	return initial
 }
 
 // parseOptions returns the field options for the input tags.
