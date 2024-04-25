@@ -209,6 +209,7 @@ func TestRun(t *testing.T) {
 		{
 			DirName: "success_with_options",
 			CLIOptions: generate.CLIOptions{
+				Prefix:       "Set",
 				ReturnCopy:   true,
 				Structs:      []string{"Options", "Empty", "GenericOptions"},
 				ValidateFunc: "Validate",

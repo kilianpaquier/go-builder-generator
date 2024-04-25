@@ -34,8 +34,8 @@ func (b *GenericOptionsBuilder[T]) Build() (*success_with_options.GenericOptions
 	return &result, nil
 }
 
-// DefaultFieldFunc sets GenericOptions's DefaultFieldFunc.
-func (b *GenericOptionsBuilder[T]) DefaultFieldFunc(defaultFieldFunc T) *GenericOptionsBuilder[T] {
+// SetDefaultFieldFunc sets GenericOptions's DefaultFieldFunc.
+func (b *GenericOptionsBuilder[T]) SetDefaultFieldFunc(defaultFieldFunc T) *GenericOptionsBuilder[T] {
 	b = b.Copy()
 	b.build.DefaultFieldFunc = defaultFieldFunc
 	return b

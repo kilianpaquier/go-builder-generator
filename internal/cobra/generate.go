@@ -4,7 +4,6 @@ import (
 	"os"
 
 	"github.com/huandu/xstrings"
-	"github.com/samber/lo"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
@@ -19,6 +18,10 @@ var (
 		Short:  "Generate builders for structs arguments present in file argument.",
 		PreRun: SetLogLevel,
 		Run: func(cmd *cobra.Command, _ []string) {
+			// force first rune to lowercase in case of unexported types
+			// it will be titled in gen template in case the type is exported
+			generateOpts.Prefix = xstrings.FirstRuneToLower(generateOpts.Prefix)
+
 			pwd, _ := os.Getwd()
 			if err := generate.Run(pwd, generateOpts); err != nil {
 				logrus.WithContext(cmd.Context()).
@@ -55,10 +58,8 @@ func init() {
 		"validate function name to be executed in Build, must have the signature 'func () error' and associated to built struct")
 
 	// setter prefix flag
-	prefix := generateCmd.Flags().StringP("prefix", "p", "", "specific prefix to apply on setter functions")
-	// force first rune to lowercase in case of unexported types
-	// it will be titled in gen template in case the type is exported
-	generateOpts.Prefix = xstrings.FirstRuneToLower(lo.FromPtr(prefix))
+	generateCmd.Flags().StringVarP(&generateOpts.Prefix, "prefix", "p", "",
+		"specific prefix to apply on setter functions")
 
 	// copy before update and return copy
 	generateCmd.Flags().BoolVar(&generateOpts.ReturnCopy, "return-copy", false,
