@@ -1,3 +1,16 @@
+## [1.2.1](https://github.com/kilianpaquier/go-builder-generator/compare/v1.2.0...v1.2.1) (2024-04-25)
+
+
+### Bug Fixes
+
+* **generic:** add unary (~) implementation for generic builders ([08baa16](https://github.com/kilianpaquier/go-builder-generator/commit/08baa16f225b4f1fddac6362d733bc6274caabb5))
+* **generic:** handle acronyms and lowercase generic names ([a642ea0](https://github.com/kilianpaquier/go-builder-generator/commit/a642ea02b21df56721fb70120f983b3336db9c67))
+
+
+### Documentation
+
+* **readme:** add some cases examples ([37d1bd8](https://github.com/kilianpaquier/go-builder-generator/commit/37d1bd8e1207f8ae49cfb0a45e5a3f9685bbde7d))
+
 ## [1.2.0](https://github.com/kilianpaquier/go-builder-generator/compare/v1.1.2...v1.2.0) (2024-04-24)
 
 
