@@ -1,3 +1,10 @@
+## [1.3.0](https://github.com/kilianpaquier/go-builder-generator/compare/v1.2.2...v1.3.0) (2024-04-26)
+
+
+### Features
+
+* **options:** add export function to export specific field's builder function (only work in certain cases, please check README.md) ([c39e935](https://github.com/kilianpaquier/go-builder-generator/commit/c39e935e6338b8ede596e85141f6bf2cca0a96a7))
+
 ## [1.2.2](https://github.com/kilianpaquier/go-builder-generator/compare/v1.2.1...v1.2.2) (2024-04-25)
 
 
