@@ -8,6 +8,7 @@ import (
 	"go/token"
 	"path/filepath"
 
+	"github.com/huandu/xstrings"
 	filesystem "github.com/kilianpaquier/filesystem/pkg"
 )
 
@@ -16,6 +17,10 @@ var tmpl embed.FS
 
 // Run runs the builder generation with input options.
 func Run(pwd string, options CLIOptions) error {
+	// force first rune to lowercase in case of unexported types
+	// it will be titled in gen template in case the type is exported
+	options.Prefix = xstrings.FirstRuneToLower(options.Prefix)
+
 	// retrieve destination full path
 	destdir, err := filepath.Abs(options.Destdir)
 	if err != nil {

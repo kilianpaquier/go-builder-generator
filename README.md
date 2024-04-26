@@ -81,6 +81,12 @@ It's possible to tune builders generation with the struct tag `builder`. The ava
 - `func_name`: when provided, the name of the function generated in the builder is set to the provided name, ignoring prefix or field name.
 - `ignore`: when provided, the field will be ignored in builder generation.
 - `pointer`: when provided on a pointer, the generated builder will keep it's pointer on the input parameter.
+- `export`: when provided, the builder function associated to the given field (unexported field for that matter) will be exported.
+  - It's only applicable when generation is done in the same package as the generated struct and the struct is exported.
+  - In the case of an unexported field for an exported struct with the generation in another package, the field will always be ignored during generation.
+  - In the case of an unexported field for an unexported struct with the generation in the same package, the builder function will always be exported (because the builder and the new function are unexported).
+
+**Note:** `append` option and `pointer` option are exclusive with a priority for `append` if both provided. Also if `append` is provided on a field not being a slice, it will just be ignored.
 
 Example:
 
@@ -99,11 +105,13 @@ type StructName struct {
 	IgnoreWithDefaultFunc int64    `builder:"ignore,default_func=SomeOtherFunc"` // no builder will be generated and the additional function will be generated
 	CustomFuncName        string   `builder:"func_name=FuncNameOverride"`        // generated builder will be 'FuncNameOverride(customFuncName string)'
 }
+
+//go:generate go-builder-generator generate -f types.go -s AnotherStructName
+
+type AnotherStructName struct {
+	unexportedField string `builder:"export"` // generated builder will be 'UnexportedField(unexportedField string)'
+}
 ```
-
-**Note:** `append` option and `pointer` option are exclusive with a priority for `append` if both provided. Also if `append` is provided on a field not being a slice, it will just be ignored.
-
-For more examples, you can check in `examples` package at project root!
 
 ### Generation cases
 

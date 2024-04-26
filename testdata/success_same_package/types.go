@@ -12,7 +12,8 @@ type SamePackage struct {
 	Ctx       context.Context
 	Primitive string
 
-	nonExported string // should be added to builder but not exported
+	nonExported          string // should be added to builder but not exported
+	nonExportedExportOpt string `builder:"export"` // should be added to builder and exported since the option says so
 }
 
 type unexportedType struct {
@@ -21,5 +22,6 @@ type unexportedType struct {
 	Ctx       context.Context
 	Primitive string
 
-	nonExported string // should be added to builder since builder won't be exported anyway
+	nonExported          string // should be added to builder since builder won't be exported anyway
+	nonExportedExportOpt string `builder:"export"` // should be added to builder since builder won't be exported anyway
 }

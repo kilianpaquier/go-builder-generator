@@ -45,6 +45,12 @@ func (b *unexportedTypeBuilder) NonExported(nonExported string) *unexportedTypeB
 	return b
 }
 
+// NonExportedExportOpt sets unexportedType's nonExportedExportOpt.
+func (b *unexportedTypeBuilder) NonExportedExportOpt(nonExportedExportOpt string) *unexportedTypeBuilder {
+	b.build.nonExportedExportOpt = nonExportedExportOpt
+	return b
+}
+
 // Primitive sets unexportedType's Primitive.
 func (b *unexportedTypeBuilder) Primitive(primitive string) *unexportedTypeBuilder {
 	b.build.Primitive = primitive

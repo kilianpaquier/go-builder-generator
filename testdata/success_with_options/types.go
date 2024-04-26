@@ -2,7 +2,7 @@ package success_with_options
 
 import "context"
 
-//go:generate ../../go-builder-generator generate -f types.go -s Options,Empty,GenericOptions -d builders --validate-func Validate --return-copy -p set
+//go:generate ../../go-builder-generator generate -f types.go -s Options,Empty,GenericOptions -d builders --validate-func Validate --return-copy -p Set
 
 type Int64Alias int64
 
@@ -26,6 +26,9 @@ type Options struct {
 
 	ForceFuncName                string `builder:"func_name=FooBarForced"`
 	ForceFuncNameWithDefaultFunc string `builder:"func_name=FooBarForceWithDefault,default_func=SetDefaultForceFuncName"`
+
+	privateField           string // should not be generated at all
+	privateFieldWithExport string `builder:"export"` // should not be generated at all even with export option
 }
 
 func (o *Options) Validate() error {

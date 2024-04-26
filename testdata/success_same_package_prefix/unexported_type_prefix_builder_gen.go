@@ -45,6 +45,12 @@ func (b *unexportedTypePrefixBuilder) SetNonExported(nonExported string) *unexpo
 	return b
 }
 
+// SetNonExportedExportOpt sets unexportedTypePrefix's nonExportedExportOpt.
+func (b *unexportedTypePrefixBuilder) SetNonExportedExportOpt(nonExportedExportOpt string) *unexportedTypePrefixBuilder {
+	b.build.nonExportedExportOpt = nonExportedExportOpt
+	return b
+}
+
 // SetPrimitive sets unexportedTypePrefix's Primitive.
 func (b *unexportedTypePrefixBuilder) SetPrimitive(primitive string) *unexportedTypePrefixBuilder {
 	b.build.Primitive = primitive

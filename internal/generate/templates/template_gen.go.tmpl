@@ -77,9 +77,10 @@ func (b *{{ $builder }}{{ $genericName }}) Build() (*{{ $fullname }}{{ $genericN
     put unexported name first letter in upper:
         - if the prefix is present (beauty) 
         - if the parent is unexported (exported function for an unexported type)
+        - if the field possess the 'export' option
 */}}
 {{ $name := .Name }}
-{{ if or (not (eq $prefix "")) (not $.Exported) }}
+{{ if or (not (eq $prefix "")) (not $.Exported) (.Opts.Export) }}
 {{ $name = title .Name }}
 {{ end }}
 {{ $funcName := .Opts.FuncName | default (printf "%s%s" $prefix $name) }}

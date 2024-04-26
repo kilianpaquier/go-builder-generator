@@ -45,6 +45,12 @@ func (b *SamePackageBuilder) nonExported(nonExported string) *SamePackageBuilder
 	return b
 }
 
+// NonExportedExportOpt sets SamePackage's nonExportedExportOpt.
+func (b *SamePackageBuilder) NonExportedExportOpt(nonExportedExportOpt string) *SamePackageBuilder {
+	b.build.nonExportedExportOpt = nonExportedExportOpt
+	return b
+}
+
 // Primitive sets SamePackage's Primitive.
 func (b *SamePackageBuilder) Primitive(primitive string) *SamePackageBuilder {
 	b.build.Primitive = primitive

@@ -47,9 +47,10 @@ type packageData struct {
 type fieldOpts struct {
 	Append      bool   `json:"append,omitempty"`
 	DefaultFunc string `json:"default_func,omitempty"`
+	Export      bool   `json:"export,omitempty"`
+	FuncName    string `json:"func_name,omitempty"`
 	Ignore      bool   `json:"ignore,omitempty"`
 	Pointer     bool   `json:"pointer,omitempty"`
-	FuncName    string `json:"func_name,omitempty"`
 }
 
 // field represents one parsed struct field.

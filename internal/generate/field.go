@@ -161,6 +161,9 @@ func parseOptions(astTags *ast.BasicLit) (fieldOpts, error) {
 		case option == "ignore":
 			options.Ignore = true
 
+		case option == "export":
+			options.Export = true
+
 		case strings.HasPrefix(option, "default_func"):
 			if options.DefaultFunc, ok = getOptionValue(option); !ok {
 				errs = append(errs, errors.New("found 'default_func' option but format is invalid, it should be of `default_func=func_name`"))
