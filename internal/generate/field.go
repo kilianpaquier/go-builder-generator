@@ -19,13 +19,13 @@ func parseField(astField *ast.Field, sourcePackage string, typeParams []string) 
 	// parse field tags
 	options, err := parseOptions(astField.Tag)
 	if err != nil {
-		return field{}, fmt.Errorf("field options parsing: %w", err)
+		return field{}, fmt.Errorf("field '%v' options parsing: %w", astField.Names, err)
 	}
 
 	// retrieve typePrefixer for field type
 	typePrefixer := prefixer.NewPrefixer(astField.Type)
 	if err := typePrefixer.Valid(); err != nil {
-		return field{}, fmt.Errorf("field validation: %w", err)
+		return field{}, fmt.Errorf("field '%v' validation: %w", astField.Names, err)
 	}
 
 	// retrieve computed string type

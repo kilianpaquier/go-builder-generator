@@ -91,7 +91,7 @@ func TestRun(t *testing.T) {
 		err := generate.Run(pwd, options)
 
 		// Assert
-		assert.ErrorContains(t, err, "field options parsing")
+		assert.ErrorContains(t, err, "field '[InvalidFlag]' options parsing")
 		assert.ErrorContains(t, err, "tags parsing")
 	})
 
