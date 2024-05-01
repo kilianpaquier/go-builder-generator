@@ -12,46 +12,28 @@ updates:
     directory: /
     schedule:
       interval: weekly
-      day: wednesday
-      time: "12:00"
-      timezone: Etc/UTC
     groups:
-      all:
+      major/minor/patch:
         update-types:
+          - major
           - minor
           - patch
     commit-message:
       include: scope
-      prefix: chore
-    pull-request-branch-name:
-      separator: /
-    rebase-strategy: auto
-    target-branch: main
-    assignees:
-      - kilianpaquier
+      prefix: ci
     reviewers:
       - kilianpaquier
-
   - package-ecosystem: gomod
     directory: /
     schedule:
       interval: weekly
-      day: wednesday
-      time: "12:00"
-      timezone: Etc/UTC
     groups:
-      all:
+      minor/patch:
         update-types:
           - minor
           - patch
     commit-message:
       include: scope
-      prefix: chore
-    pull-request-branch-name:
-      separator: /
-    rebase-strategy: auto
-    target-branch: main
-    assignees:
-      - kilianpaquier
+      prefix: ci
     reviewers:
       - kilianpaquier

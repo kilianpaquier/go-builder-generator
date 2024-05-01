@@ -12,7 +12,7 @@ on:
       - main
       - next
       - staging
-      - v[0-9]+
+      - v[0-9]+(.[0-9]+)?
   workflow_dispatch:
     inputs:
       dry_run:
@@ -25,13 +25,20 @@ jobs:
   version:
     name: Version
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    if: github.ref_protected == true
+    environment: release
     outputs:
       version: v${{ steps.semantic_release.outputs.new_release_version }}
       release: ${{ steps.release.outputs.release }}
+    env:
+      GIT_AUTHOR_NAME: ${{ github.triggering_actor }}
+      GIT_AUTHOR_EMAIL: ${{ github.triggering_actor }}@users.noreply.github.com
+      GIT_COMMITTER_NAME: ${{ github.triggering_actor }}
+      GIT_COMMITTER_EMAIL: ${{ github.triggering_actor }}@users.noreply.github.com
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - id: sha
         run: echo "sha=$(echo "$GITHUB_REF_NAME" | sha256sum | cut -c -8)" >> $GITHUB_OUTPUT
       # https://github.com/marketplace/actions/action-for-semantic-release
@@ -47,13 +54,12 @@ jobs:
             @semantic-release/release-notes-generator
             conventional-changelog-conventionalcommits
             semantic-release-license
-          ci: false
           dry_run: true
           tag_format: v${version}
           branches: |
             [
               "(master|main)",
-              "v+([0-9])",
+              "v+([0-9])?(.+([0-9]))",
               { "name": "next", "prerelease": true },
               { "name": "beta", "prerelease": true },
               { "name": "alpha", "prerelease": true },
@@ -62,7 +68,7 @@ jobs:
               { "name": "${{ github.ref_name }}", "prerelease": "${{ steps.sha.outputs.sha }}" }
             ]
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
       - run: echo $VERSION
         env:
           VERSION: v${{ steps.semantic_release.outputs.new_release_version }}
@@ -77,6 +83,7 @@ jobs:
   go-build:
     name: Go Build
     runs-on: ubuntu-latest
+    if: github.ref_protected == true
     needs: version
     steps:
       - uses: actions/checkout@v4
@@ -139,7 +146,7 @@ jobs:
           branches: |
             [
               "(master|main)",
-              "v+([0-9])",
+              "v+([0-9])?(.+([0-9]))",
               { "name": "next", "prerelease": true },
               { "name": "beta", "prerelease": true },
               { "name": "alpha", "prerelease": true },
