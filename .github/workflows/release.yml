@@ -12,6 +12,8 @@ on:
       - main
       - next
       - staging
+      # unnecessary to espace '.'
+      # see https://docs.github.com/fr/actions/using-workflows/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
       - v[0-9]+(.[0-9]+)?
   workflow_dispatch:
     inputs:
@@ -25,24 +27,20 @@ jobs:
   version:
     name: Version
     runs-on: ubuntu-latest
-    if: github.ref_protected == true
-    environment: release
     outputs:
-      version: v${{ steps.semantic_release.outputs.new_release_version }}
+      version: ${{ steps.release.outputs.version }}
       release: ${{ steps.release.outputs.release }}
-    env:
-      GIT_AUTHOR_NAME: ${{ github.triggering_actor }}
-      GIT_AUTHOR_EMAIL: ${{ github.triggering_actor }}@users.noreply.github.com
-      GIT_COMMITTER_NAME: ${{ github.triggering_actor }}
-      GIT_COMMITTER_EMAIL: ${{ github.triggering_actor }}@users.noreply.github.com
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
       - id: sha
         run: echo "sha=$(echo "$GITHUB_REF_NAME" | sha256sum | cut -c -8)" >> $GITHUB_OUTPUT
       # https://github.com/marketplace/actions/action-for-semantic-release
       - id: semantic_release
+        continue-on-error: true
         uses: cycjimmy/semantic-release-action@v4
         with:
           semantic_version: 23
@@ -65,26 +63,35 @@ jobs:
               { "name": "beta", "prerelease": true },
               { "name": "alpha", "prerelease": true },
               { "name": "staging", "prerelease": "beta" },
-              { "name": "develop", "prerelease": "alpha" },
-              { "name": "${{ github.ref_name }}", "prerelease": "${{ steps.sha.outputs.sha }}" }
+              { "name": "develop", "prerelease": "alpha" }
             ]
         env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-      - run: echo $VERSION
-        env:
-          VERSION: v${{ steps.semantic_release.outputs.new_release_version }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - id: release
         run: |
-          if [[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          if [ "$RELEASED" = "true" ]; then
+            echo "version=v$NEW_VERSION" >> $GITHUB_OUTPUT
+          elif [ "$LAST_VERSION" != "" ]; then
+            echo "version=v${LAST_VERSION}-${BRANCH_SHA}" >> $GITHUB_OUTPUT
+          else
+            echo "version=v0.0.0-dev.${BRANCH_SHA}" >> $GITHUB_OUTPUT
+          fi
+
+          if [[ $NEW_VERSION =~ ^[0-9]+(\.[0-9]+){2}$ ]]; then
             echo "release=true" >> $GITHUB_OUTPUT
           fi
         env:
-          VERSION: ${{ steps.semantic_release.outputs.new_release_version }}
+          BRANCH_SHA: ${{ steps.sha.outputs.sha }}
+          LAST_VERSION: ${{ steps.semantic_release.outputs.last_release_version }}
+          NEW_VERSION: ${{ steps.semantic_release.outputs.new_release_version }}
+          RELEASED: ${{ steps.semantic_release.outputs.new_release_published }}
+      - run: echo $VERSION
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
 
   go-build:
     name: Go Build
     runs-on: ubuntu-latest
-    if: github.ref_protected == true
     needs: version
     steps:
       - uses: actions/checkout@v4
@@ -116,11 +123,6 @@ jobs:
     environment: release
     needs:
       - go-build
-    env:
-      GIT_AUTHOR_NAME: ${{ github.triggering_actor }}
-      GIT_AUTHOR_EMAIL: ${{ github.triggering_actor }}@users.noreply.github.com
-      GIT_COMMITTER_NAME: ${{ github.triggering_actor }}
-      GIT_COMMITTER_EMAIL: ${{ github.triggering_actor }}@users.noreply.github.com
     steps:
       - uses: actions/checkout@v4
         with:

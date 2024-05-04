@@ -18,6 +18,8 @@ on:
       - main
       - next
       - staging
+      # unnecessary to espace '.'
+      # see https://docs.github.com/fr/actions/using-workflows/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
       - v[0-9]+(.[0-9]+)?
   workflow_dispatch:
 
