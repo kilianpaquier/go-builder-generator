@@ -45,6 +45,7 @@ jobs:
       - id: semantic_release
         uses: cycjimmy/semantic-release-action@v4
         with:
+          semantic_version: 23
           extra_plugins: |
             @semantic-release/changelog
             @semantic-release/commit-analyzer
@@ -52,7 +53,7 @@ jobs:
             @semantic-release/git
             @semantic-release/github
             @semantic-release/release-notes-generator
-            conventional-changelog-conventionalcommits
+            conventional-changelog-conventionalcommits@7
             semantic-release-license
           dry_run: true
           tag_format: v${version}
@@ -99,7 +100,7 @@ jobs:
           VERSION: ${{ needs.version.outputs.version }}
       - uses: actions/upload-artifact@v4
         with:
-          name: executables
+          name: build
           # order is important to filter unwanted globs after the filter or desired globs
           path: |
             dist/*
@@ -126,12 +127,13 @@ jobs:
           persist-credentials: false
       - uses: actions/download-artifact@v4
         with:
-          name: executables
+          name: build
           path: dist
       # https://github.com/marketplace/actions/action-for-semantic-release
       - id: semantic-release
         uses: cycjimmy/semantic-release-action@v4
         with:
+          semantic_version: 23
           extra_plugins: |
             @semantic-release/changelog
             @semantic-release/commit-analyzer
@@ -139,7 +141,7 @@ jobs:
             @semantic-release/git
             @semantic-release/github
             @semantic-release/release-notes-generator
-            conventional-changelog-conventionalcommits
+            conventional-changelog-conventionalcommits@7
             semantic-release-license
           dry_run: ${{ inputs.dry_run }}
           tag_format: v${version}
