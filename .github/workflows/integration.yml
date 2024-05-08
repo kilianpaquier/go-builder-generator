@@ -12,15 +12,17 @@ on:
       - ready_for_review
   push:
     branches:
-      - alpha
-      - beta
-      - develop
       - main
-      - next
+      - master
       - staging
-      # unnecessary to espace '.'
-      # see https://docs.github.com/fr/actions/using-workflows/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
-      - v[0-9]+(.[0-9]+)?
+      - dev
+      - develop
+      - development
+      - next
+      - beta
+      - alpha
+      - v[0-9]+.x
+      - v[0-9]+.[0-9]+.x
   workflow_dispatch:
 
 jobs:
@@ -61,7 +63,7 @@ jobs:
           go-version-file: go.mod
           token: ${{ secrets.GITHUB_TOKEN }}
       - run: mkdir -p reports/
-      - uses: golangci/golangci-lint-action@v5
+      - uses: golangci/golangci-lint-action@v6
         with:
           args: --config .golangci.yml --timeout 240s --fast --sort-results --out-format checkstyle:reports/go-ci-lint.checkstyle.xml,colored-line-number
 

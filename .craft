@@ -2,8 +2,11 @@
 ---
 ci:
   name: github
+  release:
+    auto: true
+    backmerge: false
+    mode: github-token
   options:
-    - auto_release
     - codecov
     - codeql
     - dependabot
