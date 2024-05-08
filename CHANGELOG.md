@@ -1,3 +1,11 @@
+## [1.3.2](https://github.com/kilianpaquier/go-builder-generator/compare/v1.3.1...v1.3.2) (2024-05-08)
+
+
+### Chores
+
+* **deps:** bump golang.org/x/tools in the minor-patch group ([ab743c1](https://github.com/kilianpaquier/go-builder-generator/commit/ab743c1152d4f3880b6cda7ec387e39909738fab))
+* **deps:** upgrade toolchain to go1.22.3 ([51a1716](https://github.com/kilianpaquier/go-builder-generator/commit/51a17169ab7758c99b92486f626f47911cfd4249))
+
 ## [1.3.1](https://github.com/kilianpaquier/go-builder-generator/compare/v1.3.0...v1.3.1) (2024-05-01)
 
 
