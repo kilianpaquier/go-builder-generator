@@ -14,7 +14,7 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/internal/generate"
 )
 
-func TestRun(t *testing.T) {
+func TestRun_Errors(t *testing.T) {
 	pwd, _ := os.Getwd()
 	testdata := filepath.Join(pwd, "..", "..", "testdata")
 
@@ -110,11 +110,15 @@ func TestRun(t *testing.T) {
 		// Assert
 		assert.ErrorContains(t, err, "is not exported (or one of its generic params is not) but generation destination is in an external package")
 	})
+}
+
+func TestRun_DifferentPackage(t *testing.T) {
+	pwd, _ := os.Getwd()
+	testdata := filepath.Join(pwd, "..", "..", "testdata")
 
 	for _, tc := range []struct {
 		generate.CLIOptions
-		DirName     string
-		SamePackage bool
+		DirName string
 	}{
 		{
 			DirName: "success_channels",
@@ -147,27 +151,6 @@ func TestRun(t *testing.T) {
 			},
 		},
 		{
-			DirName: "success_module_replace",
-			CLIOptions: generate.CLIOptions{
-				File:    "module::github.com/sirupsen/logrus/hooks/test/test.go",
-				Structs: []string{"Hook"},
-			},
-		},
-		{
-			DirName: "success_module_root",
-			CLIOptions: generate.CLIOptions{
-				File:    "module::github.com/go-playground/validator/v10/errors.go",
-				Structs: []string{"InvalidValidationError"},
-			},
-		},
-		{
-			DirName: "success_module_subdir",
-			CLIOptions: generate.CLIOptions{
-				File:    "module::github.com/sirupsen/logrus/hooks/test/test.go",
-				Structs: []string{"Hook"},
-			},
-		},
-		{
 			DirName: "success_naming",
 			CLIOptions: generate.CLIOptions{
 				Structs: []string{"Naming"},
@@ -178,21 +161,6 @@ func TestRun(t *testing.T) {
 			CLIOptions: generate.CLIOptions{
 				Structs: []string{"RootType"},
 			},
-		},
-		{
-			DirName: "success_same_package",
-			CLIOptions: generate.CLIOptions{
-				Structs: []string{"SamePackage", "unexportedType"},
-			},
-			SamePackage: true,
-		},
-		{
-			DirName: "success_same_package_prefix",
-			CLIOptions: generate.CLIOptions{
-				Structs: []string{"unexportedTypePrefix"},
-				Prefix:  "Set",
-			},
-			SamePackage: true,
 		},
 		{
 			DirName: "success_slices",
@@ -224,28 +192,102 @@ func TestRun(t *testing.T) {
 	} {
 		t.Run(tc.DirName, func(t *testing.T) {
 			// Arrange
-			if tc.CLIOptions.File == "" {
-				tc.CLIOptions.File = filepath.Join(testdata, tc.DirName, "types.go")
-			}
-			var assertdir, destdir string
-			if tc.SamePackage {
-				src := tc.CLIOptions.File
-				assertdir = filepath.Join(testdata, tc.DirName)
-				destdir = t.TempDir()
-				tc.CLIOptions.File = filepath.Join(destdir, "types.go")
-				require.NoError(t, filesystem.CopyFile(src, tc.File))
-			} else {
-				assertdir = filepath.Join(testdata, tc.DirName, "builders")
-				destdir = filepath.Join(t.TempDir(), "builders")
-			}
-			tc.CLIOptions.Destdir = destdir
+			tc.CLIOptions.File = filepath.Join(testdata, tc.DirName, "types.go")
+			assertdir := filepath.Join(testdata, tc.DirName, "builders")
+			tc.CLIOptions.Destdir = filepath.Join(t.TempDir(), "builders")
 
 			// Act
 			err := generate.Run(pwd, tc.CLIOptions)
 
 			// Assert
 			assert.NoError(t, err)
-			testfs.AssertEqualDir(t, assertdir, destdir)
+			testfs.AssertEqualDir(t, assertdir, tc.CLIOptions.Destdir)
+		})
+	}
+}
+
+func TestRun_ExternalModule(t *testing.T) {
+	pwd, _ := os.Getwd()
+	testdata := filepath.Join(pwd, "..", "..", "testdata")
+
+	for _, tc := range []struct {
+		generate.CLIOptions
+		DirName string
+	}{
+		{
+			DirName: "success_module_replace",
+			CLIOptions: generate.CLIOptions{
+				File:    "module::github.com/sirupsen/logrus/hooks/test/test.go",
+				Structs: []string{"Hook"},
+			},
+		},
+		{
+			DirName: "success_module_root",
+			CLIOptions: generate.CLIOptions{
+				File:    "module::github.com/go-playground/validator/v10/errors.go",
+				Structs: []string{"InvalidValidationError"},
+			},
+		},
+		{
+			DirName: "success_module_subdir",
+			CLIOptions: generate.CLIOptions{
+				File:    "module::github.com/sirupsen/logrus/hooks/test/test.go",
+				Structs: []string{"Hook"},
+			},
+		},
+	} {
+		t.Run(tc.DirName, func(t *testing.T) {
+			// Arrange
+			assertdir := filepath.Join(testdata, tc.DirName, "builders")
+			tc.CLIOptions.Destdir = filepath.Join(t.TempDir(), "builders")
+
+			// Act
+			err := generate.Run(pwd, tc.CLIOptions)
+
+			// Assert
+			assert.NoError(t, err)
+			testfs.AssertEqualDir(t, assertdir, tc.CLIOptions.Destdir)
+		})
+	}
+}
+
+func TestRun_SamePackage(t *testing.T) {
+	pwd, _ := os.Getwd()
+	testdata := filepath.Join(pwd, "..", "..", "testdata")
+
+	for _, tc := range []struct {
+		generate.CLIOptions
+		DirName string
+	}{
+		{
+			DirName: "success_same_package",
+			CLIOptions: generate.CLIOptions{
+				Structs: []string{"SamePackage", "unexportedType"},
+			},
+		},
+		{
+			DirName: "success_same_package_prefix",
+			CLIOptions: generate.CLIOptions{
+				Structs: []string{"unexportedTypePrefix"},
+				Prefix:  "Set",
+			},
+		},
+	} {
+		t.Run(tc.DirName, func(t *testing.T) {
+			// Arrange
+			assertdir := filepath.Join(testdata, tc.DirName)
+
+			src := filepath.Join(testdata, tc.DirName, "types.go")
+			tc.CLIOptions.Destdir = t.TempDir()
+			tc.CLIOptions.File = filepath.Join(tc.CLIOptions.Destdir, "types.go")
+			require.NoError(t, filesystem.CopyFile(src, tc.CLIOptions.File))
+
+			// Act
+			err := generate.Run(pwd, tc.CLIOptions)
+
+			// Assert
+			assert.NoError(t, err)
+			testfs.AssertEqualDir(t, assertdir, tc.CLIOptions.Destdir)
 		})
 	}
 }
