@@ -1,3 +1,10 @@
+## [1.3.3](https://github.com/kilianpaquier/go-builder-generator/compare/v1.3.2...v1.3.3) (2024-06-01)
+
+
+### Chores
+
+* **deps:** upgrade filesystem and validator dependencies ([91f0e40](https://github.com/kilianpaquier/go-builder-generator/commit/91f0e4019f728d714131e4f0237b24cbb9fc410c))
+
 ## [1.3.2](https://github.com/kilianpaquier/go-builder-generator/compare/v1.3.1...v1.3.2) (2024-05-08)
 
 
