@@ -105,7 +105,7 @@ jobs:
           check-latest: true
           go-version-file: go.mod
           token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: goreleaser/goreleaser-action@v5
+      - uses: goreleaser/goreleaser-action@v6
         with:
           args: release --clean --config .goreleaser.yml --skip=validate --skip=announce --skip=publish --snapshot
         env:
