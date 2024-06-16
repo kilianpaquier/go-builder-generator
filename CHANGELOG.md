@@ -1,3 +1,10 @@
+## [1.4.0](https://github.com/kilianpaquier/go-builder-generator/compare/v1.3.3...v1.4.0) (2024-06-16)
+
+
+### Features
+
+* **deps:** upgrade xstrings to v1.5.0 which changes ToCamelCase to respect what the function should initially do ([495434d](https://github.com/kilianpaquier/go-builder-generator/commit/495434db99547427622d4ad9269a21c31a5efff8))
+
 ## [1.3.3](https://github.com/kilianpaquier/go-builder-generator/compare/v1.3.2...v1.3.3) (2024-06-01)
 
 
