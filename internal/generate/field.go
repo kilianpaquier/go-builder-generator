@@ -103,8 +103,8 @@ func paramName(fieldName string) string {
 		return strings.ToLower(fieldName)
 	}
 
-	// transform into camel case then put first letter in lowercase
-	initial := xstrings.FirstRuneToLower(xstrings.ToCamelCase(fieldName))
+	// transform into camel case
+	initial := xstrings.ToCamelCase(fieldName)
 
 	// handle builtin reserved keywords or functions
 	// a fieldName being 'Any' would give an initial 'any' and as such the paramName would be 'a'

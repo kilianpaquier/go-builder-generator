@@ -66,49 +66,49 @@ func (b *ChanBuilder) ChanFieldWithPkg(chanFieldWithPkg chan context.Context) *C
 }
 
 // RChanField sets Chan's RChanField.
-func (b *ChanBuilder) RChanField(rChanField <-chan int64) *ChanBuilder {
-	b.build.RChanField = rChanField
+func (b *ChanBuilder) RChanField(rchanField <-chan int64) *ChanBuilder {
+	b.build.RChanField = rchanField
 	return b
 }
 
 // RChanFieldAlias sets Chan's RChanFieldAlias.
-func (b *ChanBuilder) RChanFieldAlias(rChanFieldAlias <-chan success_channels.Int64Alias) *ChanBuilder {
-	b.build.RChanFieldAlias = rChanFieldAlias
+func (b *ChanBuilder) RChanFieldAlias(rchanFieldAlias <-chan success_channels.Int64Alias) *ChanBuilder {
+	b.build.RChanFieldAlias = rchanFieldAlias
 	return b
 }
 
 // RChanFieldPtrAlias sets Chan's RChanFieldPtrAlias.
-func (b *ChanBuilder) RChanFieldPtrAlias(rChanFieldPtrAlias <-chan *success_channels.Int64Alias) *ChanBuilder {
-	b.build.RChanFieldPtrAlias = &rChanFieldPtrAlias
+func (b *ChanBuilder) RChanFieldPtrAlias(rchanFieldPtrAlias <-chan *success_channels.Int64Alias) *ChanBuilder {
+	b.build.RChanFieldPtrAlias = &rchanFieldPtrAlias
 	return b
 }
 
 // RChanFieldWithPkg sets Chan's RChanFieldWithPkg.
-func (b *ChanBuilder) RChanFieldWithPkg(rChanFieldWithPkg <-chan context.Context) *ChanBuilder {
-	b.build.RChanFieldWithPkg = rChanFieldWithPkg
+func (b *ChanBuilder) RChanFieldWithPkg(rchanFieldWithPkg <-chan context.Context) *ChanBuilder {
+	b.build.RChanFieldWithPkg = rchanFieldWithPkg
 	return b
 }
 
 // SChanField sets Chan's SChanField.
-func (b *ChanBuilder) SChanField(sChanField chan<- int64) *ChanBuilder {
-	b.build.SChanField = sChanField
+func (b *ChanBuilder) SChanField(schanField chan<- int64) *ChanBuilder {
+	b.build.SChanField = schanField
 	return b
 }
 
 // SChanFieldAlias sets Chan's SChanFieldAlias.
-func (b *ChanBuilder) SChanFieldAlias(sChanFieldAlias chan<- success_channels.Int64Alias) *ChanBuilder {
-	b.build.SChanFieldAlias = sChanFieldAlias
+func (b *ChanBuilder) SChanFieldAlias(schanFieldAlias chan<- success_channels.Int64Alias) *ChanBuilder {
+	b.build.SChanFieldAlias = schanFieldAlias
 	return b
 }
 
 // SChanFieldPtrAlias sets Chan's SChanFieldPtrAlias.
-func (b *ChanBuilder) SChanFieldPtrAlias(sChanFieldPtrAlias chan<- *success_channels.Int64Alias) *ChanBuilder {
-	b.build.SChanFieldPtrAlias = &sChanFieldPtrAlias
+func (b *ChanBuilder) SChanFieldPtrAlias(schanFieldPtrAlias chan<- *success_channels.Int64Alias) *ChanBuilder {
+	b.build.SChanFieldPtrAlias = &schanFieldPtrAlias
 	return b
 }
 
 // SChanFieldWithPkg sets Chan's SChanFieldWithPkg.
-func (b *ChanBuilder) SChanFieldWithPkg(sChanFieldWithPkg chan<- context.Context) *ChanBuilder {
-	b.build.SChanFieldWithPkg = sChanFieldWithPkg
+func (b *ChanBuilder) SChanFieldWithPkg(schanFieldWithPkg chan<- context.Context) *ChanBuilder {
+	b.build.SChanFieldWithPkg = schanFieldWithPkg
 	return b
 }
