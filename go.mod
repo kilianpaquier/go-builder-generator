@@ -10,7 +10,7 @@ require (
 	github.com/go-playground/validator/v10 v10.22.0
 	github.com/huandu/xstrings v1.5.0
 	github.com/kilianpaquier/filesystem v0.0.0-20240508104440-c4269dd05335
-	github.com/samber/lo v1.39.0
+	github.com/samber/lo v1.42.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.8.1
 	github.com/stretchr/testify v1.9.0
