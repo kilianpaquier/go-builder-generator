@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/kilianpaquier/go-builder-generator/compare/v1.4.0...v1.4.1) (2024-06-28)
+
+
+### Chores
+
+* **deps:** bump github.com/samber/lo in the minor-patch group ([836804f](https://github.com/kilianpaquier/go-builder-generator/commit/836804f064905ab23fe3a91c416152d924a286cb))
+
 ## [1.4.0](https://github.com/kilianpaquier/go-builder-generator/compare/v1.3.3...v1.4.0) (2024-06-16)
 
 
