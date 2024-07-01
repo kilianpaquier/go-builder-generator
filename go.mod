@@ -10,7 +10,7 @@ require (
 	github.com/go-playground/validator/v10 v10.22.0
 	github.com/huandu/xstrings v1.5.0
 	github.com/kilianpaquier/filesystem v0.0.0-20240508104440-c4269dd05335
-	github.com/samber/lo v1.42.0
+	github.com/samber/lo v1.44.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.8.1
 	github.com/stretchr/testify v1.9.0
@@ -36,7 +36,6 @@ require (
 	github.com/spf13/cast v1.6.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	golang.org/x/crypto v0.24.0 // indirect
-	golang.org/x/exp v0.0.0-20240613232115-7f521ea00fb8 // indirect
 	golang.org/x/net v0.26.0 // indirect
 	golang.org/x/sys v0.21.0 // indirect
 	golang.org/x/text v0.16.0 // indirect
