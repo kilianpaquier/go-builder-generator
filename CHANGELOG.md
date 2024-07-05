@@ -1,3 +1,10 @@
+## [1.5.0](https://github.com/kilianpaquier/go-builder-generator/compare/v1.4.2...v1.5.0) (2024-07-05)
+
+
+### Code Refactoring
+
+* remove dependency to filesystem and logrus ([2f8d537](https://github.com/kilianpaquier/go-builder-generator/commit/2f8d537d8c246b7a344dbdedfeabe45b4190fbf9))
+
 ## [1.4.2](https://github.com/kilianpaquier/go-builder-generator/compare/v1.4.1...v1.4.2) (2024-07-01)
 
 
