@@ -1,3 +1,3 @@
 package success_pkg
 
-//go:generate ../../go-builder-generator generate -f module::github.com/sirupsen/logrus/hooks/test/test.go -s Hook -d builders
+//go:generate ../../go-builder-generator generate -f module::github.com/stretchr/testify/mock/mock.go -s Mock -d builders

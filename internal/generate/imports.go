@@ -9,9 +9,10 @@ import (
 	"slices"
 	"strings"
 
-	filesystem "github.com/kilianpaquier/filesystem/pkg"
 	"github.com/samber/lo"
 	"golang.org/x/mod/modfile"
+
+	"github.com/kilianpaquier/go-builder-generator/internal/fs"
 )
 
 const modulePrefix = "module::"
@@ -88,7 +89,7 @@ type module struct {
 // An error is returned in such case where no go.mod is found or where dest is not in the go.mod require imports.
 func findModule(srcdir, dest string) (*module, error) {
 	gomod := filepath.Join(srcdir, "go.mod")
-	if !filesystem.Exists(gomod) {
+	if !fs.Exists(gomod) {
 		// handle root directory -> VolumeName (e.g "C:") + os.PathSeparator
 		if srcdir == filepath.VolumeName(srcdir)+string(os.PathSeparator) {
 			return nil, errors.New("current module go.mod not found")
@@ -107,7 +108,7 @@ func findModule(srcdir, dest string) (*module, error) {
 		return strings.HasPrefix(dest, require.Mod.Path)
 	})
 	if !ok {
-		return nil, fmt.Errorf("failed to find appropriate require in '%s', make sure you are importing this module", gomod)
+		return nil, fmt.Errorf("failed to find appropriate require in '%s', make sure you are importing base module of '%s'", gomod, dest)
 	}
 	subpath := strings.TrimPrefix(dest, require.Mod.Path)
 
@@ -138,7 +139,7 @@ func findSourceImport(srcdir string, packages ...string) (string, error) {
 	gomod := filepath.Join(srcdir, "go.mod")
 
 	// go through parent directory to find go.mod in case it doesn't exist in current directory
-	if !filesystem.Exists(gomod) {
+	if !fs.Exists(gomod) {
 		// handle root directory -> VolumeName (e.g "C:") + os.PathSeparator
 		if srcdir == filepath.VolumeName(srcdir)+string(os.PathSeparator) {
 			return "", errors.New("no go.mod found")

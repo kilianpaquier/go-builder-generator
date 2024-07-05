@@ -9,7 +9,8 @@ import (
 	"path/filepath"
 
 	"github.com/huandu/xstrings"
-	filesystem "github.com/kilianpaquier/filesystem/pkg"
+
+	"github.com/kilianpaquier/go-builder-generator/internal/fs"
 )
 
 //go:embed all:templates
@@ -68,7 +69,7 @@ func Run(pwd string, options CLIOptions) error {
 
 	// generate implementation file$
 	dest := filepath.Join(destdir, "builders_impl.go")
-	if len(builders) > 0 && !filesystem.Exists(dest) {
+	if len(builders) > 0 && !fs.Exists(dest) {
 		impl := &implData{
 			Builders:    builders,
 			DestPackage: filepath.Base(destdir),
