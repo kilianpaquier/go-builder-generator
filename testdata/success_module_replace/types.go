@@ -1,7 +1,10 @@
 package root
 
-import "github.com/sirupsen/logrus/hooks/test"
+import (
+	"github.com/stretchr/testify/mock"
+)
 
-//go:generate ../../go-builder-generator generate -f module::github.com/sirupsen/logrus/hooks/test/test.go -s Hook -d builders
+//go:generate ../../go-builder-generator generate -f module::github.com/stretchr/testify/mock/mock.go -s Mock -d builders
 
-type Hook test.Hook
+// Mock is just an alias of testify Mock.
+type Mock mock.Mock

@@ -1,9 +1,9 @@
 package cobra
 
 import (
+	"fmt"
 	"os"
 
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
 	"github.com/kilianpaquier/go-builder-generator/internal/generate"
@@ -13,16 +13,14 @@ var (
 	generateOpts = generate.CLIOptions{}
 
 	generateCmd = &cobra.Command{
-		Use:    "generate",
-		Short:  "Generate builders for structs arguments present in file argument.",
-		PreRun: SetLogLevel,
-		Run: func(cmd *cobra.Command, _ []string) {
+		Use:   "generate",
+		Short: "Generate builders for structs arguments present in file argument.",
+		RunE: func(_ *cobra.Command, _ []string) error {
 			pwd, _ := os.Getwd()
 			if err := generate.Run(pwd, generateOpts); err != nil {
-				logrus.WithContext(cmd.Context()).
-					WithError(err).
-					Fatal("failed to generate builders")
+				return fmt.Errorf("generate builders: %w", err)
 			}
+			return nil
 		},
 	}
 )

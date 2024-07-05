@@ -179,7 +179,7 @@ linters-settings:
       - name: import-alias-naming
         arguments:
           - "^[a-z_][a-z_0-9]{0,}$"
-      - name: imports-blacklist
+      - name: imports-blocklist
       - name: import-shadowing
       - name: max-public-structs
         arguments: [8]
@@ -227,6 +227,7 @@ linters-settings:
       - name: unhandled-error
         arguments:
           - bytes.Buffer.Write.*
+          - fmt.Print
           - fmt.Printf
           - fmt.Println
       - name: unnecessary-stmt

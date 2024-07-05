@@ -6,11 +6,11 @@ import (
 	"path/filepath"
 	"testing"
 
-	filesystem "github.com/kilianpaquier/filesystem/pkg"
-	testfs "github.com/kilianpaquier/filesystem/pkg/tests"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/kilianpaquier/go-builder-generator/internal/fs"
+	testfs "github.com/kilianpaquier/go-builder-generator/internal/fs/tests"
 	"github.com/kilianpaquier/go-builder-generator/internal/generate"
 )
 
@@ -44,7 +44,7 @@ func TestRun_Errors(t *testing.T) {
 				Field string
 			}
 			`,
-		), filesystem.RwRR)
+		), fs.RwRR)
 		require.NoError(t, err)
 
 		destdir := filepath.Join(t.TempDir(), "builders")
@@ -75,7 +75,7 @@ func TestRun_Errors(t *testing.T) {
 
 		// Assert
 		assert.ErrorContains(t, err, "failed to find appropriate require")
-		assert.ErrorContains(t, err, "make sure you are importing this module")
+		assert.ErrorContains(t, err, "make sure you are importing base module of 'github.com/jarcoal/httpmock/match.go'")
 	})
 
 	t.Run("error_invalid_tags", func(t *testing.T) {
@@ -201,7 +201,7 @@ func TestRun_DifferentPackage(t *testing.T) {
 
 			// Assert
 			assert.NoError(t, err)
-			testfs.AssertEqualDir(t, assertdir, tc.CLIOptions.Destdir)
+			assert.NoError(t, testfs.EqualDirs(assertdir, tc.CLIOptions.Destdir))
 		})
 	}
 }
@@ -217,8 +217,8 @@ func TestRun_ExternalModule(t *testing.T) {
 		{
 			DirName: "success_module_replace",
 			CLIOptions: generate.CLIOptions{
-				File:    "module::github.com/sirupsen/logrus/hooks/test/test.go",
-				Structs: []string{"Hook"},
+				File:    "module::github.com/stretchr/testify/mock/mock.go",
+				Structs: []string{"Mock"},
 			},
 		},
 		{
@@ -231,8 +231,8 @@ func TestRun_ExternalModule(t *testing.T) {
 		{
 			DirName: "success_module_subdir",
 			CLIOptions: generate.CLIOptions{
-				File:    "module::github.com/sirupsen/logrus/hooks/test/test.go",
-				Structs: []string{"Hook"},
+				File:    "module::github.com/stretchr/testify/mock/mock.go",
+				Structs: []string{"Mock"},
 			},
 		},
 	} {
@@ -246,7 +246,7 @@ func TestRun_ExternalModule(t *testing.T) {
 
 			// Assert
 			assert.NoError(t, err)
-			testfs.AssertEqualDir(t, assertdir, tc.CLIOptions.Destdir)
+			assert.NoError(t, testfs.EqualDirs(assertdir, tc.CLIOptions.Destdir))
 		})
 	}
 }
@@ -280,14 +280,14 @@ func TestRun_SamePackage(t *testing.T) {
 			src := filepath.Join(testdata, tc.DirName, "types.go")
 			tc.CLIOptions.Destdir = t.TempDir()
 			tc.CLIOptions.File = filepath.Join(tc.CLIOptions.Destdir, "types.go")
-			require.NoError(t, filesystem.CopyFile(src, tc.CLIOptions.File))
+			require.NoError(t, fs.CopyFile(src, tc.CLIOptions.File))
 
 			// Act
 			err := generate.Run(pwd, tc.CLIOptions)
 
 			// Assert
 			assert.NoError(t, err)
-			testfs.AssertEqualDir(t, assertdir, tc.CLIOptions.Destdir)
+			assert.NoError(t, testfs.EqualDirs(assertdir, tc.CLIOptions.Destdir))
 		})
 	}
 }

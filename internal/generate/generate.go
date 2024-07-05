@@ -13,9 +13,10 @@ import (
 
 	"github.com/Masterminds/sprig/v3"
 	"github.com/huandu/xstrings"
-	filesystem "github.com/kilianpaquier/filesystem/pkg"
 	"github.com/samber/lo"
 	"golang.org/x/tools/imports"
+
+	"github.com/kilianpaquier/go-builder-generator/internal/fs"
 )
 
 // generateBuilders takes a go tree file as input and generates a builder for all the input structs slice.
@@ -55,7 +56,7 @@ func generateBuilders(file *ast.File, pkg packageData, opts CLIOptions) ([]genDa
 
 		// create destination directory
 		// only now because we don't want to create the directory unless at least one builder was successfully computed and ready for generation
-		if err := os.MkdirAll(builder.Opts.Destdir, filesystem.RwxRxRxRx); err != nil && !os.IsExist(err) {
+		if err := os.MkdirAll(builder.Opts.Destdir, fs.RwxRxRxRx); err != nil && !os.IsExist(err) {
 			errs = append(errs, fmt.Errorf("mkdir %s: %w", builder.Opts.Destdir, err))
 			return false // since the destination directory couldn't be created, stop all
 		}
@@ -95,7 +96,7 @@ func generateAny(filename string, dest string, data any) error {
 	}
 
 	writeFile := func(bytes []byte) error {
-		if err := os.WriteFile(dest, bytes, filesystem.RwRR); err != nil {
+		if err := os.WriteFile(dest, bytes, fs.RwRR); err != nil {
 			return fmt.Errorf("write file %s: %w", dest, err)
 		}
 		return nil
