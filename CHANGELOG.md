@@ -1,3 +1,10 @@
+## [1.5.2](https://github.com/kilianpaquier/go-builder-generator/compare/v1.5.1...v1.5.2) (2024-07-16)
+
+
+### Chores
+
+* **deps:** bump github.com/samber/lo ([f96f627](https://github.com/kilianpaquier/go-builder-generator/commit/f96f6271172a8607cab838e3963f216ba332a8ce))
+
 ## [1.5.1](https://github.com/kilianpaquier/go-builder-generator/compare/v1.5.0...v1.5.1) (2024-07-08)
 
 
