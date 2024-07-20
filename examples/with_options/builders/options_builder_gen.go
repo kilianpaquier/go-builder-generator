@@ -8,7 +8,7 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/examples/with_options"
 )
 
-// OptionsBuilder represents the builder of Options to build Options with builder-pattern.
+// OptionsBuilder represents Options's builder.
 type OptionsBuilder struct {
 	build with_options.Options
 }
@@ -27,7 +27,7 @@ func (b *OptionsBuilder) Copy() *OptionsBuilder {
 func (b *OptionsBuilder) Build() (*with_options.Options, error) {
 	result := b.build
 	if err := result.Validate(); err != nil {
-		return nil, fmt.Errorf("failed to validate 'Options' struct: %w", err)
+		return nil, fmt.Errorf("validation of 'Options''s struct: %w", err)
 	}
 	return &result, nil
 }

@@ -6,7 +6,7 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/examples/with_tag"
 )
 
-// SomeStructBuilder represents the builder of SomeStruct to build SomeStruct with builder-pattern.
+// SomeStructBuilder represents SomeStruct's builder.
 type SomeStructBuilder struct {
 	build with_tag.SomeStruct
 }

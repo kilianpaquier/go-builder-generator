@@ -1,5 +1,10 @@
 package generate
 
+import (
+	"path/filepath"
+	"strings"
+)
+
 const (
 	// GenTemplate is the filename inside embedded fs for _gen files.
 	GenTemplate = "template_gen.go.tmpl"
@@ -11,13 +16,57 @@ const (
 type CLIOptions struct {
 	Destdir      string
 	File         string
+	NoCMD        bool
 	NoNotice     bool
 	PackageName  string
 	Prefix       string
 	ReturnCopy   bool
 	Structs      []string
 	ValidateFunc string
-	ReturnCopy   bool
+}
+
+// ToString serializes back the input command into its string format.
+func (c CLIOptions) ToString(name string) string {
+	args := []string{}
+
+	if c.Destdir != "" {
+		args = append(args, "-d .") // . since ToString is expected to be called in templates (in destination directory)
+	}
+
+	if c.File != "" {
+		file := func() string {
+			if strings.HasPrefix(c.File, modulePrefix) {
+				return c.File
+			}
+			file, _ := filepath.Rel(c.Destdir, c.File) // relative path to destdir since ToString is expected to be called in templates (in destination directory)
+			return strings.ReplaceAll(file, `\`, "/")
+		}()
+		args = append(args, "-f "+file)
+	}
+
+	args = append(args, "-s "+name)
+
+	if c.ValidateFunc != "" {
+		args = append(args, "--validate-func "+c.ValidateFunc)
+	}
+
+	if c.Prefix != "" {
+		args = append(args, "-p "+c.Prefix)
+	}
+
+	if c.NoNotice {
+		args = append(args, "--no-notice")
+	}
+
+	if c.NoCMD {
+		args = append(args, "--no-cmd")
+	}
+
+	if c.ReturnCopy {
+		args = append(args, "--return-copy")
+	}
+
+	return strings.Join(args, " ")
 }
 
 // implData represents the struct for the _impl file to generate.

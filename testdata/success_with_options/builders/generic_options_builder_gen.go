@@ -1,3 +1,5 @@
+//go:generate go run github.com/kilianpaquier/go-builder-generator/cmd/go-builder-generator@latest generate -d . -f ../types.go -s GenericOptions --validate-func Validate -p set --no-notice --return-copy
+
 package builders
 
 import (
