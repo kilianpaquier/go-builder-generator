@@ -2,7 +2,7 @@ package success_with_options
 
 import "context"
 
-//go:generate ../../go-builder-generator generate -f types.go -s Options,Empty,GenericOptions -d builders --validate-func Validate --return-copy -p Set
+//go:generate ../../go-builder-generator generate -f types.go -s Options,Empty,GenericOptions -d builders --validate-func Validate --return-copy -p Set --no-notice
 
 type Int64Alias int64
 

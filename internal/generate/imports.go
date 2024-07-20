@@ -69,7 +69,7 @@ func parseImports(file *ast.File, srcdir, destdir string) ([]string, error) {
 		// find source package path to add it as import in builder package
 		srcImport, err := findSourceImport(srcdir)
 		if err != nil {
-			return nil, fmt.Errorf("find %s imports: %w", srcdir, err)
+			return nil, fmt.Errorf("find imports: %w", err)
 		}
 		fileImports = append(fileImports, fmt.Sprint(`"`, srcImport, `"`))
 	}

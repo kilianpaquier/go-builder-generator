@@ -1,7 +1,11 @@
 // This file is safe to edit. Once it exists it will not be overwritten.
 // Deleting this file will force its generation again next time go-builder-generator is executed.
 
+{{ if not (eq .SourcePackage "") -}}
+package {{ .Opts.PackageName | default .DestPackage }}
+{{ else -}}
 package {{ .DestPackage }}
+{{- end }}
 
 /*
 Additional functions present here are called during a specific builder's

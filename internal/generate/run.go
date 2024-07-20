@@ -4,7 +4,7 @@ import (
 	"embed"
 	"errors"
 	"fmt"
-	"go/parser"
+	ast "go/parser"
 	"go/token"
 	"path/filepath"
 
@@ -35,15 +35,15 @@ func Run(pwd string, options CLIOptions) error {
 	srcdir := filepath.Dir(src)
 
 	// parse source file as ast to retrieve golang code
-	file, err := parser.ParseFile(token.NewFileSet(), src, nil, parser.SkipObjectResolution)
+	file, err := ast.ParseFile(token.NewFileSet(), src, nil, ast.SkipObjectResolution)
 	if err != nil {
-		return fmt.Errorf("file %s parsing: %w", src, err)
+		return fmt.Errorf("parse file: %w", err)
 	}
 
 	// retrieve file imports to reuse them in template
 	imports, err := parseImports(file, srcdir, destdir)
 	if err != nil {
-		return fmt.Errorf("find %s imports: %w", srcdir, err)
+		return fmt.Errorf("parse imports: %w", err)
 	}
 
 	sourcePackage, destPackage := func() (string, string) {
@@ -57,10 +57,10 @@ func Run(pwd string, options CLIOptions) error {
 
 	// generate all builders for input structs
 	pkg := packageData{
-		DestDir:    destdir,
-		DestName:   destPackage,
-		Imports:    imports,
-		SourceName: sourcePackage,
+		Destdir:       destdir,
+		DestPackage:   destPackage,
+		Imports:       imports,
+		SourcePackage: sourcePackage,
 	}
 	builders, err := generateBuilders(file, pkg, options)
 	if err != nil {
@@ -71,8 +71,10 @@ func Run(pwd string, options CLIOptions) error {
 	dest := filepath.Join(destdir, "builders_impl.go")
 	if len(builders) > 0 && !fs.Exists(dest) {
 		impl := &implData{
-			Builders:    builders,
-			DestPackage: filepath.Base(destdir),
+			Builders:      builders,
+			DestPackage:   filepath.Base(destdir),
+			Opts:          options,
+			SourcePackage: sourcePackage,
 		}
 		if err := generateAny(ImplTemplate, dest, impl); err != nil {
 			errs = append(errs, err)
