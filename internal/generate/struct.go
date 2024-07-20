@@ -48,7 +48,7 @@ func parseStruct(typeSpec *ast.TypeSpec, structType *ast.StructType, pkg package
 			}
 
 			// retrieve computed string type
-			finalType, exported := typePrefixer.ToString(pkg.SourceName, genericNames)
+			finalType, exported := typePrefixer.ToString(pkg.SourcePackage, genericNames)
 			field := field{
 				AlteredType: finalType,
 				Exported:    exported,
@@ -64,14 +64,14 @@ func parseStruct(typeSpec *ast.TypeSpec, structType *ast.StructType, pkg package
 	// add an error if destination package is not the same as the source one
 	// and the struct to generate is not exported
 	builder.Exported = genericExported && ast.IsExported(builder.Name)
-	if pkg.SourceName != "" && !builder.Exported {
+	if pkg.SourcePackage != "" && !builder.Exported {
 		errs = append(errs, fmt.Errorf("%s is not exported (or one of its generic params is not) but generation destination is in an external package", builder.Name))
 	}
 
 	// compute all fields associated to builder
 	builder.Fields = make([]field, 0, len(structType.Fields.List))
 	for _, astField := range structType.Fields.List {
-		field, err := parseField(astField, pkg.SourceName, genericNames)
+		field, err := parseField(astField, pkg.SourcePackage, genericNames)
 		if err != nil {
 			errs = append(errs, err)
 			continue

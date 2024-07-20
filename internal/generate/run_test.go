@@ -1,7 +1,6 @@
 package generate_test
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
@@ -31,7 +30,7 @@ func TestRun_Errors(t *testing.T) {
 		err := generate.Run(pwd, options)
 
 		// Assert
-		assert.ErrorContains(t, err, fmt.Sprintf("file %s parsing", options.File))
+		assert.ErrorContains(t, err, "parse file")
 		assert.NoDirExists(t, destdir)
 	})
 
@@ -177,6 +176,7 @@ func TestRun_DifferentPackage(t *testing.T) {
 		{
 			DirName: "success_with_options",
 			CLIOptions: generate.CLIOptions{
+				NoNotice:     true,
 				Prefix:       "Set",
 				ReturnCopy:   true,
 				Structs:      []string{"Options", "Empty", "GenericOptions"},
@@ -186,7 +186,7 @@ func TestRun_DifferentPackage(t *testing.T) {
 		{
 			DirName: "success_generic",
 			CLIOptions: generate.CLIOptions{
-				Structs: []string{"Struct", "SimpleGeneric", "AliasGeneric", "ComplexGeneric", "FuckedUpGeneric", "ComplexSliceGeneric"},
+				Structs: []string{"Struct", "SimpleGeneric", "AliasGeneric", "ComplexGeneric", "GenericAnonymousStruct", "ComplexSliceGeneric"},
 			},
 		},
 	} {
@@ -194,7 +194,9 @@ func TestRun_DifferentPackage(t *testing.T) {
 			// Arrange
 			tc.CLIOptions.File = filepath.Join(testdata, tc.DirName, "types.go")
 			assertdir := filepath.Join(testdata, tc.DirName, "builders")
-			tc.CLIOptions.Destdir = filepath.Join(t.TempDir(), "builders")
+			tc.CLIOptions.Destdir = filepath.Join(testdata, tc.DirName, "result")
+			tc.CLIOptions.PackageName = "builders"
+			t.Cleanup(func() { require.NoError(t, os.RemoveAll(tc.CLIOptions.Destdir)) })
 
 			// Act
 			err := generate.Run(pwd, tc.CLIOptions)
@@ -266,10 +268,11 @@ func TestRun_SamePackage(t *testing.T) {
 			},
 		},
 		{
-			DirName: "success_same_package_prefix",
+			DirName: "success_same_package_options",
 			CLIOptions: generate.CLIOptions{
-				Structs: []string{"unexportedTypePrefix"},
-				Prefix:  "Set",
+				Structs:     []string{"unexportedTypeOptions"},
+				Prefix:      "Set",
+				PackageName: "invalid", // shouldn't be used
 			},
 		},
 	} {

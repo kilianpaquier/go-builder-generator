@@ -12,7 +12,9 @@ type CLIOptions struct {
 	Destdir      string
 	File         string
 	NoNotice     bool
+	PackageName  string
 	Prefix       string
+	ReturnCopy   bool
 	Structs      []string
 	ValidateFunc string
 	ReturnCopy   bool
@@ -20,8 +22,10 @@ type CLIOptions struct {
 
 // implData represents the struct for the _impl file to generate.
 type implData struct {
-	Builders    []genData
-	DestPackage string
+	Builders      []genData
+	DestPackage   string
+	Opts          CLIOptions
+	SourcePackage string
 }
 
 // genData represents the struct for a builder to generate.
@@ -37,10 +41,10 @@ type genData struct {
 }
 
 type packageData struct {
-	DestDir    string
-	DestName   string
-	Imports    []string
-	SourceName string
+	Destdir       string
+	DestPackage   string
+	Imports       []string
+	SourcePackage string
 }
 
 // fieldOpts represents the available options to be put in `builder` tag at a field level.
