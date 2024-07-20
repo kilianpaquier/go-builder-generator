@@ -72,7 +72,7 @@ func Run(pwd string, options CLIOptions) error {
 	if len(builders) > 0 && !fs.Exists(dest) {
 		impl := &implData{
 			Builders:      builders,
-			DestPackage:   filepath.Base(destdir),
+			DestPackage:   destPackage,
 			Opts:          options,
 			SourcePackage: sourcePackage,
 		}
