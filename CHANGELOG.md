@@ -1,3 +1,16 @@
+## [1.6.0](https://github.com/kilianpaquier/go-builder-generator/compare/v1.5.2...v1.6.0) (2024-07-20)
+
+
+### Features
+
+* **generate:** add --package-name CLI arg ([c884191](https://github.com/kilianpaquier/go-builder-generator/commit/c884191ee2a9db4f253c67c6de40d2e19b3e7d55))
+* **generate:** add top comment 'go:generate' in generated files to easily regenerate files alongside disabling option --no-cmd to remove this comment - [#28](https://github.com/kilianpaquier/go-builder-generator/issues/28) ([cd6c56d](https://github.com/kilianpaquier/go-builder-generator/commit/cd6c56da74ad75439f458e6dbac3a5ef4bff789d))
+
+
+### Bug Fixes
+
+* **generate:** set the right package name when generating in the same package but with a package name difference from directory name ([8f10fdd](https://github.com/kilianpaquier/go-builder-generator/commit/8f10fddc7268ded524cb777b0c9ac31c55b546ef))
+
 ## [1.5.2](https://github.com/kilianpaquier/go-builder-generator/compare/v1.5.1...v1.5.2) (2024-07-16)
 
 
