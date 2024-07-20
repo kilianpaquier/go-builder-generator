@@ -1,6 +1,6 @@
 package success_generic
 
-//go:generate ../../go-builder-generator generate -f types.go -s Struct,SimpleGeneric,AliasGeneric,FuckedUpGeneric,ComplexGeneric,ComplexSliceGeneric -d builders
+//go:generate ../../go-builder-generator generate -f types.go -s Struct,SimpleGeneric,AliasGeneric,GenericAnonymousStruct,ComplexGeneric,ComplexSliceGeneric -d builders
 
 type SimpleGeneric[T any] struct {
 	Value T
@@ -32,7 +32,7 @@ type ComplexSliceGeneric[S ~[]E, E Struct] struct {
 	ValueT func(S) E
 }
 
-type FuckedUpGeneric[T struct {
+type GenericAnonymousStruct[T struct {
 	Property string `builder:"pointer"` // tag won't be taken into account
 }] struct {
 	Prop T
