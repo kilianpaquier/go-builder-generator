@@ -1,3 +1,10 @@
+## [1.6.3](https://github.com/kilianpaquier/go-builder-generator/compare/v1.6.2...v1.6.3) (2024-08-09)
+
+
+### Chores
+
+* **deps:** upgrade go toolchain to go1.22.6 ([ebdd36d](https://github.com/kilianpaquier/go-builder-generator/commit/ebdd36dea18b1067cf1b3699f1631724f66a39a1))
+
 ## [1.6.2](https://github.com/kilianpaquier/go-builder-generator/compare/v1.6.1...v1.6.2) (2024-08-07)
 
 
