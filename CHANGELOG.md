@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/kilianpaquier/go-builder-generator/compare/v1.7.0...v1.7.1) (2024-08-11)
+
+
+### Bug Fixes
+
+* incomplete regular expression to check whether go:generate is present in input file ([c9e6089](https://github.com/kilianpaquier/go-builder-generator/commit/c9e6089f35ddfcae6a3c5c9ff50c597b06178c67))
+
 ## [1.7.0](https://github.com/kilianpaquier/go-builder-generator/compare/v1.6.3...v1.7.0) (2024-08-11)
 
 
