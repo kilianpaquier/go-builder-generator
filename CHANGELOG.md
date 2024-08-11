@@ -1,3 +1,10 @@
+## [1.7.0](https://github.com/kilianpaquier/go-builder-generator/compare/v1.6.3...v1.7.0) (2024-08-11)
+
+
+### Features
+
+* provide filepath to where the structs comes from in generated files and don't add go:generate command when it already exists in input file - [#30](https://github.com/kilianpaquier/go-builder-generator/issues/30) ([ebff42c](https://github.com/kilianpaquier/go-builder-generator/commit/ebff42c6aa1c1f295d7679b36e192db71f29cf82))
+
 ## [1.6.3](https://github.com/kilianpaquier/go-builder-generator/compare/v1.6.2...v1.6.3) (2024-08-09)
 
 
