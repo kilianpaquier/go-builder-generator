@@ -2,7 +2,6 @@ package cobra
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/spf13/cobra"
 
@@ -15,9 +14,8 @@ var (
 	generateCmd = &cobra.Command{
 		Use:   "generate",
 		Short: "Generate builders for structs arguments present in file argument.",
-		RunE: func(_ *cobra.Command, _ []string) error {
-			pwd, _ := os.Getwd()
-			if err := generate.Run(pwd, generateOpts); err != nil {
+		RunE: func(_ *cobra.Command, args []string) error {
+			if err := generate.Run(generateOpts, args); err != nil {
 				return fmt.Errorf("generate builders: %w", err)
 			}
 			return nil

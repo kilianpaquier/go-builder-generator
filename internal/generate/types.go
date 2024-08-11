@@ -25,6 +25,15 @@ type CLIOptions struct {
 	ValidateFunc string
 }
 
+// FileRelPath returns the relative path of options File property and options Destdir.
+func (c CLIOptions) FileRelPath() string {
+	if strings.HasPrefix(c.File, modulePrefix) {
+		return c.File
+	}
+	file, _ := filepath.Rel(c.Destdir, c.File) // relative path to destdir since RelPath is expected to be called in templates (in destination directory)
+	return strings.ReplaceAll(file, `\`, "/")
+}
+
 // ToString serializes back the input command into its string format.
 func (c CLIOptions) ToString(name string) string {
 	args := []string{}
@@ -34,17 +43,14 @@ func (c CLIOptions) ToString(name string) string {
 	}
 
 	if c.File != "" {
-		file := func() string {
-			if strings.HasPrefix(c.File, modulePrefix) {
-				return c.File
-			}
-			file, _ := filepath.Rel(c.Destdir, c.File) // relative path to destdir since ToString is expected to be called in templates (in destination directory)
-			return strings.ReplaceAll(file, `\`, "/")
-		}()
-		args = append(args, "-f "+file)
+		args = append(args, "-f "+c.FileRelPath())
 	}
 
-	args = append(args, "-s "+name)
+	if name != "" {
+		args = append(args, "-s "+name)
+	} else {
+		args = append(args, "-s "+strings.Join(c.Structs, ","))
+	}
 
 	if c.ValidateFunc != "" {
 		args = append(args, "--validate-func "+c.ValidateFunc)
@@ -71,10 +77,10 @@ func (c CLIOptions) ToString(name string) string {
 
 // implData represents the struct for the _impl file to generate.
 type implData struct {
-	Builders      []genData
-	DestPackage   string
-	Opts          CLIOptions
-	SourcePackage string
+	Builders []genData
+
+	Opts     CLIOptions
+	Packages packagesData
 }
 
 // genData represents the struct for a builder to generate.
@@ -85,15 +91,18 @@ type genData struct {
 	Name         string
 	Fields       []field
 
-	Opts    CLIOptions
-	Package packageData
+	Opts     CLIOptions
+	Packages packagesData
 }
 
-type packageData struct {
+type packagesData struct {
 	Destdir       string
-	DestPackage   string
+	DestName      string
+	GeneratedFrom string
+	HasGenerate   bool
 	Imports       []string
-	SourcePackage string
+	SameModule    bool
+	SourceName    string
 }
 
 // fieldOpts represents the available options to be put in `builder` tag at a field level.

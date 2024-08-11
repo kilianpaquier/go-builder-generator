@@ -1,4 +1,4 @@
-//go:generate go run github.com/kilianpaquier/go-builder-generator/cmd/go-builder-generator@latest generate -d . -f ../types.go -s Options --validate-func Validate -p set --no-notice --return-copy
+// Code generated from testdata/success_with_options/types.go
 
 package builders
 
