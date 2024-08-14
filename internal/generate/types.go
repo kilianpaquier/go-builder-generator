@@ -34,30 +34,34 @@ func (c CLIOptions) FileRelPath() string {
 	return strings.ReplaceAll(file, `\`, "/")
 }
 
-// ToString serializes back the input command into its string format.
-func (c CLIOptions) ToString(name string) string {
-	args := []string{}
+// ToArgs serializes back the input options into its slice of string representation.
+func (c CLIOptions) ToArgs(name string) []string {
+	var args []string
 
 	if c.Destdir != "" {
-		args = append(args, "-d .") // . since ToString is expected to be called in templates (in destination directory)
+		args = append(args, "-d", ".") // . since ToString is expected to be called in templates (in destination directory)
 	}
 
 	if c.File != "" {
-		args = append(args, "-f "+c.FileRelPath())
+		args = append(args, "-f", c.FileRelPath())
 	}
 
 	if name != "" {
-		args = append(args, "-s "+name)
-	} else {
-		args = append(args, "-s "+strings.Join(c.Structs, ","))
+		args = append(args, "-s", name)
+	} else if len(c.Structs) > 0 {
+		args = append(args, "-s", strings.Join(c.Structs, ","))
 	}
 
 	if c.ValidateFunc != "" {
-		args = append(args, "--validate-func "+c.ValidateFunc)
+		args = append(args, "--validate-func", c.ValidateFunc)
 	}
 
 	if c.Prefix != "" {
-		args = append(args, "-p "+c.Prefix)
+		args = append(args, "-p", c.Prefix)
+	}
+
+	if c.PackageName != "" {
+		args = append(args, "--package-name", c.PackageName)
 	}
 
 	if c.NoNotice {
@@ -72,6 +76,12 @@ func (c CLIOptions) ToString(name string) string {
 		args = append(args, "--return-copy")
 	}
 
+	return args
+}
+
+// ToString serializes back the input command into its string format.
+func (c CLIOptions) ToString(name string) string {
+	args := c.ToArgs(name)
 	return strings.Join(args, " ")
 }
 
