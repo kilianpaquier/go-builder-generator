@@ -3,6 +3,7 @@ package generate_test
 import (
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -143,71 +144,82 @@ func TestRun_DifferentPackage(t *testing.T) {
 		{
 			DirName: "success_channels",
 			CLIOptions: generate.CLIOptions{
+				NoCMD:   true,
 				Structs: []string{"Chan"},
 			},
 		},
 		{
 			DirName: "success_export",
 			CLIOptions: generate.CLIOptions{
+				NoCMD:   true,
 				Structs: []string{"Export"},
 			},
 		},
 		{
 			DirName: "success_funcs",
 			CLIOptions: generate.CLIOptions{
+				NoCMD:   true,
 				Structs: []string{"Func"},
+			},
+		},
+		{
+			DirName: "success_generic",
+			CLIOptions: generate.CLIOptions{
+				NoCMD:   true,
+				Structs: []string{"Struct", "SimpleGeneric", "AliasGeneric", "ComplexGeneric", "GenericAnonymousStruct", "ComplexSliceGeneric"},
 			},
 		},
 		{
 			DirName: "success_interface",
 			CLIOptions: generate.CLIOptions{
+				NoCMD:   false, // enforce testing at least with one case that the cmd can be printed (and is right) in generated files
 				Structs: []string{"Interface", "InterfaceNoFields"},
 			},
 		},
 		{
 			DirName: "success_maps",
 			CLIOptions: generate.CLIOptions{
+				NoCMD:   true,
 				Structs: []string{"Map"},
 			},
 		},
 		{
 			DirName: "success_naming",
 			CLIOptions: generate.CLIOptions{
+				NoCMD:   true,
 				Structs: []string{"Naming"},
 			},
 		},
 		{
 			DirName: "success_root_gomod",
 			CLIOptions: generate.CLIOptions{
+				NoCMD:   true,
 				Structs: []string{"RootType"},
 			},
 		},
 		{
 			DirName: "success_slices",
 			CLIOptions: generate.CLIOptions{
+				NoCMD:   true,
 				Structs: []string{"ArrayAndSlice"},
 			},
 		},
 		{
 			DirName: "success_struct",
 			CLIOptions: generate.CLIOptions{
+				NoCMD:   true,
 				Structs: []string{"Struct", "StructNoFields"},
 			},
 		},
 		{
 			DirName: "success_with_options",
 			CLIOptions: generate.CLIOptions{
+				NoCMD:        true,
 				NoNotice:     true,
 				Prefix:       "Set",
 				ReturnCopy:   true,
 				Structs:      []string{"Options", "Empty", "GenericOptions"},
 				ValidateFunc: "Validate",
-			},
-		},
-		{
-			DirName: "success_generic",
-			CLIOptions: generate.CLIOptions{
-				Structs: []string{"Struct", "SimpleGeneric", "AliasGeneric", "ComplexGeneric", "GenericAnonymousStruct", "ComplexSliceGeneric"},
 			},
 		},
 	} {
@@ -241,6 +253,7 @@ func TestRun_ExternalModule(t *testing.T) {
 			DirName: "success_module_replace",
 			CLIOptions: generate.CLIOptions{
 				File:    "module::github.com/stretchr/testify/mock/mock.go",
+				NoCMD:   true,
 				Structs: []string{"Mock"},
 			},
 		},
@@ -248,6 +261,7 @@ func TestRun_ExternalModule(t *testing.T) {
 			DirName: "success_module_root",
 			CLIOptions: generate.CLIOptions{
 				File:    "module::github.com/go-playground/validator/v10/errors.go",
+				NoCMD:   true,
 				Structs: []string{"InvalidValidationError"},
 			},
 		},
@@ -255,6 +269,7 @@ func TestRun_ExternalModule(t *testing.T) {
 			DirName: "success_module_subdir",
 			CLIOptions: generate.CLIOptions{
 				File:    "module::github.com/stretchr/testify/mock/mock.go",
+				NoCMD:   true,
 				Structs: []string{"Mock"},
 			},
 		},
@@ -282,16 +297,19 @@ func TestRun_SamePackage(t *testing.T) {
 
 	for _, tc := range []struct {
 		generate.CLIOptions
+		Args    string
 		DirName string
 	}{
 		{
 			DirName: "success_same_package",
+			Args:    "-f types.go -s SamePackage,unexportedType",
 			CLIOptions: generate.CLIOptions{
 				Structs: []string{"SamePackage", "unexportedType"},
 			},
 		},
 		{
 			DirName: "success_same_package_options",
+			Args:    "-f types.go -s unexportedTypeOptions -p set --package-name unused",
 			CLIOptions: generate.CLIOptions{
 				Structs:     []string{"unexportedTypeOptions"},
 				Prefix:      "Set",
@@ -311,7 +329,7 @@ func TestRun_SamePackage(t *testing.T) {
 			t.Cleanup(func() { require.NoError(t, os.RemoveAll(tc.CLIOptions.Destdir)) })
 
 			// Act
-			err := generate.Run(tc.CLIOptions, nil)
+			err := generate.Run(tc.CLIOptions, strings.Split(tc.Args, " "))
 
 			// Assert
 			assert.NoError(t, err)

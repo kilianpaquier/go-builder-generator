@@ -6,6 +6,8 @@ package builders
 
 import "github.com/kilianpaquier/go-builder-generator/testdata/success_interface"
 
+//go:generate go run github.com/kilianpaquier/go-builder-generator/cmd/go-builder-generator@latest generate -d . -f ../types.go -s InterfaceNoFields --package-name builders
+
 // InterfaceNoFieldsBuilder represents InterfaceNoFields's builder.
 type InterfaceNoFieldsBuilder struct {
 	build success_interface.InterfaceNoFields

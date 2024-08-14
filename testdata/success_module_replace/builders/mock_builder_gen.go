@@ -4,8 +4,6 @@ package builders
 
 import "github.com/stretchr/testify/mock"
 
-//go:generate go run github.com/kilianpaquier/go-builder-generator/cmd/go-builder-generator@latest generate -d . -f module::github.com/stretchr/testify/mock/mock.go -s Mock
-
 // MockBuilder represents Mock's builder.
 type MockBuilder struct {
 	build mock.Mock

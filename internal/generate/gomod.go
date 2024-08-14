@@ -129,12 +129,12 @@ func fileImport(file *modfile.File, pkg string) string {
 }
 
 // hasGenerate checks whether a 'go:generate' comment is present in input file for go-builder-generator.
-func hasGenerate(file *ast.File, rawArgs []string) bool {
-	args := regexp.QuoteMeta(strings.Join(rawArgs, " "))
+func hasGenerate(file *ast.File, args []string) bool {
+	options := regexp.QuoteMeta(strings.Join(args, " "))
 
 	rexps := []*regexp.Regexp{
-		regexp.MustCompile(`//go:generate go run github\.com/kilianpaquier/go-builder-generator/cmd/go-builder-generator@[^\s]+ generate ` + args),
-		regexp.MustCompile(`//go:generate ([^\s]+)?go-builder-generator generate ` + args),
+		regexp.MustCompile(fmt.Sprint(`^//go:generate go run github\.com/kilianpaquier/go-builder-generator/cmd/go-builder-generator@[^\s]+ generate `, options, "$")),
+		regexp.MustCompile(fmt.Sprint(`^//go:generate ([^\s]+)?go-builder-generator generate `, options, "$")),
 	}
 
 	for _, group := range file.Comments {
@@ -147,8 +147,7 @@ func hasGenerate(file *ast.File, rawArgs []string) bool {
 				continue
 			}
 
-			_, ok := lo.Find(rexps, func(reg *regexp.Regexp) bool { return reg.MatchString(comment.Text) })
-			if ok {
+			if _, ok := lo.Find(rexps, func(reg *regexp.Regexp) bool { return reg.MatchString(comment.Text) }); ok {
 				return true
 			}
 		}

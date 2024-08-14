@@ -14,7 +14,14 @@ var (
 	generateCmd = &cobra.Command{
 		Use:   "generate",
 		Short: "Generate builders for structs arguments present in file argument.",
-		RunE: func(_ *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, args []string) error {
+			// now that we have the raw flags in args slice, reenable flag parsing for ParseFlags
+			cmd.DisableFlagParsing = false
+			// parse flags into generateOpts (yeah it's wobbly but cobra is missing this issue https://github.com/spf13/cobra/issues/1832)
+			if err := cmd.ParseFlags(args); err != nil {
+				return err
+			}
+
 			if err := generate.Run(generateOpts, args); err != nil {
 				return fmt.Errorf("generate builders: %w", err)
 			}
@@ -24,6 +31,7 @@ var (
 )
 
 func init() {
+	generateCmd.DisableFlagParsing = true // disable flags parsing to get raw flags in args slice
 	rootCmd.AddCommand(generateCmd)
 
 	// dest flag

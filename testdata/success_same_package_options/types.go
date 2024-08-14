@@ -2,7 +2,7 @@ package success_spo
 
 import "context"
 
-//go:generate ../../go-builder-generator generate -f types.go -s unexportedTypeOptions -p set --package-name invalid
+//go:generate ../../go-builder-generator generate -f types.go -s unexportedTypeOptions -p set --package-name unused
 
 type Int64Alias int64
 

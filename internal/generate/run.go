@@ -19,7 +19,7 @@ import (
 var tmpl embed.FS
 
 // Run runs the builder generation with input options.
-func Run(options CLIOptions, rawArgs []string) error {
+func Run(options CLIOptions, args []string) error {
 	// force first rune to lowercase in case of unexported types
 	// it will be titled in gen template in case the type is exported
 	options.Prefix = xstrings.FirstRuneToLower(options.Prefix)
@@ -86,7 +86,7 @@ func Run(options CLIOptions, rawArgs []string) error {
 		Destdir:       destdir,
 		DestName:      destPackage,
 		GeneratedFrom: path.Join(srcpkg, filepath.Base(options.File)),
-		HasGenerate:   hasGenerate(file, rawArgs),
+		HasGenerate:   hasGenerate(file, args),
 		Imports:       imports,
 		SameModule:    destfile.Module.Mod.String() == srcfile.Module.Mod.String(),
 		SourceName:    sourcePackage,

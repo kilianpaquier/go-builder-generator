@@ -10,6 +10,8 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/testdata/success_interface"
 )
 
+//go:generate go run github.com/kilianpaquier/go-builder-generator/cmd/go-builder-generator@latest generate -d . -f ../types.go -s Interface --package-name builders
+
 // InterfaceBuilder represents Interface's builder.
 type InterfaceBuilder struct {
 	build success_interface.Interface
