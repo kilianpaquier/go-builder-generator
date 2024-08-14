@@ -1,3 +1,11 @@
+## [1.7.2](https://github.com/kilianpaquier/go-builder-generator/compare/v1.7.1...v1.7.2) (2024-08-14)
+
+
+### Bug Fixes
+
+* **comments:** add missing --package-name when given ([3adc1a4](https://github.com/kilianpaquier/go-builder-generator/commit/3adc1a48d72f7d4b46503de1907228c7226e5e2b))
+* **comments:** correctly parse args with cobra and strengthen regexp search ([471a3f6](https://github.com/kilianpaquier/go-builder-generator/commit/471a3f69384419dc0684de5f8cb8e5df6cafccef))
+
 ## [1.7.1](https://github.com/kilianpaquier/go-builder-generator/compare/v1.7.0...v1.7.1) (2024-08-11)
 
 
