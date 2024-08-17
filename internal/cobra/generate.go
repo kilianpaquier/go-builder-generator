@@ -1,9 +1,8 @@
 package cobra
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
+	flag "github.com/spf13/pflag"
 
 	"github.com/kilianpaquier/go-builder-generator/internal/generate"
 )
@@ -14,18 +13,24 @@ var (
 	generateCmd = &cobra.Command{
 		Use:   "generate",
 		Short: "Generate builders for structs arguments present in file argument.",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		Args: func(cmd *cobra.Command, args []string) error {
 			// now that we have the raw flags in args slice, reenable flag parsing for ParseFlags
 			cmd.DisableFlagParsing = false
+
 			// parse flags into generateOpts (yeah it's wobbly but cobra is missing this issue https://github.com/spf13/cobra/issues/1832)
 			if err := cmd.ParseFlags(args); err != nil {
 				return err
 			}
 
-			if err := generate.Run(generateOpts, args); err != nil {
-				return fmt.Errorf("generate builders: %w", err)
+			if help, _ := cmd.Flags().GetBool("help"); help {
+				return flag.ErrHelp
 			}
 			return nil
+		},
+		Run: func(cmd *cobra.Command, args []string) {
+			if err := generate.Run(generateOpts, args); err != nil {
+				fatal(cmd.Context(), err)
+			}
 		},
 	}
 )
