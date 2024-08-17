@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.0...v1.8.1) (2024-08-17)
+
+
+### Documentation
+
+* **upgrade:** add default installation destination path in help ([eb47cf3](https://github.com/kilianpaquier/go-builder-generator/commit/eb47cf336fde5fb67128b6900f9a2336fbcc7b51))
+
 ## [1.8.0](https://github.com/kilianpaquier/go-builder-generator/compare/v1.7.2...v1.8.0) (2024-08-17)
 
 
