@@ -1,10 +1,6 @@
 package cobra
 
-import (
-	"fmt"
-
-	"github.com/spf13/cobra"
-)
+import "github.com/spf13/cobra"
 
 var (
 	// version is substituted with -ldflags
@@ -12,10 +8,8 @@ var (
 
 	versionCmd = &cobra.Command{
 		Use:   "version",
-		Short: "Shows current go-builder-generator version",
-		Run: func(_ *cobra.Command, _ []string) {
-			fmt.Print(version)
-		},
+		Short: "Show current go-builder-generator version",
+		Run:   func(_ *cobra.Command, _ []string) { _log.Info(version) },
 	}
 )
 

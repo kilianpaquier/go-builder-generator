@@ -4,6 +4,12 @@ name: Release
 run-name: Release
 
 on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Dry run
+        type: boolean
+        default: false
   push:
     branches:
       - main
@@ -17,12 +23,6 @@ on:
       - alpha
       - v[0-9]+.x
       - v[0-9]+.[0-9]+.x
-  workflow_dispatch:
-    inputs:
-      dry_run:
-        description: Dry run
-        type: boolean
-        default: false
 
 jobs:
 
@@ -30,9 +30,9 @@ jobs:
     name: Version
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.release.outputs.version }}
-      release: ${{ steps.release.outputs.release }}
       branch_sha: ${{ steps.release.outputs.branch_sha }}
+      release: ${{ steps.release.outputs.release }}
+      version: ${{ steps.release.outputs.version }}
     permissions:
       contents: write
       issues: write
@@ -81,9 +81,7 @@ jobs:
 
           git fetch --tags
 
-          SEARCH="" # see .gitlab/version.yml.tmpl - may evolve in the future
-
-          SEMREL_INFO_LAST_VERSION=$(git tag --list | sort -V | grep -E "${SEARCH}" | tail -n1)
+          SEMREL_INFO_LAST_VERSION=$(git tag --list | sort -V | tail -n1)
 
           SEMREL_INFO_NEXT_VERSION=${SEMREL_INFO_LAST_VERSION-1.0.0}
           SEMREL_INFO_NEXT_VERSION=${SEMREL_INFO_NEXT_VERSION%-*}
@@ -99,6 +97,7 @@ jobs:
   go-build:
     name: Go Build
     runs-on: ubuntu-latest
+    if: ${{ ! startsWith(github.event_name, 'pull_request') }}
     needs: version
     steps:
       - uses: actions/checkout@v4
@@ -126,9 +125,10 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    if: github.ref_protected == true
+    if: ${{ github.ref_protected && ! startsWith(github.event_name, 'pull_request') }}
     environment: release
     needs:
+      - version
       - go-build
     permissions:
       contents: write
@@ -141,7 +141,7 @@ jobs:
           name: build
           path: dist
       # https://github.com/marketplace/actions/action-for-semantic-release
-      - id: semantic-release
+      - id: semantic_release
         uses: cycjimmy/semantic-release-action@v4
         with:
           semantic_version: 23
@@ -168,3 +168,6 @@ jobs:
             ]
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: echo $VERSION
+        env:
+          VERSION: ${{ steps.semantic_release.outputs.new_release_version }}
