@@ -42,7 +42,7 @@ var (
 func init() {
 	rootCmd.AddCommand(upgradeCmd)
 
-	upgradeCmd.Flags().StringVar(&dest, "dest", "", "destination directory where go-builder-generator will be upgraded / installed")
+	upgradeCmd.Flags().StringVar(&dest, "dest", "", `destination directory where go-builder-generator will be upgraded / installed (by default "${HOME}/.local/bin")`)
 	_ = upgradeCmd.MarkFlagDirname("dest")
 
 	upgradeCmd.Flags().StringVar(&major, "major", "", `which major version to upgrade / install (must be of the form "v1", "v2", etc.) - mutually exclusive with --minor option`)

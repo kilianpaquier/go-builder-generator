@@ -109,7 +109,7 @@ Usage:
   go-builder-generator upgrade [flags]
 
 Flags:
-      --dest string    destination directory where go-builder-generator will be upgraded / installed
+      --dest string    destination directory where go-builder-generator will be upgraded / installed (by default "${HOME}/.local/bin")
   -h, --help           help for upgrade
       --major string   which major version to upgrade / install (must be of the form "v1", "v2", etc.) - mutually exclusive with --minor option
       --minor string   which minor version to upgrade / install (must be of the form "v1.5", "v2.4", etc.) - mutually exclusive with --major option
