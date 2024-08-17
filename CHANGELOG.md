@@ -1,3 +1,15 @@
+## [1.8.0](https://github.com/kilianpaquier/go-builder-generator/compare/v1.7.2...v1.8.0) (2024-08-17)
+
+
+### Features
+
+* **upgrade:** add new command for easier upgrade of go-builder-generator ([438e8d0](https://github.com/kilianpaquier/go-builder-generator/commit/438e8d05703801f81e86d8337908288af7064064))
+
+
+### Bug Fixes
+
+* **generate:** show help when flag is provided ([e5bc4ff](https://github.com/kilianpaquier/go-builder-generator/commit/e5bc4ff1839a2d2528b8ee207ce0dccaf35c8204))
+
 ## [1.7.2](https://github.com/kilianpaquier/go-builder-generator/compare/v1.7.1...v1.7.2) (2024-08-14)
 
 
