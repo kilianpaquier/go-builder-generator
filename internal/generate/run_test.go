@@ -6,11 +6,11 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/kilianpaquier/cli-sdk/pkg/cfs"
+	testfs "github.com/kilianpaquier/cli-sdk/pkg/cfs/tests"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kilianpaquier/go-builder-generator/internal/fs"
-	testfs "github.com/kilianpaquier/go-builder-generator/internal/fs/tests"
 	"github.com/kilianpaquier/go-builder-generator/internal/generate"
 )
 
@@ -29,7 +29,7 @@ func TestRun_Errors(t *testing.T) {
 				Field string
 			}
 			`,
-		), fs.RwRR)
+		), cfs.RwRR)
 		require.NoError(t, err)
 
 		destdir := filepath.Join(testdata, "result")
@@ -52,7 +52,7 @@ func TestRun_Errors(t *testing.T) {
 		tmp := t.TempDir()
 
 		src := filepath.Join(tmp, "go.mod")
-		err := os.WriteFile(src, []byte(``), fs.RwRR)
+		err := os.WriteFile(src, []byte(``), cfs.RwRR)
 		require.NoError(t, err)
 
 		destdir := filepath.Join(testdata, "result")
@@ -324,8 +324,8 @@ func TestRun_SamePackage(t *testing.T) {
 			src := filepath.Join(testdata, tc.DirName, "types.go")
 			tc.CLIOptions.Destdir = filepath.Join(testdata, tc.DirName, "result")
 			tc.CLIOptions.File = filepath.Join(tc.CLIOptions.Destdir, "types.go")
-			require.NoError(t, os.MkdirAll(tc.CLIOptions.Destdir, fs.RwxRxRxRx))
-			require.NoError(t, fs.CopyFile(src, tc.CLIOptions.File))
+			require.NoError(t, os.MkdirAll(tc.CLIOptions.Destdir, cfs.RwxRxRxRx))
+			require.NoError(t, cfs.CopyFile(src, tc.CLIOptions.File))
 			t.Cleanup(func() { require.NoError(t, os.RemoveAll(tc.CLIOptions.Destdir)) })
 
 			// Act

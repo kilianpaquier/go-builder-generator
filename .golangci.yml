@@ -5,7 +5,7 @@ linters-settings:
   cyclop:
     # The maximal code complexity to report.
     # Default: 10
-    max-complexity: 15
+    max-complexity: 20
 
   decorder:
     # Required order of `type`, `const`, `var` and `func` declarations inside a file.
@@ -185,7 +185,6 @@ linters-settings:
         arguments: [8]
       - name: modifies-parameter
       - name: modifies-value-receiver
-      - name: nested-structs
       - name: optimize-operands-order
       # - name: package-comments
       - name: range

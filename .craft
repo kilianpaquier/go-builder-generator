@@ -7,6 +7,7 @@ ci:
     - codeql
     - dependabot
   release:
+    action: semantic-release
     auto: true
     backmerge: false
     mode: github-token

@@ -11,8 +11,7 @@ import (
 	"strings"
 
 	"github.com/huandu/xstrings"
-
-	"github.com/kilianpaquier/go-builder-generator/internal/fs"
+	"github.com/kilianpaquier/cli-sdk/pkg/cfs"
 )
 
 //go:embed all:templates
@@ -98,7 +97,7 @@ func Run(options CLIOptions, args []string) error {
 
 	// generate implementation file
 	dest := filepath.Join(destdir, "builders_impl.go")
-	if len(builders) > 0 && !fs.Exists(dest) {
+	if len(builders) > 0 && !cfs.Exists(dest) {
 		impl := &implData{
 			Builders: builders,
 			Opts:     options,
