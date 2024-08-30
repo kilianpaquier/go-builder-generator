@@ -1,3 +1,10 @@
+## [1.8.2](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.1...v1.8.2) (2024-08-30)
+
+
+### Chores
+
+* **deps:** bump github.com/Masterminds/sprig/v3 ([1c6fb38](https://github.com/kilianpaquier/go-builder-generator/commit/1c6fb385a935a27c48e1638cdea8bbcf7b921b1f))
+
 ## [1.8.1](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.0...v1.8.1) (2024-08-17)
 
 
