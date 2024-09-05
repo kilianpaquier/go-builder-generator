@@ -1,6 +1,6 @@
 module github.com/kilianpaquier/go-builder-generator
 
-go 1.21
+go 1.22.0
 
 toolchain go1.23.0
 
@@ -16,7 +16,7 @@ require (
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.9.0
-	golang.org/x/mod v0.20.0
+	golang.org/x/mod v0.21.0
 	golang.org/x/tools v0.24.0
 )
 
