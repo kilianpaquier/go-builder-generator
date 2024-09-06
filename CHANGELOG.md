@@ -1,3 +1,10 @@
+## [1.8.3](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.2...v1.8.3) (2024-09-06)
+
+
+### Chores
+
+* **deps:** bump golang.org/x/mod in the minor-patch group ([2bde82a](https://github.com/kilianpaquier/go-builder-generator/commit/2bde82ad5469f467874e37d1dc4e80625e36452b))
+
 ## [1.8.2](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.1...v1.8.2) (2024-08-30)
 
 
