@@ -7,7 +7,7 @@ toolchain go1.23.0
 require (
 	github.com/Masterminds/sprig/v3 v3.3.0
 	github.com/fatih/structtag v1.2.0
-	github.com/go-playground/validator/v10 v10.22.0
+	github.com/go-playground/validator/v10 v10.22.1
 	github.com/hashicorp/go-cleanhttp v0.5.2
 	github.com/huandu/xstrings v1.5.0
 	github.com/kilianpaquier/cli-sdk v0.0.0-20240817193626-4b2ded52f151
