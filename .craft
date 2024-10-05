@@ -1,16 +1,15 @@
 # Craft configuration file (https://github.com/kilianpaquier/craft)
 ---
+bot: dependabot
 ci:
+  auth:
+    release: github-token
   name: github
   options:
     - codecov
     - codeql
-    - dependabot
   release:
-    action: semantic-release
     auto: true
-    backmerge: false
-    mode: github-token
 license: mit
 maintainers:
   - name: kilianpaquier

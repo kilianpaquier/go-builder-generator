@@ -15,8 +15,8 @@ fi
 echo "installing latest go version ${new_version}"
 rm -rf "${HOME}/.local/go" && mkdir -p "${HOME}/.local/go"
 curl -fsSL "https://go.dev/dl/${new_version}.linux-amd64.tar.gz" | (cd "${HOME}/.local/go" && tar -xz --strip-components=1)
-for item in "go" "gofmt"; do 
-	chmod +x "${HOME}/.local/go/bin/${item}" && ln -sf "${HOME}/.local/go/bin/${item}" "${HOME}/.local/bin/${item}" 
+for item in "go" "gofmt"; do
+	chmod +x "${HOME}/.local/go/bin/${item}" && ln -sf "${HOME}/.local/go/bin/${item}" "${HOME}/.local/bin/${item}"
 done
 endef
 .PHONY: install-go

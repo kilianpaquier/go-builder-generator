@@ -22,7 +22,7 @@ var _ Prefixer = &starPrefixer{} // ensure interface is implemented
 // In that case, all three prefixers computed from those ast.Expr will be validated with Valid.
 func (p *starPrefixer) Valid() error {
 	p.XPrefixer = NewPrefixer(p.X)
-	return p.XPrefixer.Valid()
+	return p.XPrefixer.Valid() //nolint:wrapcheck
 }
 
 // ToString transforms a Prefixer (ast.Expr) into its string representation.

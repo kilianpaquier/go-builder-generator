@@ -29,7 +29,7 @@ func NewPrefixerEditor(prefixer Prefixer, editor editor) Prefixer {
 // An example would be a composition of a StarExpr with an ArrayType of an Ident.
 // In that case, all three prefixers computed from those ast.Expr will be validated with Valid.
 func (i *editorPrefixer) Valid() error {
-	return i.Prefixer.Valid()
+	return i.Prefixer.Valid() //nolint:wrapcheck
 }
 
 // ToString transforms a Prefixer (ast.Expr) into its string representation.

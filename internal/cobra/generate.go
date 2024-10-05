@@ -19,7 +19,7 @@ var (
 
 			// parse flags into generateOpts (yeah it's wobbly but cobra is missing this issue https://github.com/spf13/cobra/issues/1832)
 			if err := cmd.ParseFlags(args); err != nil {
-				return err
+				return err //nolint:wrapcheck
 			}
 
 			if help, _ := cmd.Flags().GetBool("help"); help {

@@ -125,7 +125,7 @@ linters-settings:
     # Report pre-allocation suggestions on for loops.
     # Default: false
     for-loops: true
-  
+
   revive:
     # Sets the default severity.
     # See https://github.com/mgechev/revive#configuration
@@ -260,6 +260,33 @@ linters-settings:
     # Default: false
     strict: true
 
+  testifylint:
+    require-error:
+      # Regexp for assertions to analyze. If defined, then only matched error assertions will be reported.
+      # Default: ""
+      fn-pattern: ^NoErrorf?$
+
+  varnamelen:
+    # The longest distance, in source lines, that is being considered a "small scope".
+    # Variables used in at most this many lines will be ignored.
+    # Default: 5
+    max-distance: 10
+    # The minimum length of a variable's name that is considered "long".
+    # Variable names that are at least this long will be ignored.
+    # Default: 3
+    min-name-length: 2
+    # Optional list of variable declarations that should be ignored completely.
+    # Entries must be in one of the following forms (see below for examples):
+    # - for variables, parameters, named return values, method receivers, or type parameters:
+    #   <name> <type>  (<type> can also be a pointer/slice/map/chan/...)
+    # - for constants: const <name>
+    #
+    # Default: []
+    ignore-decls:
+      - o options
+      - T any
+      - t testing.T
+
   whitespace:
     # Enforces newlines (or comments) after every multi-line if statement.
     # Default: false
@@ -273,7 +300,7 @@ issues:
     # revive:exported enforce revive comments on exported types
     - EXC0012 # exported (.+) should have comment( \(or a comment on this block\))? or be unexported
     - EXC0014 # comment on exported (.+) should be of the form "(.+)..."
-    
+
     # revive:package-comments enforce revive comments on packages
     # - EXC0013 # package comment should be of the form "(.+)...
     # - EXC0015 # should have a package comment
@@ -303,8 +330,12 @@ linters:
   # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
   disable-all: true
   enable:
+    - asasalint
     - bodyclose
+    - canonicalheader
+    - containedctx
     - contextcheck
+    - copyloopvar
     - cyclop
     - decorder
     - dogsled
@@ -313,7 +344,9 @@ linters:
     - errcheck
     - errname
     - errorlint
-    - exportloopref
+    - exhaustive
+    - fatcontext
+    - forbidigo
     - forcetypeassert
     - funlen
     - gci
@@ -324,23 +357,52 @@ linters:
     - gocyclo
     - godox
     - gofumpt
+    - goprintffuncname
     - gosec
     - gosimple
     - govet
+    - grouper
+    - importas
+    - inamedparam
     - ineffassign
     - interfacebloat
+    - intrange
     - maintidx
+    - makezero
+    - mirror
     - misspell
+    - musttag
     - nakedret
+    - nestif
+    - nilerr
+    - nilnil
+    - noctx
+    - nolintlint
+    - nosprintfhostport
     - paralleltest
     - perfsprint
     - prealloc
+    - predeclared
+    - reassign
     - revive
+    - rowserrcheck
+    - sloglint
+    - spancheck
+    - sqlclosecheck
     - staticcheck
     - stylecheck
     - tagalign
+    - tenv
+    - testableexamples
+    - testifylint
     - testpackage
+    - thelper
+    - tparallel
     - typecheck
     - unconvert
     - unused
+    - usestdlibvars
+    - varnamelen
+    - wastedassign
     - whitespace
+    - wrapcheck

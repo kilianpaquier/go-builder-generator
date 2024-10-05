@@ -30,7 +30,7 @@ var (
 			}
 			if err := upgrade.Run(ctx, "go-builder-generator", version, upgrade.GithubReleases("kilianpaquier", "go-builder-generator"), options...); err != nil {
 				if errors.Is(err, upgrade.ErrInvalidOptions) {
-					return err
+					return err //nolint:wrapcheck
 				}
 				fatal(ctx, err) // don't return err since returning an error shows the help
 			}

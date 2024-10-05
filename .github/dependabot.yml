@@ -12,6 +12,8 @@ updates:
     directory: /
     schedule:
       interval: daily
+      time: "12:00"
+      timezone: "Etc/UTC"
     groups:
       major/minor/patch:
         update-types:
@@ -27,6 +29,8 @@ updates:
     directory: /
     schedule:
       interval: daily
+      time: "12:00"
+      timezone: "Etc/UTC"
     groups:
       minor/patch:
         update-types:

@@ -41,8 +41,6 @@ func (i *indexListPrefixer) Valid() error {
 // ToString transforms a Prefixer (ast.Expr) into its string representation.
 // It also returns a boolean indicating whether the type is exported.
 func (i *indexListPrefixer) ToString(sourcePackage string, typeParams []string, prefixes ...string) (_ string, _ bool) {
-	x, xExported := i.XPrefixer.ToString(sourcePackage, typeParams, prefixes...)
-
 	exported := true
 	indices := make([]string, 0, len(i.IndicesPrefixers))
 	for _, indice := range i.IndicesPrefixers {
@@ -56,5 +54,6 @@ func (i *indexListPrefixer) ToString(sourcePackage string, typeParams []string, 
 		indices = append(indices, stringType)
 	}
 
+	x, xExported := i.XPrefixer.ToString(sourcePackage, typeParams, prefixes...)
 	return fmt.Sprintf("%s[%s]", x, strings.Join(indices, ", ")), xExported && exported
 }

@@ -88,7 +88,7 @@ jobs:
           go-version-file: go.mod
           token: ${{ secrets.GITHUB_TOKEN }}
       - run: mkdir -p reports/
-      - run: go test ./... -coverpkg="./..." -covermode="count" -coverprofile="reports/go-coverage.native.out"
+      - run: go test ./... -coverpkg="./..." -covermode="count" -coverprofile="reports/go-coverage.native.out" -timeout=15s
       - uses: codecov/codecov-action@v4
         if: ${{ ! startsWith(github.head_ref, 'dependabot') }} # ignore codecov on dependabot branches
         with:

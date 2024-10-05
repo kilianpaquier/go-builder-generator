@@ -2,6 +2,22 @@
 
 # https://semantic-release.gitbook.io/semantic-release/usage/configuration
 
+branches:
+  - (master|main)
+  - v+([0-9])?(.{+([0-9]),x}).x
+  - name: next
+    prerelease: true
+  - name: beta
+    prerelease: true
+  - name: alpha
+    prerelease: true
+  - name: staging
+    prerelease: beta
+  - name: (dev|develop|development)
+    prerelease: alpha
+
+tagFormat: v${version}
+
 plugins:
   - - "@semantic-release/commit-analyzer"
     - preset: conventionalcommits
@@ -65,11 +81,13 @@ plugins:
         - LICENSE
       message: "chore(release): v${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
   - - "@semantic-release/github"
-    - assets:
-        - { path: CHANGELOG.md, label: CHANGELOG.md }
-        - { path: checksums.txt }
-        - { path: dist }
+    - draftRelease: false
+      successComment: 🎉 This issue has been resolved in version v${nextRelease.version} 🎉
       failComment: false
       failTitle: false
-      successComment: 🎉 This issue has been resolved in version v${nextRelease.version} 🎉
+      assets:
+        - label: CHANGELOG.md
+          path: CHANGELOG.md
+        - path: checksums.txt
+        - path: dist
   - "@semantic-release/exec"

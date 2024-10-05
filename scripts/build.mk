@@ -18,15 +18,15 @@ lint-fix: reports
 
 .PHONY: test
 test:
-	@go test ./... -count 1
+	@go test ./... -count 1 -timeout=15s
 
 .PHONY: test-race
 test-race:
-	@go test ./... -race
+	@CGO_ENABLED=1 go test ./... -race -timeout=15s
 
 .PHONY: test-cover
 test-cover: reports
-	@go test ./... -coverpkg="./..." -covermode="count" -coverprofile="reports/go-coverage.native.out"
+	@go test ./... -coverpkg="./..." -covermode="count" -coverprofile="reports/go-coverage.native.out" -timeout=15s
 
 .PHONY: buildall
 buildall: build-go-builder-generator

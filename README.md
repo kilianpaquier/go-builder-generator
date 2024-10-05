@@ -39,7 +39,7 @@ go install github.com/kilianpaquier/go-builder-generator/cmd/go-builder-generato
 ```sh
 if which go-builder-generator >/dev/null; then
   go-builder-generator upgrade
-  return $?
+  exit $?
 fi
 
 OS="linux" # change it depending on our case

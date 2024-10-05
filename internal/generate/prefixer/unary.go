@@ -17,7 +17,7 @@ var _ Prefixer = &unaryPrefixer{}
 // In that case, all three prefixers computed from those ast.Expr will be validated with Valid.
 func (u *unaryPrefixer) Valid() error {
 	u.XPrefixer = NewPrefixer(u.X)
-	return u.XPrefixer.Valid()
+	return u.XPrefixer.Valid() //nolint:wrapcheck
 }
 
 // ToString transforms a Prefixer (ast.Expr) into its string representation.
