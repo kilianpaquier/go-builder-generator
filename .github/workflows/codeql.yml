@@ -17,17 +17,17 @@ run-name: CodeQL
 on:
   push:
     branches:
-      - main
-      - master
-      - staging
+      - alpha
+      - beta
       - dev
       - develop
       - development
+      - main
+      - master
       - next
-      - beta
-      - alpha
-      - v[0-9]+.x
+      - staging
       - v[0-9]+.[0-9]+.x
+      - v[0-9]+.x
 
 jobs:
   codeql:

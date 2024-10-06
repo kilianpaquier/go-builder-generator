@@ -8,6 +8,7 @@ ci:
   options:
     - codecov
     - codeql
+    - labeler
   release:
     auto: true
 license: mit
