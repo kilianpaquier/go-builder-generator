@@ -83,9 +83,9 @@ plugins:
   - - "@semantic-release/github"
     - draftRelease: false
       failComment: ⚠️ Expected release for branch '${branch.name}' has failed due to the following errors:\n- ${errors.map(err => err.message).join('\\n- ')}
-      failCommentCondition: false
+      failCommentCondition: <% return false; %>
       successComment: 🎉 This issue has been resolved in version v${nextRelease.version} 🎉
-      successCommentCondition: true
+      successCommentCondition: <% return true; %>
       assets:
         - label: CHANGELOG.md
           path: CHANGELOG.md
