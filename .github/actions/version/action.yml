@@ -44,8 +44,8 @@ runs:
         fi
       env:
         MODE: ${{ inputs.mode }}
-    - uses: actions/download-artifact@v4
-      if: ${{ inputs.download_dist == 'true' }}
+    - if: ${{ inputs.download_dist == 'true' }}
+      uses: actions/download-artifact@v4
       with:
         name: build
         path: dist

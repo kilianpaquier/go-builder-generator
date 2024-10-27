@@ -25,7 +25,7 @@ jobs:
   version:
     name: Version
     runs-on: ubuntu-latest
-    if: ${{ github.ref_protected }} # skip all jobs since they depend on version job
+    if: ${{ github.ref_protected }}
     environment: release
     permissions:
       contents: write
@@ -52,12 +52,16 @@ jobs:
         env:
           INPUT_MODE: ${{ inputs.mode }}
 
-  build:
-    name: Build
+  golang:
+    name: Golang
     needs: version
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/golang.yml
+    permissions:
+      checks: write
     with:
+      build: true
       version: ${{ needs.version.outputs.version }}
+    secrets: inherit
 
   release:
     name: Release
@@ -69,7 +73,7 @@ jobs:
       pull-requests: write
     needs:
       - version
-      - build
+      - golang
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/version

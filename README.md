@@ -3,7 +3,6 @@
 # go-builder-generator <!-- omit in toc -->
 
 <p align="center">
-  <img alt="GitHub Actions" src="https://img.shields.io/github/actions/workflow/status/kilianpaquier/go-builder-generator/integration.yml?branch=main&style=for-the-badge">
   <img alt="GitHub Release" src="https://img.shields.io/github/v/release/kilianpaquier/go-builder-generator?include_prereleases&sort=semver&style=for-the-badge">
   <img alt="GitHub Issues" src="https://img.shields.io/github/issues-raw/kilianpaquier/go-builder-generator?style=for-the-badge">
   <img alt="GitHub License" src="https://img.shields.io/github/license/kilianpaquier/go-builder-generator?style=for-the-badge">
@@ -20,11 +19,7 @@
 - [Commands](#commands)
   - [Generate](#generate)
   - [Upgrade](#upgrade)
-    - [Tags](#tags)
   - [Generation cases](#generation-cases)
-    - [Simple struct](#simple-struct)
-    - [Generic struct](#generic-struct)
-    - [Imported module struct](#imported-module-struct)
 
 ## How to use ?
 
