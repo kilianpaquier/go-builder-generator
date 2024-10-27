@@ -23,18 +23,18 @@ plugins:
     - preset: conventionalcommits
       presetConfig:
         types:
-          - { type: feat, section: Features }
-          - { type: fix, section: Bug Fixes }
-          - { type: revert, section: Reverts }
-          - { type: perf, section: Performance Improvements }
-          - { type: docs, section: Documentation }
-          - { type: chore, section: Chores }
-          - { type: refactor, section: Code Refactoring }
+          - { type: feat, section: "🚀 Features" }
+          - { type: fix, section: "🐛 Bug Fixes" }
+          - { type: revert, section: "⏪ Reverts" }
+          - { type: perf, section: "💪 Performance Improvements" }
+          - { type: docs, section: "📚 Documentation" }
+          - { type: chore, section: "⚙️ Chores" }
+          - { type: refactor, section: "🚜 Code Refactoring" }
 
-          - { type: build, section: Build System, hidden: true }
-          - { type: ci, section: Continuous Integration, hidden: true }
-          - { type: style, section: Styles, hidden: true }
-          - { type: test, section: Tests, hidden: true }
+          - { type: build, section: "🏗️ Build System", hidden: true }
+          - { type: ci, section: "♾️ Continuous Integration", hidden: true }
+          - { type: style, section: "Styles", hidden: true }
+          - { type: test, section: "Tests", hidden: true }
       releaseRules:
         - { breaking: true, release: major }
         - { revert: true, release: patch }
@@ -56,18 +56,18 @@ plugins:
     - preset: conventionalcommits
       presetConfig:
         types:
-          - { type: feat, section: Features }
-          - { type: fix, section: Bug Fixes }
-          - { type: revert, section: Reverts }
-          - { type: perf, section: Performance Improvements }
-          - { type: docs, section: Documentation }
-          - { type: chore, section: Chores }
-          - { type: refactor, section: Code Refactoring }
+          - { type: feat, section: "🚀 Features" }
+          - { type: fix, section: "🐛 Bug Fixes" }
+          - { type: revert, section: "⏪ Reverts" }
+          - { type: perf, section: "💪 Performance Improvements" }
+          - { type: docs, section: "📚 Documentation" }
+          - { type: chore, section: "⚙️ Chores" }
+          - { type: refactor, section: "🚜 Code Refactoring" }
 
-          - { type: build, section: Build System, hidden: true }
-          - { type: ci, section: Continuous Integration, hidden: true }
-          - { type: style, section: Styles, hidden: true }
-          - { type: test, section: Tests, hidden: true }
+          - { type: build, section: "🏗️ Build System", hidden: true }
+          - { type: ci, section: "♾️ Continuous Integration", hidden: true }
+          - { type: style, section: "Styles", hidden: true }
+          - { type: test, section: "Tests", hidden: true }
       parserOpts:
         noteKeywords:
         - BREAKING CHANGE
@@ -82,9 +82,10 @@ plugins:
       message: "chore(release): v${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
   - - "@semantic-release/github"
     - draftRelease: false
+      failComment: ⚠️ Expected release for branch '${branch.name}' has failed due to the following errors:\n- ${errors.map(err => err.message).join('\\n- ')}
+      failCommentCondition: false
       successComment: 🎉 This issue has been resolved in version v${nextRelease.version} 🎉
-      failComment: false
-      failTitle: false
+      successCommentCondition: true
       assets:
         - label: CHANGELOG.md
           path: CHANGELOG.md

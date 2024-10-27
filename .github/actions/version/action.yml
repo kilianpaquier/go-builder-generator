@@ -15,7 +15,7 @@ inputs:
         - "release" to get the next version number and create pull requests, tags and releases
     required: true
   token:
-    description: Github access token
+    description: GitHub access token
     required: true
 
 outputs:
