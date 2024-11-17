@@ -95,14 +95,14 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - run: mkdir -p reports/
       - run: go test ./... -coverpkg="./..." -covermode="count" -coverprofile="reports/go-coverage.native.out" -timeout=15s
-      - if: ${{ ! startsWith(github.head_ref, 'dependabot') }} # ignore codecov on dependabot branches
-        uses: codecov/codecov-action@v4
+      - if: ${{ ! startsWith(github.head_ref, 'dependabot') && ! startsWith(github.head_ref, 'renovate') }}
+        uses: codecov/codecov-action@v5
         with:
           codecov_yml_path: .codecov.yml
           disable_search: true
           env_vars: OS
           fail_ci_if_error: true
-          file: reports/go-coverage.native.out
+          files: reports/go-coverage.native.out
           flags: ${{ matrix.os }}
           slug: ${{ github.repository }}
           token: ${{ secrets.CODECOV_TOKEN }}
