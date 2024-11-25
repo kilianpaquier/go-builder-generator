@@ -1,3 +1,11 @@
+## [1.8.7](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.6...v1.8.7) (2024-11-25)
+
+### ⚙️ Chores
+
+* **deps:** bump github.com/go-playground/validator/v10 ([1f38e87](https://github.com/kilianpaquier/go-builder-generator/commit/1f38e8702bb72dc0255c5a26d8e04736179a3f36))
+* **deps:** bump github.com/stretchr/testify in the minor-patch group ([2d5b37c](https://github.com/kilianpaquier/go-builder-generator/commit/2d5b37c09815c7b13cf9cb711e7ba104bfb15a55))
+* **deps:** bump the minor-patch group across 1 directory with 2 updates ([7650d19](https://github.com/kilianpaquier/go-builder-generator/commit/7650d1990633be292766f7f4e04d1e8e2108b24c))
+
 ## [1.8.6](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.5...v1.8.6) (2024-10-05)
 
 ### Chores
