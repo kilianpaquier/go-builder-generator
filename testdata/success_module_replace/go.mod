@@ -4,9 +4,9 @@ go 1.22.0
 
 toolchain go1.22.2
 
-require github.com/stretchr/testify v1.9.0
+require github.com/stretchr/testify v1.10.0
 
-replace github.com/stretchr/testify v1.9.0 => github.com/stretchr/testify v1.9.0 // replace for testing purposes
+replace github.com/stretchr/testify v1.10.0 => github.com/stretchr/testify v1.10.0 // replace for testing purposes
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
