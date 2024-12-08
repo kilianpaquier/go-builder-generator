@@ -1,3 +1,9 @@
+## [1.8.8](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.7...v1.8.8) (2024-12-08)
+
+### ⚙️ Chores
+
+* **deps:** bump golang.org/x/tools in the minor-patch group ([0d43edf](https://github.com/kilianpaquier/go-builder-generator/commit/0d43edf4fcc3eb0932ef99895a864ff2bd7f7efa))
+
 ## [1.8.7](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.6...v1.8.7) (2024-11-25)
 
 ### ⚙️ Chores
