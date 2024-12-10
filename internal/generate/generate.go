@@ -1,9 +1,11 @@
 package generate
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"go/ast"
+	"io/fs"
 	"os"
 	"path"
 	"path/filepath"
@@ -55,7 +57,7 @@ func generateBuilders(file *ast.File, pkg packagesData, opts CLIOptions) ([]genD
 
 		// create destination directory
 		// only now because we don't want to create the directory unless at least one builder was successfully computed and ready for generation
-		if err := os.MkdirAll(builder.Opts.Destdir, cfs.RwxRxRxRx); err != nil && !os.IsExist(err) {
+		if err := os.MkdirAll(builder.Opts.Destdir, cfs.RwxRxRxRx); err != nil && !errors.Is(err, fs.ErrExist) {
 			errs = append(errs, fmt.Errorf("mkdir %s: %w", builder.Opts.Destdir, err))
 			return false // since the destination directory couldn't be created, stop all
 		}
@@ -89,28 +91,24 @@ func generateAny(filename string, dest string, data any) error {
 	}
 
 	// render file
-	var content strings.Builder
+	var content bytes.Buffer
 	if err := tpl.Execute(&content, data); err != nil {
 		return fmt.Errorf("execute template %s: %w", filename, err)
 	}
 
-	writeFile := func(bytes []byte) error {
-		if err := os.WriteFile(dest, bytes, cfs.RwRR); err != nil {
-			return fmt.Errorf("write file %s: %w", dest, err)
-		}
-		return nil
-	}
-
 	// optimize file imports
-	bytes := []byte(content.String())
-	formatted, err := imports.Process(dest, bytes, nil)
+	formatted, err := imports.Process(dest, content.Bytes(), nil)
 	if err != nil {
 		// also write file when imports optimization failed
 		// better for debugging
-		_ = writeFile(bytes)
+		_ = os.WriteFile(dest, content.Bytes(), cfs.RwRR)
 		return fmt.Errorf("generated builder '%s' is incorrect: %w", dest, err)
 	}
-	return writeFile(formatted)
+
+	if err := os.WriteFile(dest, formatted, cfs.RwRR); err != nil {
+		return fmt.Errorf("write file %s: %w", dest, err)
+	}
+	return nil
 }
 
 // funcMap returns the functions to be used in go template generation to make it easier.
