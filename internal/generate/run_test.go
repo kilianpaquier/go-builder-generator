@@ -225,10 +225,11 @@ func TestRun_DifferentPackage(t *testing.T) {
 	} {
 		t.Run(tc.DirName, func(t *testing.T) {
 			// Arrange
-			tc.CLIOptions.File = filepath.Join(testdata, tc.DirName, "types.go")
 			assertdir := filepath.Join(testdata, tc.DirName, "builders")
-			tc.CLIOptions.Destdir = filepath.Join(testdata, tc.DirName, "result")
+
 			tc.CLIOptions.PackageName = "builders"
+			tc.CLIOptions.File = filepath.Join(testdata, tc.DirName, "types.go")
+			tc.CLIOptions.Destdir = filepath.Join(testdata, tc.DirName, "result")
 			t.Cleanup(func() { require.NoError(t, os.RemoveAll(tc.CLIOptions.Destdir)) })
 
 			// Act
@@ -277,8 +278,9 @@ func TestRun_ExternalModule(t *testing.T) {
 		t.Run(tc.DirName, func(t *testing.T) {
 			// Arrange
 			assertdir := filepath.Join(testdata, tc.DirName, "builders")
-			tc.CLIOptions.Destdir = filepath.Join(testdata, tc.DirName, "result")
+
 			tc.CLIOptions.PackageName = "builders"
+			tc.CLIOptions.Destdir = filepath.Join(testdata, tc.DirName, "result")
 			t.Cleanup(func() { require.NoError(t, os.RemoveAll(tc.CLIOptions.Destdir)) })
 
 			// Act
@@ -319,14 +321,15 @@ func TestRun_SamePackage(t *testing.T) {
 	} {
 		t.Run(tc.DirName, func(t *testing.T) {
 			// Arrange
-			assertdir := filepath.Join(testdata, tc.DirName)
+			assertdir := t.TempDir()
+			require.NoError(t, os.CopyFS(assertdir, os.DirFS(filepath.Join(testdata, tc.DirName))))
 
-			src := filepath.Join(testdata, tc.DirName, "types.go")
 			tc.CLIOptions.Destdir = filepath.Join(testdata, tc.DirName, "result")
-			tc.CLIOptions.File = filepath.Join(tc.CLIOptions.Destdir, "types.go")
-			require.NoError(t, os.MkdirAll(tc.CLIOptions.Destdir, cfs.RwxRxRxRx))
-			require.NoError(t, cfs.CopyFile(src, tc.CLIOptions.File))
+			require.NoError(t, os.MkdirAll(tc.CLIOptions.Destdir, cfs.RwxRxRxRx)) // the only reason we need to create the directory is because types.go is copied before generation
 			t.Cleanup(func() { require.NoError(t, os.RemoveAll(tc.CLIOptions.Destdir)) })
+
+			tc.CLIOptions.File = filepath.Join(tc.CLIOptions.Destdir, "types.go")
+			require.NoError(t, cfs.CopyFile(filepath.Join(testdata, tc.DirName, "types.go"), tc.CLIOptions.File))
 
 			// Act
 			err := generate.Run(tc.CLIOptions, strings.Split(tc.Args, " "))
