@@ -19,7 +19,6 @@ on:
       - v[0-9]+.x
 
 jobs:
-
   go-dependency-submission:
     name: Go Dependency Submission
     runs-on: ubuntu-latest

@@ -9,17 +9,13 @@ on:
       - opened
       - reopened
       - synchronize
-  # pull_request_target: # autolabeler on fork pull requests
-  #   types:
-  #     - opened
-  #     - reopened
-  #     - synchronize
+      - ready_for_review
 
 jobs:
-
   labeler:
     name: Labeler
     runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'pull_request' || (github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.ref_protected == false) }}
     permissions:
       contents: read # enfore rights to specify no release, even draft, is created
       pull-requests: write
