@@ -1,3 +1,9 @@
+## [1.8.9](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.8...v1.8.9) (2024-12-11)
+
+### Chores
+
+* **deps:** upgrade various dependencies ([08603dc](https://github.com/kilianpaquier/go-builder-generator/commit/08603dc48c100aedc30da9e7ddd65e4989621442))
+
 ## [1.8.8](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.7...v1.8.8) (2024-12-08)
 
 ### ⚙️ Chores
