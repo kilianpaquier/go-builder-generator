@@ -1,24 +1,24 @@
 package cobra
 
 import (
-	"context"
 	"errors"
-	"time"
+	"os"
 
-	"github.com/sirupsen/logrus"
+	"github.com/charmbracelet/log"
 	"github.com/spf13/cobra"
 )
 
 var (
-	_log = logrus.StandardLogger()
-
+	logger = log.NewWithOptions(os.Stderr, log.Options{
+		CallerFormatter: log.ShortCallerFormatter,
+		ReportCaller:    true,
+	})
 	logLevel  = "info"
 	logFormat = "text"
-
-	rootCmd = &cobra.Command{
+	rootCmd   = &cobra.Command{
 		Use:               "go-builder-generator",
-		SilenceErrors:     true, // errors are already logged by fatal function when Execute has an error
-		PersistentPreRunE: func(_ *cobra.Command, _ []string) error { return preRun() },
+		SilenceErrors:     true, // don't print errors with cobra, let logger.Fatal handle them
+		PersistentPreRunE: func(*cobra.Command, []string) error { return preRun() },
 	}
 )
 
@@ -33,35 +33,29 @@ func init() {
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		fatal(context.Background(), err)
+		logger.Fatal(err)
 	}
 }
 
 func preRun() error {
+	styles := log.DefaultStyles()
 	switch logFormat {
 	case "text":
-		_log.SetFormatter(&logrus.TextFormatter{
-			DisableLevelTruncation: true,
-			ForceColors:            true,
-			FullTimestamp:          true,
-			TimestampFormat:        time.RFC3339,
-		})
+		logger.SetFormatter(log.TextFormatter)
+		for _, level := range []log.Level{log.DebugLevel, log.InfoLevel, log.WarnLevel, log.ErrorLevel, log.FatalLevel} {
+			styles.Levels[level] = styles.Levels[level].MaxWidth(len(level.String()))
+		}
+		logger.SetStyles(styles)
 	case "json":
-		_log.SetFormatter(&logrus.JSONFormatter{
-			TimestampFormat: time.RFC3339,
-		})
+		logger.SetFormatter(log.JSONFormatter)
 	default:
 		return errors.New(`invalid --log-format argument, must be either "json" or "text"`)
 	}
 
-	level, err := logrus.ParseLevel(logLevel)
+	level, err := log.ParseLevel(logLevel)
 	if err != nil {
-		level = logrus.InfoLevel
+		level = log.InfoLevel
 	}
-	_log.SetLevel(level)
+	logger.SetLevel(level)
 	return nil
-}
-
-func fatal(ctx context.Context, err error) {
-	_log.WithContext(ctx).Fatal(err)
 }

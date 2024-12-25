@@ -7,4 +7,4 @@ generate:
 .PHONY: clean
 clean:
 	@go clean
-	@git clean -Xf ./*
+	@git clean -dfX

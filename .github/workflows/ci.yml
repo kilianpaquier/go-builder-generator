@@ -26,7 +26,7 @@ on:
   workflow_dispatch:
     inputs:
       release:
-        description: Run release job by checking this box.
+        description: Run release job.
         type: boolean
 
 concurrency:

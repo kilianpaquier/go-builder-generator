@@ -19,7 +19,7 @@ var (
 
 			// parse flags into generateOpts (yeah it's wobbly but cobra is missing this issue https://github.com/spf13/cobra/issues/1832)
 			if err := cmd.ParseFlags(args); err != nil {
-				return err //nolint:wrapcheck
+				return err
 			}
 
 			if help, _ := cmd.Flags().GetBool("help"); help {
@@ -27,9 +27,9 @@ var (
 			}
 			return nil
 		},
-		Run: func(cmd *cobra.Command, args []string) {
+		Run: func(_ *cobra.Command, args []string) {
 			if err := generate.Run(generateOpts, args); err != nil {
-				fatal(cmd.Context(), err)
+				logger.Fatal(err)
 			}
 		},
 	}
