@@ -1,3 +1,9 @@
+## [1.8.10](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.9...v1.8.10) (2024-12-25)
+
+### Chores
+
+* **log:** migrate to charmbracelet ([c0e1745](https://github.com/kilianpaquier/go-builder-generator/commit/c0e17450cae921ae705810c61a8799c3b0c5722f))
+
 ## [1.8.9](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.8...v1.8.9) (2024-12-11)
 
 ### Chores
