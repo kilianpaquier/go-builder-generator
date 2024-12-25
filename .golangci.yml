@@ -22,11 +22,6 @@ linters-settings:
     # Default: true (disabled)
     disable-init-func-first-check: true
 
-  errcheck:
-    # report about not checking of errors in type assetions: `a := b.(MyStruct)`;
-    # default is false: such cases aren't reported by default.
-    check-type-assertions: true
-
   funlen:
     # Checks the number of lines in a function.
     # If lower than 0, disable the check.
@@ -229,6 +224,8 @@ linters-settings:
           - fmt.Print
           - fmt.Printf
           - fmt.Println
+          - io.Writer.Write.*
+          - strings.Builder.Write.*
       - name: unnecessary-stmt
       - name: unreachable-code
       - name: unused-parameter
@@ -341,7 +338,6 @@ linters:
     - dogsled
     - dupl
     - durationcheck
-    - errcheck
     - errname
     - errorlint
     - exhaustive
@@ -405,4 +401,3 @@ linters:
     - varnamelen
     - wastedassign
     - whitespace
-    - wrapcheck

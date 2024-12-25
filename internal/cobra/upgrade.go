@@ -17,24 +17,28 @@ var (
 	upgradeCmd = &cobra.Command{
 		Use:   "upgrade",
 		Short: "Upgrade or install go-builder-generator",
-		RunE: func(cmd *cobra.Command, _ []string) error {
-			ctx := cmd.Context()
-
+		Run: func(cmd *cobra.Command, _ []string) {
 			options := []upgrade.RunOption{
 				upgrade.WithDestination(dest),
 				upgrade.WithHTTPClient(cleanhttp.DefaultClient()),
-				upgrade.WithLogger(_log),
 				upgrade.WithMajor(major),
 				upgrade.WithMinor(minor),
 				upgrade.WithPrereleases(prereleases),
 			}
-			if err := upgrade.Run(ctx, "go-builder-generator", version, upgrade.GithubReleases("kilianpaquier", "go-builder-generator"), options...); err != nil {
-				if errors.Is(err, upgrade.ErrInvalidOptions) {
-					return err //nolint:wrapcheck
+
+			version, err := upgrade.Run(cmd.Context(), "go-builder-generator", version, upgrade.GithubReleases("kilianpaquier", "go-builder-generator"), options...)
+			if err != nil {
+				switch {
+				case errors.Is(err, upgrade.ErrNoNewVersion):
+					logger.Info(err)
+				case errors.Is(err, upgrade.ErrAlreadyInstalled):
+					logger.Infof("version '%s' is already installed", version)
+				default:
+					logger.Fatal(err)
 				}
-				fatal(ctx, err) // don't return err since returning an error shows the help
+				return
 			}
-			return nil
+			logger.Infof("successfully installed version '%s'", version)
 		},
 	}
 )

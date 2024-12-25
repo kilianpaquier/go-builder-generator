@@ -9,7 +9,7 @@ var (
 	versionCmd = &cobra.Command{
 		Use:   "version",
 		Short: "Show current go-builder-generator version",
-		Run:   func(_ *cobra.Command, _ []string) { _log.Info(version) },
+		Run:   func(_ *cobra.Command, _ []string) { logger.Info(version) },
 	}
 )
 

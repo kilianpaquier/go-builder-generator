@@ -19,7 +19,7 @@ var _ Prefixer = &chanPrefixer{} // ensure interface is implemented
 // In that case, all three prefixers computed from those ast.Expr will be validated with Valid.
 func (c *chanPrefixer) Valid() error {
 	c.ValuePrefixer = NewPrefixer(c.Value)
-	return c.ValuePrefixer.Valid() //nolint:wrapcheck
+	return c.ValuePrefixer.Valid()
 }
 
 // ToString transforms a Prefixer (ast.Expr) into its string representation.

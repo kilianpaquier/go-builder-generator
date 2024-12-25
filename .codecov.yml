@@ -17,6 +17,5 @@ ignore:
   - "cmd"
   - "examples"
   - "**/cobra/**"
-  - "**/mocks/**"
-  - "**/tests/**"
-  - "**/testutils/**"
+  - "**/testdata/**"
+  - "**/logger.go"
