@@ -11,9 +11,10 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/kilianpaquier/cli-sdk/pkg/cfs"
 	"github.com/samber/lo"
 	"golang.org/x/mod/modfile"
+
+	"github.com/kilianpaquier/go-builder-generator/internal/generate/files"
 )
 
 const modulePrefix = "module::"
@@ -95,7 +96,7 @@ func findGomod(dir string, parts ...string) (*modfile.File, string, error) {
 	mod := filepath.Join(dir, "go.mod")
 
 	// go through parent directory to find go.mod in case it doesn't exist in current directory
-	if !cfs.Exists(mod) {
+	if !files.Exists(mod) {
 		// handle root directory -> VolumeName (e.g "C:") + os.PathSeparator
 		if dir == filepath.VolumeName(dir)+string(os.PathSeparator) {
 			return nil, "", errors.New("no parent go.mod found")

@@ -7,7 +7,10 @@ builds:
     env:
       - CGO_ENABLED=0
     ldflags:
-      - -X github.com/kilianpaquier/go-builder-generator/internal/cobra.version={{ .Env.VERSION }}
+      - -X github.com/kilianpaquier/go-builder-generator/internal/build.branch={{ .Branch }}
+      - -X github.com/kilianpaquier/go-builder-generator/internal/build.commit={{ .Commit }}
+      - -X github.com/kilianpaquier/go-builder-generator/internal/build.date={{ .CommitDate }}
+      - -X github.com/kilianpaquier/go-builder-generator/internal/build.version={{ .Env.VERSION }}
     goos:
       - linux
       - windows
