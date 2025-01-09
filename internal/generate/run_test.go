@@ -6,12 +6,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/kilianpaquier/cli-sdk/pkg/cfs"
-	testfs "github.com/kilianpaquier/cli-sdk/pkg/cfs/tests"
+	compare "github.com/kilianpaquier/compare/pkg"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"github.com/kilianpaquier/go-builder-generator/internal/generate"
+	"github.com/kilianpaquier/go-builder-generator/internal/generate/files"
 )
 
 func TestRun_Errors(t *testing.T) {
@@ -29,7 +29,7 @@ func TestRun_Errors(t *testing.T) {
 				Field string
 			}
 			`,
-		), cfs.RwRR)
+		), files.RwRR)
 		require.NoError(t, err)
 
 		destdir := filepath.Join(testdata, "result")
@@ -52,7 +52,7 @@ func TestRun_Errors(t *testing.T) {
 		tmp := t.TempDir()
 
 		src := filepath.Join(tmp, "go.mod")
-		err := os.WriteFile(src, []byte(``), cfs.RwRR)
+		err := os.WriteFile(src, []byte(``), files.RwRR)
 		require.NoError(t, err)
 
 		destdir := filepath.Join(testdata, "result")
@@ -237,7 +237,7 @@ func TestRun_DifferentPackage(t *testing.T) {
 
 			// Assert
 			assert.NoError(t, err)
-			assert.NoError(t, testfs.EqualDirs(assertdir, tc.CLIOptions.Destdir))
+			assert.NoError(t, compare.Dirs(assertdir, tc.CLIOptions.Destdir))
 		})
 	}
 }
@@ -288,7 +288,7 @@ func TestRun_ExternalModule(t *testing.T) {
 
 			// Assert
 			assert.NoError(t, err)
-			assert.NoError(t, testfs.EqualDirs(assertdir, tc.CLIOptions.Destdir))
+			assert.NoError(t, compare.Dirs(assertdir, tc.CLIOptions.Destdir))
 		})
 	}
 }
@@ -325,18 +325,18 @@ func TestRun_SamePackage(t *testing.T) {
 			require.NoError(t, os.CopyFS(assertdir, os.DirFS(filepath.Join(testdata, tc.DirName))))
 
 			tc.CLIOptions.Destdir = filepath.Join(testdata, tc.DirName, "result")
-			require.NoError(t, os.MkdirAll(tc.CLIOptions.Destdir, cfs.RwxRxRxRx)) // the only reason we need to create the directory is because types.go is copied before generation
+			require.NoError(t, os.MkdirAll(tc.CLIOptions.Destdir, files.RwxRxRxRx)) // the only reason we need to create the directory is because types.go is copied before generation
 			t.Cleanup(func() { require.NoError(t, os.RemoveAll(tc.CLIOptions.Destdir)) })
 
 			tc.CLIOptions.File = filepath.Join(tc.CLIOptions.Destdir, "types.go")
-			require.NoError(t, cfs.CopyFile(filepath.Join(testdata, tc.DirName, "types.go"), tc.CLIOptions.File))
+			require.NoError(t, files.Copy(filepath.Join(testdata, tc.DirName, "types.go"), tc.CLIOptions.File))
 
 			// Act
 			err := generate.Run(tc.CLIOptions, strings.Split(tc.Args, " "))
 
 			// Assert
 			assert.NoError(t, err)
-			assert.NoError(t, testfs.EqualDirs(assertdir, tc.CLIOptions.Destdir))
+			assert.NoError(t, compare.Dirs(assertdir, tc.CLIOptions.Destdir))
 		})
 	}
 }

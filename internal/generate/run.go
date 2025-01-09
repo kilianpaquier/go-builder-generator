@@ -11,14 +11,15 @@ import (
 	"strings"
 
 	"github.com/huandu/xstrings"
-	"github.com/kilianpaquier/cli-sdk/pkg/cfs"
+
+	"github.com/kilianpaquier/go-builder-generator/internal/generate/files"
 )
 
 //go:embed all:templates
 var tmpl embed.FS
 
 // Run runs the builder generation with input options.
-func Run(options CLIOptions, args []string) error {
+func Run(options CLIOptions, args []string) error { //nolint:funlen
 	// force first rune to lowercase in case of unexported types
 	// it will be titled in gen template in case the type is exported
 	options.Prefix = xstrings.FirstRuneToLower(options.Prefix)
@@ -97,7 +98,7 @@ func Run(options CLIOptions, args []string) error {
 
 	// generate implementation file
 	dest := filepath.Join(destdir, "builders_impl.go")
-	if len(builders) > 0 && !cfs.Exists(dest) {
+	if len(builders) > 0 && !files.Exists(dest) {
 		impl := &implData{
 			Builders: builders,
 			Opts:     options,

@@ -18,7 +18,6 @@
   - [Linux](#linux)
 - [Commands](#commands)
   - [Generate](#generate)
-  - [Upgrade](#upgrade)
   - [Generation cases](#generation-cases)
 
 ## How to use ?
@@ -32,21 +31,14 @@ go install github.com/kilianpaquier/go-builder-generator/cmd/go-builder-generato
 ### Linux
 
 ```sh
-if which go-builder-generator >/dev/null; then
-  go-builder-generator upgrade
-  exit $?
-fi
+OS="linux" # change it depending on your case
+ARCH="amd64" # change it depending on your case
+INSTALL_DIR="$HOME/.local/bin" # change it depending on your case
 
-OS="linux" # change it depending on our case
-ARCH="amd64" # change it depending on our case
-
-echo "installing go-builder-generator"
 new_version=$(curl -fsSL "https://api.github.com/repos/kilianpaquier/go-builder-generator/releases/latest" | jq -r '.tag_name')
-url="https://github.com/kilianpaquier/go-builder-generator/releases/download/${new_version}/go-builder-generator_${OS}_${ARCH}.tar.gz"
-curl -fsSL "$url" -o "/tmp/go-builder-generator_${OS}_${ARCH}.tar.gz"
-mkdir -p "/tmp/go-builder-generator/${new_version}"
-tar -xzf "/tmp/go-builder-generator_${OS}_${ARCH}.tar.gz" -C "/tmp/go-builder-generator/${new_version}"
-cp "/tmp/go-builder-generator/${new_version}/go-builder-generator" "${HOME}/.local/bin/go-builder-generator"
+url="https://github.com/kilianpaquier/go-builder-generator/releases/download/$new_version/go-builder-generator_${OS}_${ARCH}.tar.gz"
+curl -fsSL "$url" | (mkdir -p "/tmp/go-builder-generator/$new_version" && cd "/tmp/go-builder-generator/$new_version" && tar -xz)
+cp "/tmp/go-builder-generator/$new_version/go-builder-generator" "$INSTALL_DIR/go-builder-generator"
 ```
 
 ## Commands
@@ -89,26 +81,6 @@ Flags:
       --return-copy            returns a copy of the builder each time a setter function is called
   -s, --structs strings        struct names to generate builders on (they must be contained in given input file)
       --validate-func string   validate function name to be executed in Build, must have the signature 'func () error' and associated to built struct
-
-Global Flags:
-      --log-format string   set logging format (either "text" or "json") (default "text")
-      --log-level string    set logging level (default "info")
-```
-
-### Upgrade
-
-```
-Upgrade or install go-builder-generator
-
-Usage:
-  go-builder-generator upgrade [flags]
-
-Flags:
-      --dest string    destination directory where go-builder-generator will be upgraded / installed (by default "${HOME}/.local/bin")
-  -h, --help           help for upgrade
-      --major string   which major version to upgrade / install (must be of the form "v1", "v2", etc.) - mutually exclusive with --minor option
-      --minor string   which minor version to upgrade / install (must be of the form "v1.5", "v2.4", etc.) - mutually exclusive with --major option
-      --prereleases    whether prereleases are accepted for installation or not
 
 Global Flags:
       --log-format string   set logging format (either "text" or "json") (default "text")

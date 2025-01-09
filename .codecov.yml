@@ -18,4 +18,5 @@ ignore:
   - "examples"
   - "**/cobra/**"
   - "**/testdata/**"
+  - "**/build.go"
   - "**/logger.go"
