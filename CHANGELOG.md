@@ -1,3 +1,9 @@
+## [1.8.11](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.10...v1.8.11) (2025-01-12)
+
+### Chores
+
+* **deps:** migrate dependency cli-sdk to compare ([a07d910](https://github.com/kilianpaquier/go-builder-generator/commit/a07d91082d8586becb28dd52db2b4e96231f6727))
+
 ## [1.8.10](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.9...v1.8.10) (2024-12-25)
 
 ### Chores
