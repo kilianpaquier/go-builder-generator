@@ -1,3 +1,9 @@
+## [1.8.12](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.11...v1.8.12) (2025-01-13)
+
+### Chores
+
+* **deps:** bump github.com/go-playground/validator/v10 ([019a1ee](https://github.com/kilianpaquier/go-builder-generator/commit/019a1eea11f6013a9123e0c47a96b42641d0d3f6))
+
 ## [1.8.11](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.10...v1.8.11) (2025-01-12)
 
 ### Chores
