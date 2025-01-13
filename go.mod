@@ -6,7 +6,7 @@ require (
 	github.com/Masterminds/sprig/v3 v3.3.0
 	github.com/charmbracelet/log v0.4.0
 	github.com/fatih/structtag v1.2.0
-	github.com/go-playground/validator/v10 v10.23.0
+	github.com/go-playground/validator/v10 v10.24.0
 	github.com/huandu/xstrings v1.5.0
 	github.com/kilianpaquier/compare v1.0.0
 	github.com/samber/lo v1.47.0
