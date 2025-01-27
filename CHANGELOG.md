@@ -1,3 +1,9 @@
+## [1.8.13](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.12...v1.8.13) (2025-01-27)
+
+### Chores
+
+* **deps:** bump github.com/samber/lo in the minor-patch group ([fee785e](https://github.com/kilianpaquier/go-builder-generator/commit/fee785e1538f849aca33a90d1bb35fc7005c894c))
+
 ## [1.8.12](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.11...v1.8.12) (2025-01-13)
 
 ### Chores
