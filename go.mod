@@ -9,7 +9,7 @@ require (
 	github.com/go-playground/validator/v10 v10.24.0
 	github.com/huandu/xstrings v1.5.0
 	github.com/kilianpaquier/compare v1.0.0
-	github.com/samber/lo v1.47.0
+	github.com/samber/lo v1.49.0
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.10.0
