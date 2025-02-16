@@ -122,7 +122,7 @@ jobs:
   go-test:
     name: Go Test
     runs-on: ${{ matrix.os }}
-    needs: run-workflow
+    needs: go-lint
     strategy:
       fail-fast: false
       matrix:

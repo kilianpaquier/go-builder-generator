@@ -272,17 +272,6 @@ linters-settings:
     # Variable names that are at least this long will be ignored.
     # Default: 3
     min-name-length: 2
-    # Optional list of variable declarations that should be ignored completely.
-    # Entries must be in one of the following forms (see below for examples):
-    # - for variables, parameters, named return values, method receivers, or type parameters:
-    #   <name> <type>  (<type> can also be a pointer/slice/map/chan/...)
-    # - for constants: const <name>
-    #
-    # Default: []
-    ignore-decls:
-      - o options
-      - T any
-      - t testing.T
 
   whitespace:
     # Enforces newlines (or comments) after every multi-line if statement.
@@ -388,7 +377,6 @@ linters:
     - staticcheck
     - stylecheck
     - tagalign
-    - tenv
     - testableexamples
     - testifylint
     - testpackage
@@ -398,6 +386,7 @@ linters:
     - unconvert
     - unused
     - usestdlibvars
+    - usetesting
     - varnamelen
     - wastedassign
     - whitespace
