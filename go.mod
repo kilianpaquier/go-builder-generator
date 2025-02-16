@@ -10,7 +10,7 @@ require (
 	github.com/fatih/structtag v1.2.0
 	github.com/go-playground/validator/v10 v10.25.0
 	github.com/huandu/xstrings v1.5.0
-	github.com/kilianpaquier/compare v1.0.0
+	github.com/kilianpaquier/compare v1.0.1
 	github.com/samber/lo v1.49.1
 	github.com/spf13/cobra v1.9.0
 	github.com/spf13/pflag v1.0.6
