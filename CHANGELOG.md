@@ -1,3 +1,10 @@
+## [1.8.15](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.14...v1.8.15) (2025-02-16)
+
+### Chores
+
+* **deps:** bump github.com/kilianpaquier/compare ([7569e42](https://github.com/kilianpaquier/go-builder-generator/commit/7569e42d7a7781fc851124190fc799f3ff726c4c))
+* **deps:** upgrade dependencies ([1848b4c](https://github.com/kilianpaquier/go-builder-generator/commit/1848b4c3c139a1f0c2411191b4033e0e43557d21))
+
 ## [1.8.14](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.13...v1.8.14) (2025-02-09)
 
 ### Chores
