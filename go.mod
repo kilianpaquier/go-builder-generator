@@ -12,7 +12,7 @@ require (
 	github.com/huandu/xstrings v1.5.0
 	github.com/kilianpaquier/compare v1.0.1
 	github.com/samber/lo v1.49.1
-	github.com/spf13/cobra v1.9.0
+	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.6
 	github.com/stretchr/testify v1.10.0
 	golang.org/x/mod v0.23.0
