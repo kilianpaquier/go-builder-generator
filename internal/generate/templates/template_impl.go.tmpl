@@ -11,7 +11,7 @@ package {{ .Packages.DestName }}
 Additional functions present here are called during a specific builder's
 Build function in the order of struct fields.
 
-For instance, with the below struct, `some_function` will be called first and 
+For instance, with the below struct, `some_function` will be called first and
 then `some_other_function` will be called.
 
 type MyStruct struct {
@@ -27,10 +27,10 @@ type MyStruct struct {
 
 {{- range .DefaultFuncs }}
 
-// {{ . }} will be executed during Build function. It allows defining 
+// {{ . }} will be executed during Build function. It allows defining
 // some fields of {{ $structName }} at the end of builder in case those would depend on other fields.
 func (b *{{ $builder }}{{ $genericName }}) {{ . }}() *{{ $builder }}{{ $genericName }} {
     return b
 }
 {{- end }}
-{{- end }} 
+{{- end }}

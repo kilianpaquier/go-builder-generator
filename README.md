@@ -157,7 +157,7 @@ type GenericFieldStruct struct {
 In case it's needed to generate a builder on a struct not being one of the current module, it's possible to provide the `module::` prefix to tell `go-builder-generator` to generate the struct from an **imported** module.
 The provided module must be imported in the current module `go.mod`.
 
-This case works with both simple structs and generic structs. Under the hood, `go-builder-generator` will retrieve the appropriate version from the current module `go.mod` (it works with `replace` too) 
+This case works with both simple structs and generic structs. Under the hood, `go-builder-generator` will retrieve the appropriate version from the current module `go.mod` (it works with `replace` too)
 and generate with those specific rules:
 - If `replace` is provided with a custom path, then it will retrieve the file from that path
 - If `GOPATH` environment variable exists, it will retrieve the file from `${GOPATH}/pkg/mod/module_name/...`

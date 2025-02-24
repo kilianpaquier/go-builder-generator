@@ -42,6 +42,26 @@ jobs:
       - id: skip
         run: echo "Running workflow"
 
+  pre-commit:
+    name: Pre-Commit
+    runs-on: ubuntu-latest
+    needs: run-workflow
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+      - uses: pre-commit/action@v3.0.1
+      - if: always()
+        # see https://github.com/marketplace/actions/git-auto-commit
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "fix(commit): pre-commit autofixes [skip ci]"
+
   version:
     name: Version
     runs-on: ubuntu-latest

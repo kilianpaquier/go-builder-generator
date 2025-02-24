@@ -3,7 +3,7 @@
 version: 2
 
 builds:
-  - main: cmd/go-builder-generator/main.go
+  - main: ./cmd/go-builder-generator
     env:
       - CGO_ENABLED=0
     ldflags:

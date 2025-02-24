@@ -38,4 +38,4 @@ build:
 			-X 'github.com/kilianpaquier/go-builder-generator/internal/build.date=$(shell TZ="UTC" date '+%Y-%m-%dT%TZ')' \
 			-X 'github.com/kilianpaquier/go-builder-generator/internal/build.version=${VERSION}' \
 		" \
-		-o go-builder-generator cmd/go-builder-generator/main.go
+		-o go-builder-generator ./cmd/go-builder-generator

@@ -83,9 +83,9 @@ func (b *{{ $builder }}{{ $genericName }}) Build() (*{{ $fullname }}{{ $genericN
 {{ $prefix = title $.Opts.Prefix }}
 {{ end }}
 
-{{/* 
+{{/*
     put unexported name first letter in upper:
-        - if the prefix is present (beauty) 
+        - if the prefix is present (beauty)
         - if the parent is unexported (exported function for an unexported type)
         - if the field possess the 'export' option
 */}}
