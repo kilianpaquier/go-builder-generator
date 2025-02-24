@@ -1,3 +1,10 @@
+## [1.8.16](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.15...v1.8.16) (2025-02-24)
+
+### Chores
+
+* add pre-commit configuration ([3ea5fe0](https://github.com/kilianpaquier/go-builder-generator/commit/3ea5fe00e0a747e40c671eacf0e890ce12f2555d))
+* **deps:** upgrade dependencies ([aeab39c](https://github.com/kilianpaquier/go-builder-generator/commit/aeab39c822c89ba53940bfc5dd652cc44e8b5cc1))
+
 ## [1.8.15](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.14...v1.8.15) (2025-02-16)
 
 ### Chores
