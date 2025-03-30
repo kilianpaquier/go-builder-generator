@@ -158,9 +158,9 @@ func fileImport(file *modfile.File, pkg string) string {
 	return fmt.Sprint(`"`, i, `"`)
 }
 
-// hasTool returns truthy when given modfile go version is above or equal to go1.24.
+// toolAvailable returns truthy when given modfile go version is above or equal to go1.24.
 // Meaning it can handle go tool section.
-func hasTool(file *modfile.File) bool {
+func toolAvailable(file *modfile.File) bool {
 	minGo := "go1.24"
 	return version.Compare("go"+file.Go.Version, minGo) >= 0
 }

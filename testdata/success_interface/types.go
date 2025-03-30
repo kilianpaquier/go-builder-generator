@@ -3,7 +3,9 @@ package success_interface
 import "context"
 
 // execute this command from your terminal
-// ./go-builder-generator generate -f testdata/success_interface/types.go -s Interface,InterfaceNoFields -d testdata/success_interface/builders --package-name builders --no-tool
+// part of this case ensures that go run ... is added to generated files and not go tool since --no-tool is given
+
+// ../../go-builder-generator generate -f testdata/success_interface/types.go -s Interface,InterfaceNoFields -d testdata/success_interface/builders --package-name builders --no-tool
 
 type Int64Alias int64
 

@@ -127,10 +127,10 @@ type packagesData struct {
 	DestName      string
 	GeneratedFrom string
 	HasGenerate   bool
-	HasTool       bool
 	Imports       []string
 	SameModule    bool
 	SourceName    string
+	ToolAvailable bool
 }
 
 // fieldOpts represents the available options to be put in `builder` tag at a field level.
