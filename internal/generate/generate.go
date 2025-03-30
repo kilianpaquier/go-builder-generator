@@ -24,7 +24,7 @@ import (
 // generateBuilders takes a go tree file as input and generates a builder for all the input structs slice.
 //
 // It returns a slice to generate aftermath an _impl file with custom functions.
-func generateBuilders(file *ast.File, pkg packagesData, opts CLIOptions) ([]genData, error) {
+func generateBuilders(file *ast.File, data packagesData, opts CLIOptions) ([]genData, error) {
 	// inspect whole file an retrieve all associated builders
 	var errs []error
 	builders := make([]genData, 0, len(opts.Structs))
@@ -50,7 +50,7 @@ func generateBuilders(file *ast.File, pkg packagesData, opts CLIOptions) ([]genD
 		validNodes++
 
 		// compute builder data associated to struct name
-		builder, err := parseStruct(typeSpec, structType, pkg, opts)
+		builder, err := parseStruct(typeSpec, structType, data, opts)
 		if err != nil {
 			errs = append(errs, err)
 			return true

@@ -2,7 +2,7 @@ package success_same_package
 
 import "context"
 
-//go:generate ../../go-builder-generator generate -f types.go -s SamePackage,unexportedType
+//go:generate go tool go-builder-generator generate -f types.go -s SamePackage,unexportedType
 
 type Int64Alias int64
 

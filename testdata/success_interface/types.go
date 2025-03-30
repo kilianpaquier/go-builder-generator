@@ -3,7 +3,7 @@ package success_interface
 import "context"
 
 // execute this command from your terminal
-// ./go-builder-generator generate -f testdata/success_interface/types.go -s Interface,InterfaceNoFields -d testdata/success_interface/builders --package-name builders
+// ./go-builder-generator generate -f testdata/success_interface/types.go -s Interface,InterfaceNoFields -d testdata/success_interface/builders --package-name builders --no-tool
 
 type Int64Alias int64
 

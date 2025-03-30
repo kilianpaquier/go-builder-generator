@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"go/ast"
+	"go/version"
 	"os"
 	"path"
 	"path/filepath"
@@ -15,6 +16,17 @@ import (
 	"golang.org/x/mod/modfile"
 
 	"github.com/kilianpaquier/go-builder-generator/internal/generate/files"
+)
+
+var (
+	// ErrMissingGo indicates that 'go' statement is missing in a go.mod.
+	ErrMissingGo = errors.New("missing go statement")
+
+	// ErrMissingModule indicates that 'module' statement is missing in a go.mod.
+	ErrMissingModule = errors.New("missing module statement")
+
+	// ErrNilMod indicates that modfile.File is nil (should never happen).
+	ErrNilMod = errors.New("nil go.mod")
 )
 
 const modulePrefix = "module::"
@@ -110,8 +122,26 @@ func findGomod(dir string, parts ...string) (*modfile.File, string, error) {
 		return nil, "", fmt.Errorf("go.mod '%s' parsing: %w", mod, err)
 	}
 
+	if err := validGomod(file); err != nil {
+		return nil, "", fmt.Errorf("invalid '%s' go.mod: %w", mod, err)
+	}
+
 	slices.Reverse(parts)
 	return file, strings.Join(parts, "/"), nil
+}
+
+// validGomod ensures that used properties in generation process aren't nil.
+func validGomod(file *modfile.File) error {
+	if file == nil {
+		return ErrNilMod
+	}
+	if file.Module == nil {
+		return ErrMissingModule
+	}
+	if file.Go == nil {
+		return ErrMissingGo
+	}
+	return nil
 }
 
 // fileImport returns the import for the input pkg with the associated go.mod modfile.
@@ -128,13 +158,21 @@ func fileImport(file *modfile.File, pkg string) string {
 	return fmt.Sprint(`"`, i, `"`)
 }
 
+// hasTool returns truthy when given modfile go version is above or equal to go1.24.
+// Meaning it can handle go tool section.
+func hasTool(file *modfile.File) bool {
+	minGo := "go1.24"
+	return version.Compare("go"+file.Go.Version, minGo) >= 0
+}
+
 // hasGenerate checks whether a 'go:generate' comment is present in input file for go-builder-generator.
 func hasGenerate(file *ast.File, args []string) bool {
 	options := regexp.QuoteMeta(strings.Join(args, " "))
 
 	rexps := []*regexp.Regexp{
-		regexp.MustCompile(fmt.Sprint(`^//go:generate go run github\.com/kilianpaquier/go-builder-generator/cmd/go-builder-generator@[^\s]+ generate `, options, "$")),
 		regexp.MustCompile(fmt.Sprint(`^//go:generate ([^\s]+)?go-builder-generator generate `, options, "$")),
+		regexp.MustCompile(fmt.Sprint(`^//go:generate go run github\.com/kilianpaquier/go-builder-generator/cmd/go-builder-generator@[^\s]+ generate `, options, "$")),
+		regexp.MustCompile(fmt.Sprint(`^//go:generate go tool go-builder-generator generate `, options, "$")),
 	}
 
 	for _, group := range file.Comments {

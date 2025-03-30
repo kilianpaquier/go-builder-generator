@@ -14,14 +14,14 @@ import (
 )
 
 // parseStruct parses and returns a gen data (to generate _gen file). Computing is done from input ast type spec and struct type.
-func parseStruct(typeSpec *ast.TypeSpec, structType *ast.StructType, pkg packagesData, opts CLIOptions) (genData, error) {
+func parseStruct(typeSpec *ast.TypeSpec, structType *ast.StructType, data packagesData, opts CLIOptions) (genData, error) {
 	var errs []error
 
 	// initialize builder to avoid too many params in generateStruct
 	builder := genData{
 		Name:     typeSpec.Name.String(),
 		Opts:     opts,
-		Packages: pkg,
+		Packages: data,
 	}
 
 	// compute generic params for builder structure
@@ -48,7 +48,7 @@ func parseStruct(typeSpec *ast.TypeSpec, structType *ast.StructType, pkg package
 			}
 
 			// retrieve computed string type
-			finalType, exported := typePrefixer.ToString(pkg.SourceName, genericNames)
+			finalType, exported := typePrefixer.ToString(data.SourceName, genericNames)
 			field := field{
 				AlteredType: finalType,
 				Exported:    exported,
@@ -64,14 +64,14 @@ func parseStruct(typeSpec *ast.TypeSpec, structType *ast.StructType, pkg package
 	// add an error if destination package is not the same as the source one
 	// and the struct to generate is not exported
 	builder.Exported = genericExported && ast.IsExported(builder.Name)
-	if pkg.SourceName != "" && !builder.Exported {
+	if data.SourceName != "" && !builder.Exported {
 		errs = append(errs, fmt.Errorf("%s is not exported (or one of its generic params is not) but generation destination is in an external package", builder.Name))
 	}
 
 	// compute all fields associated to builder
 	builder.Fields = make([]field, 0, len(structType.Fields.List))
 	for _, astField := range structType.Fields.List {
-		field, err := parseField(astField, pkg.SourceName, genericNames)
+		field, err := parseField(astField, data.SourceName, genericNames)
 		if err != nil {
 			errs = append(errs, err)
 			continue

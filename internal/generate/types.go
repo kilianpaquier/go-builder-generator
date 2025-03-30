@@ -34,6 +34,7 @@ type CLIOptions struct {
 	File         string
 	NoCMD        bool
 	NoNotice     bool
+	NoTool       bool
 	PackageName  string
 	Prefix       string
 	ReturnCopy   bool
@@ -126,6 +127,7 @@ type packagesData struct {
 	DestName      string
 	GeneratedFrom string
 	HasGenerate   bool
+	HasTool       bool
 	Imports       []string
 	SameModule    bool
 	SourceName    string
