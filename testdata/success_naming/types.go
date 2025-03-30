@@ -5,7 +5,7 @@ import (
 	"net/url"
 )
 
-//go:generate ../../go-builder-generator generate -f types.go -s Naming -d builders
+//go:generate go tool go-builder-generator generate -f types.go -s Naming -d builders
 
 type Naming struct {
 	ACRONYMOUS        string

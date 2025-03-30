@@ -1,6 +1,6 @@
 package success_generic
 
-//go:generate ../../go-builder-generator generate -f types.go -s Struct,SimpleGeneric,AliasGeneric,GenericAnonymousStruct,ComplexGeneric,ComplexSliceGeneric -d builders
+//go:generate go tool go-builder-generator generate -f types.go -s Struct,SimpleGeneric,AliasGeneric,GenericAnonymousStruct,ComplexGeneric,ComplexSliceGeneric -d builders
 
 type SimpleGeneric[T any] struct {
 	Value T

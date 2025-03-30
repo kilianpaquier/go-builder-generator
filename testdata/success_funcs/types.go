@@ -1,6 +1,6 @@
 package success_funcs
 
-//go:generate ../../go-builder-generator generate -f types.go -s Func -d builders
+//go:generate go tool go-builder-generator generate -f types.go -s Func -d builders
 
 type Int64Alias int64
 

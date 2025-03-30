@@ -2,7 +2,7 @@ package success_struct
 
 import "context"
 
-//go:generate ../../go-builder-generator generate -f types.go -s Struct,StructNoFields -d builders
+//go:generate go tool go-builder-generator generate -f types.go -s Struct,StructNoFields -d builders
 
 type Int64Alias int64
 

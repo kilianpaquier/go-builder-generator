@@ -87,6 +87,7 @@ func Run(options CLIOptions, args []string) error { //nolint:funlen
 		DestName:      destPackage,
 		GeneratedFrom: path.Join(srcpkg, filepath.Base(options.File)),
 		HasGenerate:   hasGenerate(file, args),
+		HasTool:       hasTool(destfile),
 		Imports:       imports,
 		SameModule:    destfile.Module.Mod.String() == srcfile.Module.Mod.String(),
 		SourceName:    sourcePackage,

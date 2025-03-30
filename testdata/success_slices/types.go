@@ -2,7 +2,7 @@ package success_slices
 
 import "context"
 
-//go:generate ../../go-builder-generator generate -f types.go -s ArrayAndSlice -d builders
+//go:generate go tool go-builder-generator generate -f types.go -s ArrayAndSlice -d builders
 
 type Int64Alias int64
 

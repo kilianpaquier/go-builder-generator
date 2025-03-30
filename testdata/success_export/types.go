@@ -1,6 +1,6 @@
 package success_export
 
-//go:generate ../../go-builder-generator generate -f types.go -s Export -d builders
+//go:generate go tool go-builder-generator generate -f types.go -s Export -d builders
 
 type Int64Alias int64
 

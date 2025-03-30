@@ -47,7 +47,7 @@ func TestRun_Errors(t *testing.T) {
 		assert.NoDirExists(t, destdir)
 	})
 
-	t.Run("error_no_file", func(t *testing.T) {
+	t.Run("error_missing_module", func(t *testing.T) {
 		// Arrange
 		tmp := t.TempDir()
 
@@ -66,7 +66,7 @@ func TestRun_Errors(t *testing.T) {
 		err = generate.Run(options, nil)
 
 		// Assert
-		assert.ErrorContains(t, err, "parse file")
+		assert.ErrorIs(t, err, generate.ErrMissingModule)
 		assert.NoDirExists(t, destdir)
 	})
 
@@ -173,6 +173,7 @@ func TestRun_DifferentPackage(t *testing.T) {
 			DirName: "success_interface",
 			CLIOptions: generate.CLIOptions{
 				NoCMD:   false, // enforce testing at least with one case that the cmd can be printed (and is right) in generated files
+				NoTool:  true,  // force go run ...
 				Structs: []string{"Interface", "InterfaceNoFields"},
 			},
 		},

@@ -8,7 +8,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-//go:generate go run github.com/kilianpaquier/go-builder-generator/cmd/go-builder-generator@latest generate -d . -f module::github.com/go-playground/validator/v10/errors.go -s InvalidValidationError
+//go:generate go tool go-builder-generator generate -d . -f module::github.com/go-playground/validator/v10/errors.go -s InvalidValidationError
 
 // InvalidValidationErrorBuilder represents InvalidValidationError's builder.
 type InvalidValidationErrorBuilder struct {
