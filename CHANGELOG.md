@@ -1,3 +1,13 @@
+## [1.9.0](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.16...v1.9.0) (2025-03-30)
+
+### Features
+
+* **go:generate:** use `go tool` instead of `go run ...` in generated files when possible. See [#66](https://github.com/kilianpaquier/go-builder-generator/issues/66) for full feature. ([689a943](https://github.com/kilianpaquier/go-builder-generator/commit/689a943c2cb20f0a56dbf7a10eae891468621307))
+
+### Chores
+
+* **deps:** upgrade dependencies ([f06fd4d](https://github.com/kilianpaquier/go-builder-generator/commit/f06fd4d9e1d192e5c5c451c9ecd13da2b6d27b47))
+
 ## [1.8.16](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.15...v1.8.16) (2025-02-24)
 
 ### Chores
