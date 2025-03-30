@@ -47,13 +47,9 @@ func TestRun_Errors(t *testing.T) {
 		assert.NoDirExists(t, destdir)
 	})
 
-	t.Run("error_missing_module", func(t *testing.T) {
+	t.Run("errors_module", func(t *testing.T) {
 		// Arrange
 		tmp := t.TempDir()
-
-		src := filepath.Join(tmp, "go.mod")
-		err := os.WriteFile(src, []byte(``), files.RwRR)
-		require.NoError(t, err)
 
 		destdir := filepath.Join(testdata, "result")
 		options := generate.CLIOptions{
@@ -62,12 +58,42 @@ func TestRun_Errors(t *testing.T) {
 			Structs: []string{},
 		}
 
-		// Act
-		err = generate.Run(options, nil)
+		testcases := []struct {
+			Name        string
+			GoMod       string
+			ErrContains string
+		}{
+			{
+				Name:        "error_module_statement",
+				ErrContains: generate.ErrMissingModule.Error(),
+			},
+			{
+				Name:        "error_go_statement",
+				GoMod:       "module test",
+				ErrContains: generate.ErrMissingGo.Error(),
+			},
+			{
+				Name: "error_no_file",
+				GoMod: `module test
+				go 1.22`,
+				ErrContains: "parse file",
+			},
+		}
+		for _, tc := range testcases {
+			t.Run(tc.Name, func(t *testing.T) {
+				// Arrange
+				src := filepath.Join(tmp, "go.mod")
+				err := os.WriteFile(src, []byte(tc.GoMod), files.RwRR)
+				require.NoError(t, err)
 
-		// Assert
-		assert.ErrorIs(t, err, generate.ErrMissingModule)
-		assert.NoDirExists(t, destdir)
+				// Act
+				err = generate.Run(options, nil)
+
+				// Assert
+				assert.ErrorContains(t, err, tc.ErrContains)
+				assert.NoDirExists(t, destdir)
+			})
+		}
 	})
 
 	t.Run("error_no_dest_gomod", func(t *testing.T) {

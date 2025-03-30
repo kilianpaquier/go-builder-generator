@@ -19,7 +19,7 @@ import {{ . }}
 {{ end }}
 
 {{ if and (not .Packages.HasGenerate) (not .Opts.NoCMD) }}
-{{ if and .Packages.HasTool (not .Opts.NoTool) }}
+{{ if and .Packages.ToolAvailable (not .Opts.NoTool) }}
 //go:generate go tool go-builder-generator generate {{ .Opts.ToString .Name }}
 {{ else }}
 //go:generate go run github.com/kilianpaquier/go-builder-generator/cmd/go-builder-generator@latest generate {{ .Opts.ToString .Name }}
