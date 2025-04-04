@@ -61,4 +61,6 @@ require (
 
 tool github.com/kilianpaquier/go-builder-generator/cmd/go-builder-generator
 
-replace github.com/kilianpaquier/go-builder-generator => ./
+// uncomment this line when generating tests
+// replace can't stay uncommented because of https://github.com/golang/go/issues/44840
+// replace github.com/kilianpaquier/go-builder-generator => ./

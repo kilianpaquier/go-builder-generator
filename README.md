@@ -185,6 +185,6 @@ You may see the [examples](./examples/) folder for real generation cases.
 
 ## Contributing
 
-When contributing, you can generate testdata files with `make go-generate`.
+When contributing, you can generate testdata files with `make go-generate` (you must beforehand uncomment the `replace` directive in `go.mod`).
 It will avoid painful manual updates, however, make sure that generated testdata matches what you expect.
 Also, make sure to add or update associated tests to your change.
