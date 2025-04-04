@@ -1,3 +1,9 @@
+## [1.9.1](https://github.com/kilianpaquier/go-builder-generator/compare/v1.9.0...v1.9.1) (2025-04-04)
+
+### Bug Fixes
+
+* **gomod:** comment replace directive to allow go install usage ([5574f86](https://github.com/kilianpaquier/go-builder-generator/commit/5574f86f8e201d0d69df89b719b7e7e74dae4bd5))
+
 ## [1.9.0](https://github.com/kilianpaquier/go-builder-generator/compare/v1.8.16...v1.9.0) (2025-03-30)
 
 ### Features
