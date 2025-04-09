@@ -288,9 +288,9 @@ func TestRun_ExternalModule(t *testing.T) {
 		{
 			DirName: "success_module_root",
 			CLIOptions: generate.CLIOptions{
-				File:    "module::github.com/go-playground/validator/v10/errors.go",
+				File:    "module::github.com/huandu/xstrings/translate.go",
 				NoCMD:   true,
-				Structs: []string{"InvalidValidationError"},
+				Structs: []string{"Translator"},
 			},
 		},
 		{
