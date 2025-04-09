@@ -43,7 +43,7 @@ func (i *interfacePrefixer) Valid() error {
 
 		i.MethodsPrefixers = make([]Prefixer, 0, len(i.Methods.List))
 		for _, method := range i.Methods.List {
-			// create a prefixer prefixer to remove func( prefix and add name prefix
+			// create a prefixer to remove func( prefix and add name prefix
 			prefixer := NewPrefixerEditor(NewPrefixer(method.Type), editor(method))
 
 			errs = append(errs, prefixer.Valid())

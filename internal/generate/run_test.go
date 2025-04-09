@@ -164,8 +164,8 @@ func TestRun_DifferentPackage(t *testing.T) {
 	testdata := filepath.Join(pwd, "..", "..", "testdata")
 
 	for _, tc := range []struct {
-		generate.CLIOptions
-		DirName string
+		CLIOptions generate.CLIOptions
+		DirName    string
 	}{
 		{
 			DirName: "success_channels",
@@ -274,8 +274,8 @@ func TestRun_ExternalModule(t *testing.T) {
 	testdata := filepath.Join(pwd, "..", "..", "testdata")
 
 	for _, tc := range []struct {
-		generate.CLIOptions
-		DirName string
+		CLIOptions generate.CLIOptions
+		DirName    string
 	}{
 		{
 			DirName: "success_module_replace",
@@ -325,9 +325,9 @@ func TestRun_SamePackage(t *testing.T) {
 	testdata := filepath.Join(pwd, "..", "..", "testdata")
 
 	for _, tc := range []struct {
-		generate.CLIOptions
-		Args    string
-		DirName string
+		Args       string
+		CLIOptions generate.CLIOptions
+		DirName    string
 	}{
 		{
 			DirName: "success_same_package",

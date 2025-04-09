@@ -9,8 +9,9 @@ reports:
 
 .PHONY: lint
 lint: reports
-	@golangci-lint run -c ${GOCI_LINT_PATH} --timeout 240s --fast --sort-results \
-		--out-format checkstyle:reports/go-ci-lint.checkstyle.xml,colored-line-number $(ARGS) || \
+	@golangci-lint run -c ${GOCI_LINT_PATH} --timeout 240s --allow-parallel-runners \
+		--output.checkstyle.path reports/go-ci-lint.checkstyle.xml \
+		--output.text.path stdout $(ARGS) || \
 		echo "golangci-lint failed, running 'make lint-fix' may fix some issues"
 
 .PHONY: lint-fix
