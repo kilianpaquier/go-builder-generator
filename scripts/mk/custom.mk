@@ -1,6 +1,5 @@
 .PHONY: go-generate
 go-generate:
-	@go generate ./...
-	@go generate ./testdata/**
-	@find ./testdata -name go.mod -execdir go mod tidy \;
-	@find ./testdata -name go.mod -execdir go generate ./... \;
+	@find . -name go.mod -execdir go get -u ./... \;
+	@find . -name go.mod -execdir go mod tidy \;
+	@find . -name go.mod -execdir go generate ./... \;

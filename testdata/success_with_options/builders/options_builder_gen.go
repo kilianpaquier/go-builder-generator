@@ -1,4 +1,4 @@
-// Code generated from testdata/success_with_options/types.go.
+// Code generated from success_with_options/types.go.
 
 package builders
 
