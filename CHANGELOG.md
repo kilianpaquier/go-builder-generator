@@ -1,3 +1,9 @@
+## [1.9.3](https://github.com/kilianpaquier/go-builder-generator/compare/v1.9.2...v1.9.3) (2025-04-09)
+
+### Chores
+
+* define go.mod files for examples and testdata to reduce go-builder-generator dependencies and let using go tool like expected for tests ([199eb1d](https://github.com/kilianpaquier/go-builder-generator/commit/199eb1d71e77585dd48d07f661ef57108fc061bc))
+
 ## [1.9.2](https://github.com/kilianpaquier/go-builder-generator/compare/v1.9.1...v1.9.2) (2025-04-09)
 
 ### Chores
