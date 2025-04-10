@@ -9,7 +9,7 @@ require (
 	github.com/charmbracelet/log v0.4.1
 	github.com/fatih/structtag v1.2.0
 	github.com/huandu/xstrings v1.5.0
-	github.com/kilianpaquier/compare v1.0.2
+	github.com/kilianpaquier/compare v1.0.3
 	github.com/samber/lo v1.49.1
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.6
@@ -40,7 +40,7 @@ require (
 	github.com/muesli/termenv v0.16.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
-	github.com/rogpeppe/go-internal v1.14.0 // indirect
+	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/spf13/cast v1.7.1 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
