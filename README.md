@@ -174,8 +174,9 @@ The provided module must be imported in the current module `go.mod`.
 This case works with both simple structs and generic structs. Under the hood, `go-builder-generator` will retrieve the appropriate version from the current module `go.mod` (it works with `replace` too)
 and generate with those specific rules:
 - If `replace` is provided with a custom path, then it will retrieve the file from that path
+- if `GOMODCACHE` environment variable exists, it will retrieve the file from `${GOMODCACHE}/module_name/...`
 - If `GOPATH` environment variable exists, it will retrieve the file from `${GOPATH}/pkg/mod/module_name/...`
-- If `GOPATH` environment variable doesn't exist, it will retrieve the file from `${HOME}/go/pkg/mod/module_name/...`
+- If neither `GOMODCACHE` and `GOPATH` environment variables exist, it will retrieve the file from `${HOME}/go/pkg/mod/module_name/...`
 
 ```go
 //go:generate go tool go-builder-generator generate -f module::github.com/kilianpaquier/go-builder-generator/path/to/file.go -s ExternalStructName -d builders

@@ -41,14 +41,16 @@ func modulePath(file *modfile.File, moduleName string) (string, error) {
 		return "", err
 	}
 
-	gopath := os.Getenv("GOPATH")
-	if gopath == "" {
-		home, _ := os.UserHomeDir()
-		gopath = filepath.Join(home, "go")
+	if modcache := os.Getenv("GOMODCACHE"); modcache != "" {
+		return filepath.Join(modcache, module), nil
 	}
-	gopkg := filepath.Join(gopath, "pkg", "mod")
 
-	return filepath.Join(gopkg, module.ModulePath, module.SubPath), nil
+	if gopath := os.Getenv("GOPATH"); gopath != "" {
+		return filepath.Join(gopath, "pkg", "mod", module), nil
+	}
+
+	home, _ := os.UserHomeDir()
+	return filepath.Join(home, "go", "pkg", "mod", module), nil
 }
 
 // getImports returns the slice of imports associated to input ast file.
@@ -67,19 +69,14 @@ func getImports(file *ast.File) ([]string, error) {
 	return imports, nil
 }
 
-type module struct {
-	ModulePath string
-	SubPath    string
-}
-
 // findRequire finds the appropriate module name and version in input file for the input moduleName.
-func findRequire(file *modfile.File, moduleName string) (module, error) {
+func findRequire(file *modfile.File, moduleName string) (string, error) {
 	// find appropriate require in go.mod file to retrieve the version
 	require, ok := lo.Find(file.Require, func(require *modfile.Require) bool {
 		return strings.HasPrefix(moduleName, require.Mod.Path)
 	})
 	if !ok {
-		return module{}, fmt.Errorf("missing module name '%s' in go.mod", moduleName)
+		return "", fmt.Errorf("missing module name '%s' in go.mod", moduleName)
 	}
 	subpath := strings.TrimPrefix(moduleName, require.Mod.Path)
 
@@ -89,17 +86,10 @@ func findRequire(file *modfile.File, moduleName string) (module, error) {
 	})
 	if !ok {
 		// return required version if no replaced version found
-		return module{
-			ModulePath: require.Mod.String(),
-			SubPath:    subpath,
-		}, nil
+		return filepath.Join(require.Mod.String(), subpath), nil
 	}
-
 	// return replaced version if provided
-	return module{
-		ModulePath: replace.New.String(),
-		SubPath:    subpath,
-	}, nil
+	return filepath.Join(replace.New.String(), subpath), nil
 }
 
 // findGomod finds the parent go.mod associated to input dir
