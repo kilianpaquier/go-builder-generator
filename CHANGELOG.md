@@ -1,3 +1,9 @@
+## [1.9.4](https://github.com/kilianpaquier/go-builder-generator/compare/v1.9.3...v1.9.4) (2025-04-28)
+
+### Bug Fixes
+
+* **module:::** use GOMODCACHE when possible then fallback on GOPATH or /home/go (like before) ([6220d88](https://github.com/kilianpaquier/go-builder-generator/commit/6220d887bb54d27c3635500821ee3dbaedb9f025))
+
 ## [1.9.3](https://github.com/kilianpaquier/go-builder-generator/compare/v1.9.2...v1.9.3) (2025-04-09)
 
 ### Chores
