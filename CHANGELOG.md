@@ -1,3 +1,9 @@
+## [1.9.5](https://github.com/kilianpaquier/go-builder-generator/compare/v1.9.4...v1.9.5) (2025-04-29)
+
+### Chores
+
+* **deps:** upgrade dependencies ([c7cb05e](https://github.com/kilianpaquier/go-builder-generator/commit/c7cb05e470118c21464ef5a741bd8253950fbd1d))
+
 ## [1.9.4](https://github.com/kilianpaquier/go-builder-generator/compare/v1.9.3...v1.9.4) (2025-04-28)
 
 ### Bug Fixes
