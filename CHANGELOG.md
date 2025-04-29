@@ -1,3 +1,9 @@
+## [1.9.6](https://github.com/kilianpaquier/go-builder-generator/compare/v1.9.5...v1.9.6) (2025-04-29)
+
+### Chores
+
+* **deps:** bump github.com/kilianpaquier/compare ([269091d](https://github.com/kilianpaquier/go-builder-generator/commit/269091da26305fdbeedb83d350ea0848360fab49))
+
 ## [1.9.5](https://github.com/kilianpaquier/go-builder-generator/compare/v1.9.4...v1.9.5) (2025-04-29)
 
 ### Chores
