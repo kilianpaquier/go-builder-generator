@@ -135,7 +135,7 @@ jobs:
           go-version-file: go.mod
           token: ${{ secrets.GITHUB_TOKEN }}
       - run: mkdir -p reports/
-      - uses: golangci/golangci-lint-action@v7
+      - uses: golangci/golangci-lint-action@v8
         with:
           args: --config .golangci.yml --timeout 240s --allow-parallel-runners --output.checkstyle.path reports/go-ci-lint.checkstyle.xml --output.text.path stdout
 
