@@ -6,7 +6,7 @@ toolchain go1.24.2
 
 require (
 	github.com/Masterminds/sprig/v3 v3.3.0
-	github.com/charmbracelet/log v0.4.1
+	github.com/charmbracelet/log v0.4.2
 	github.com/fatih/structtag v1.2.0
 	github.com/huandu/xstrings v1.5.0
 	github.com/kilianpaquier/compare v1.0.3
@@ -15,7 +15,7 @@ require (
 	github.com/spf13/pflag v1.0.6
 	github.com/stretchr/testify v1.10.0
 	golang.org/x/mod v0.24.0
-	golang.org/x/tools v0.32.0
+	golang.org/x/tools v0.33.0
 )
 
 require (
@@ -46,8 +46,8 @@ require (
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	golang.org/x/crypto v0.37.0 // indirect
 	golang.org/x/exp v0.0.0-20250408133849-7e4ce0ab07d0 // indirect
-	golang.org/x/sync v0.13.0 // indirect
-	golang.org/x/sys v0.32.0 // indirect
+	golang.org/x/sync v0.14.0 // indirect
+	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/text v0.24.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
