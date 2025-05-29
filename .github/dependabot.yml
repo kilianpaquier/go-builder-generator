@@ -23,8 +23,6 @@ updates:
     commit-message:
       include: scope
       prefix: ci
-    reviewers:
-      - kilianpaquier
 
   - package-ecosystem: gomod
     directory: /
@@ -40,5 +38,3 @@ updates:
     commit-message:
       include: scope
       prefix: chore
-    reviewers:
-      - kilianpaquier
