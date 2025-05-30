@@ -37,8 +37,8 @@ github.com/huandu/xstrings v1.5.0 h1:2ag3IFq9ZDANvthTwTiqSSZLjDc+BedvHPAp5tJy2TI
 github.com/huandu/xstrings v1.5.0/go.mod h1:y5/lhBue+AyNmUVz9RLU9xbLR0o4KIIExikq4ovT0aE=
 github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2s0bqwp9tc8=
 github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLfsEA9PFc4w1p2J65bw=
-github.com/kilianpaquier/compare v1.0.3 h1:ugCur2MuZaX5mZwMfF7PNIoz+QxPXsZscwUCwM8PZ1s=
-github.com/kilianpaquier/compare v1.0.3/go.mod h1:O8XzlqsDP/BAzd+R8yqy7vuG0vFnTE9q1kbvJmlf5G8=
+github.com/kilianpaquier/compare v1.1.0 h1:gCJvpnsTBEDEFMYQ+6sVsffo8AzOiFVf3U5VFbDZn2A=
+github.com/kilianpaquier/compare v1.1.0/go.mod h1:UssLUC5WsVVCq7BEjnv4890B9G/M047vaciME3wi/PE=
 github.com/kr/pretty v0.2.1/go.mod h1:ipq/a2n7PKx3OHsz4KJII5eveXtPO4qwEXGdVfWzfnI=
 github.com/kr/pretty v0.3.1 h1:flRD4NNwYAUpkphVc1HcthR4KEIFJ65n8Mw5qdRn3LE=
 github.com/kr/pretty v0.3.1/go.mod h1:hoEshYVHaxMs3cyo3Yncou5ZscifuDolrwPKZanG3xk=
