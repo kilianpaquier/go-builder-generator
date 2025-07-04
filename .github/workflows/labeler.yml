@@ -15,6 +15,7 @@ jobs:
   labeler:
     name: Labeler
     runs-on: ubuntu-latest
+    # run on branches or pull request not being draft and associated with branches not protected
     if: ${{ github.event_name != 'pull_request' || (github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.ref_protected == false) }}
     permissions:
       contents: read # enfore rights to specify no release, even draft, is created

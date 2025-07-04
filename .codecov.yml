@@ -16,7 +16,10 @@ coverage:
 ignore:
   - "cmd"
   - "examples"
-  - "**/cobra/**"
-  - "**/testdata/**"
+  - "testdata"
+  - "testutils"
   - "**/build.go"
+  - "**/cobra/**"
   - "**/logger.go"
+  - "**/testdata/**"
+  - "**/testutils/**"
