@@ -1,3 +1,9 @@
+## [1.9.9](https://github.com/kilianpaquier/go-builder-generator/compare/v1.9.8...v1.9.9) (2025-07-17)
+
+### Chores
+
+* **deps:** bump the minor-patch group across 1 directory with 2 updates ([905a35d](https://github.com/kilianpaquier/go-builder-generator/commit/905a35d2e50a4b6101b5d4852d47729bcc24c3b9))
+
 ## [1.9.8](https://github.com/kilianpaquier/go-builder-generator/compare/v1.9.7...v1.9.8) (2025-06-16)
 
 ### Chores
