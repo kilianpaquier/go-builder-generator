@@ -12,7 +12,7 @@ require (
 	github.com/kilianpaquier/compare v1.1.0
 	github.com/samber/lo v1.51.0
 	github.com/spf13/cobra v1.9.1
-	github.com/spf13/pflag v1.0.6
+	github.com/spf13/pflag v1.0.7
 	github.com/stretchr/testify v1.10.0
 	golang.org/x/mod v0.26.0
 	golang.org/x/tools v0.35.0
