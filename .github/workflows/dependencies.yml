@@ -17,6 +17,15 @@ on:
       - staging
       - v[0-9]+.[0-9]+.x
       - v[0-9]+.x
+    paths:
+      - go.mod
+      - go.sum
+      - "**/go.mod"
+      - "**/go.sum"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   go-dependency-submission:

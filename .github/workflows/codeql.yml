@@ -29,6 +29,10 @@ on:
       - v[0-9]+.[0-9]+.x
       - v[0-9]+.x
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   codeql:
     name: CodeQL

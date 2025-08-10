@@ -11,8 +11,6 @@ ci:
     - labeler
   release:
     auto: true
-exclude:
-  - chart
 license: mit
 maintainers:
   - name: kilianpaquier

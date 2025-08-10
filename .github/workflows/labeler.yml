@@ -11,12 +11,16 @@ on:
       - synchronize
       - ready_for_review
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   labeler:
     name: Labeler
     runs-on: ubuntu-latest
     # run on branches or pull request not being draft and associated with branches not protected
-    if: ${{ github.event_name != 'pull_request' || (github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.ref_protected == false) }}
+    if: ${{ github.event_name != 'pull_request' || (github.event_name == 'pull_request' && !github.event.pull_request.draft && !github.ref_protected) }}
     permissions:
       contents: read # enfore rights to specify no release, even draft, is created
       pull-requests: write

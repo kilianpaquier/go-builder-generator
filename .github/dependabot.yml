@@ -8,7 +8,26 @@
 version: 2
 enable-beta-ecosystems: true
 updates:
+
   - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: daily
+      time: "12:00"
+      timezone: "Etc/UTC"
+    groups:
+      major/minor/patch:
+        update-types:
+          - major
+          - minor
+          - patch
+    commit-message:
+      include: scope
+      prefix: ci
+    cooldown:
+      default-days: 5
+
+  - package-ecosystem: gitsubmodule
     directory: /
     schedule:
       interval: daily

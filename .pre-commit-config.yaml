@@ -9,12 +9,14 @@ default_stages:
 
 repos:
   - repo: https://github.com/compilerla/conventional-pre-commit
-    rev: v4.0.0
+    # renovate: datasource=github-tags packageName=compilerla/conventional-pre-commit
+    rev: v4.2.0
     hooks:
       - id: conventional-pre-commit
         stages: [commit-msg]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
+    # renovate: datasource=github-tags packageName=pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
       - id: check-merge-conflict
