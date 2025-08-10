@@ -1,3 +1,9 @@
+## [1.9.10](https://github.com/kilianpaquier/go-builder-generator/compare/v1.9.9...v1.9.10) (2025-08-10)
+
+### Chores
+
+* **deps:** bump github.com/spf13/pflag in the minor-patch group ([653c1b9](https://github.com/kilianpaquier/go-builder-generator/commit/653c1b97b49a4d9362b6cd38d6236c8e3aba0176))
+
 ## [1.9.9](https://github.com/kilianpaquier/go-builder-generator/compare/v1.9.8...v1.9.9) (2025-07-17)
 
 ### Chores
