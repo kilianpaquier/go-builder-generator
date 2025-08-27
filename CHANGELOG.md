@@ -1,3 +1,13 @@
+## [1.9.11](https://github.com/kilianpaquier/go-builder-generator/compare/v1.9.10...v1.9.11) (2025-08-27)
+
+### Documentation
+
+* **cli:** add precision on how to provide multiple structs in the same call ([3900617](https://github.com/kilianpaquier/go-builder-generator/commit/390061756e86938939ae83ee008d1c357dfc9aba))
+
+### Chores
+
+* **deps:** upgrade dependencies ([e93504a](https://github.com/kilianpaquier/go-builder-generator/commit/e93504a4981e9db607aa98c4e566ae50f1051090))
+
 ## [1.9.10](https://github.com/kilianpaquier/go-builder-generator/compare/v1.9.9...v1.9.10) (2025-08-10)
 
 ### Chores
