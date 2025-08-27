@@ -74,7 +74,7 @@ func init() {
 
 	// structs flag
 	generateCmd.Flags().StringSliceVarP(&generateOpts.Structs, "structs", "s", []string{},
-		"struct names to generate builders on (they must be contained in given input file)")
+		"struct names to generate builders on (they must be contained in given input file). Multiple elements may be given by separating them with a comma or by providing multiple times the flag.")
 	_ = generateCmd.MarkFlagRequired("structs")
 
 	// validate func flag

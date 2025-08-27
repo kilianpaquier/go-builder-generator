@@ -93,7 +93,7 @@ Flags:
       --package-name string    defines a specific package name instead of '--dest', '-d' directory name. Only available when generating files in another directory
   -p, --prefix string          specific prefix to apply on setter functions
       --return-copy            returns a copy of the builder each time a setter function is called
-  -s, --structs strings        struct names to generate builders on (they must be contained in given input file)
+  -s, --structs strings        struct names to generate builders on (they must be contained in given input file). Multiple elements may be given by separating them with a comma or by providing multiple times the flag.
       --validate-func string   validate function name to be executed in Build, must have the signature 'func () error' and associated to built struct
 
 Global Flags:
