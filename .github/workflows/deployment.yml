@@ -47,7 +47,7 @@ jobs:
     steps:
       - id: conclusion
         if: ${{ github.event_name == 'workflow_dispatch' }}
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           result-encoding: string
           script: |-
@@ -87,13 +87,13 @@ jobs:
       pull-requests: write
       id-token: none
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
       # https://github.com/marketplace/actions/action-for-semantic-release
       - id: semrel_version
         # renovate: datasource=git-refs packageName=https://github.com/cycjimmy/semantic-release-action depName=cycjimmy/semantic-release-action versioning=docker
-        uses: cycjimmy/semantic-release-action@v4
+        uses: cycjimmy/semantic-release-action@v5
         with:
           dry_run: true
           # renovate: datasource=github-tags packageName=semantic-release/semantic-release versioning=docker
@@ -128,8 +128,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: version
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
         with:
           check-latest: true
           go-version-file: go.mod
@@ -167,7 +167,7 @@ jobs:
       pull-requests: write
       id-token: none
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - uses: actions/download-artifact@v5
@@ -177,7 +177,7 @@ jobs:
       # https://github.com/marketplace/actions/action-for-semantic-release
       - id: semrel_version
         # renovate: datasource=git-refs packageName=https://github.com/cycjimmy/semantic-release-action depName=cycjimmy/semantic-release-action versioning=docker
-        uses: cycjimmy/semantic-release-action@v4
+        uses: cycjimmy/semantic-release-action@v5
         with:
           dry_run: ${{ github.event_name == 'workflow_dispatch' && inputs.release != 'release' }}
           # renovate: datasource=github-tags packageName=semantic-release/semantic-release versioning=docker
