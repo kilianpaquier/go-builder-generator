@@ -27,10 +27,8 @@ var (
 			}
 			return nil
 		},
-		Run: func(_ *cobra.Command, args []string) {
-			if err := generate.Run(generateOpts, args); err != nil {
-				logger.Fatal(err)
-			}
+		RunE: func(_ *cobra.Command, args []string) error {
+			return generate.Run(generateOpts, args)
 		},
 	}
 )
