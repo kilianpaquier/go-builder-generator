@@ -48,7 +48,7 @@ func (c CLIOptions) FileRelPath() string {
 		return c.File
 	}
 	file, _ := filepath.Rel(c.Destdir, c.File) // relative path to destdir since RelPath is expected to be called in templates (in destination directory)
-	return strings.ReplaceAll(file, `\`, "/")
+	return filepath.ToSlash(file)
 }
 
 // ToArgs serializes back the input options into its slice of string representation.
