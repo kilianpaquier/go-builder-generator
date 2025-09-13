@@ -1,11 +1,11 @@
-package success_naming
+package testdata
 
 import (
 	net_http "net/http"
 	"net/url"
 )
 
-//go:generate go tool go-builder-generator generate -f types.go -s Naming -d builders
+//go:generate ../../go-builder-generator generate -f types.go -s Naming -d builders
 
 type Naming struct {
 	ACRONYMOUS        string
