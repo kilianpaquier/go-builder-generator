@@ -160,8 +160,8 @@ func hasGenerate(file *ast.File, args []string) bool {
 	options := regexp.QuoteMeta(strings.Join(args, " "))
 
 	rexps := []*regexp.Regexp{
-		regexp.MustCompile(fmt.Sprint(`^//go:generate ([^\s]+)?go-builder-generator generate `, options, "$")),
-		regexp.MustCompile(fmt.Sprint(`^//go:generate go run github\.com/kilianpaquier/go-builder-generator/cmd/go-builder-generator@[^\s]+ generate `, options, "$")),
+		regexp.MustCompile(fmt.Sprint(`^//go:generate (?:\S+)?go-builder-generator generate `, options, "$")),
+		regexp.MustCompile(fmt.Sprint(`^//go:generate go run github\.com/kilianpaquier/go-builder-generator/cmd/go-builder-generator@\S+ generate `, options, "$")),
 		regexp.MustCompile(fmt.Sprint(`^//go:generate go tool go-builder-generator generate `, options, "$")),
 	}
 
