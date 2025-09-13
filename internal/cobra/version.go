@@ -9,7 +9,7 @@ import (
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Show current go-builder-generator version",
-	Run:   func(_ *cobra.Command, _ []string) { logger.Info(build.GetInfo()) },
+	Run:   func(_ *cobra.Command, _ []string) { logger.Info(build.GetInfo().String()) },
 }
 
 func init() {
