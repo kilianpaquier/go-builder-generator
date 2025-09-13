@@ -1,6 +1,6 @@
-package no_dest
+package examples
 
-//go:generate go tool go-builder-generator generate -f types.go -s SomeStruct
+//go:generate ../../go-builder-generator generate -f types.go -s SomeStruct
 
 type SomeAlias int64
 
