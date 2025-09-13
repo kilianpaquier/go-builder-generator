@@ -175,7 +175,7 @@ func parseOptions(astTags *ast.BasicLit) (fieldOpts, error) {
 			}
 
 		default:
-			// ignore invalid option (maybe add an error in the future)
+			errs = append(errs, fmt.Errorf("unknown option '%s'", option))
 		}
 	}
 	return options, errors.Join(errs...)
