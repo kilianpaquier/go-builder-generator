@@ -173,6 +173,9 @@ func parseOptions(astTags *ast.BasicLit) (fieldOpts, error) {
 			if options.FuncName, ok = getOptionValue(option); !ok {
 				errs = append(errs, errors.New("found 'func_name' option but format is invalid, it should be of `func_name=func_name`"))
 			}
+
+		default:
+			// ignore invalid option (maybe add an error in the future)
 		}
 	}
 	return options, errors.Join(errs...)
