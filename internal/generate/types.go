@@ -89,6 +89,10 @@ func (c CLIOptions) ToArgs(name string) []string {
 		args = append(args, "--no-cmd")
 	}
 
+	if c.NoTool {
+		args = append(args, "--no-tool")
+	}
+
 	if c.ReturnCopy {
 		args = append(args, "--return-copy")
 	}
