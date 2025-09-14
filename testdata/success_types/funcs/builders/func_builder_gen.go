@@ -34,7 +34,7 @@ func (b *FuncBuilder) FuncField(funcField func(int64) string) *FuncBuilder {
 }
 
 // FuncFieldAlias sets Func's FuncFieldAlias.
-func (b *FuncBuilder) FuncFieldAlias(funcFieldAlias func(testdata.Int64Alias) string) *FuncBuilder {
+func (b *FuncBuilder) FuncFieldAlias(funcFieldAlias func(...testdata.Int64Alias) string) *FuncBuilder {
 	b.build.FuncFieldAlias = funcFieldAlias
 	return b
 }
