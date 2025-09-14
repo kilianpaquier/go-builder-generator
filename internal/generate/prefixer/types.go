@@ -74,6 +74,10 @@ func NewPrefixer(input ast.Expr) Prefixer {
 	// more operators here https://github.com/golang/go/blob/master/src/go/token/token.go
 	case *ast.UnaryExpr:
 		return &unaryPrefixer{UnaryExpr: expr}
+
+	// field is a ...<some type> (variadic type)
+	case *ast.Ellipsis:
+		return &joinpathPrefixer{Ellipsis: expr}
 	}
 
 	// any other unanticipated types that could exist

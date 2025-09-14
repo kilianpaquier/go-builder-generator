@@ -20,7 +20,7 @@ type Interface struct {
 	AnotherInterface interface {
 		SomeFunc() chan<- Int64Alias
 		SomeOtherFunc(ctx context.Context, c <-chan int64) error
-		AFunc(i Int64Alias) context.Context
+		AFunc(i ...Int64Alias) context.Context
 	}
 }
 

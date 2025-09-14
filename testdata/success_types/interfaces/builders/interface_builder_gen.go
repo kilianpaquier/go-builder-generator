@@ -35,7 +35,7 @@ func (b *InterfaceBuilder) Build() *testdata.Interface {
 func (b *InterfaceBuilder) AnotherInterface(anotherInterface interface {
 	SomeFunc() chan<- testdata.Int64Alias
 	SomeOtherFunc(ctx context.Context, c <-chan int64) error
-	AFunc(i testdata.Int64Alias) context.Context
+	AFunc(i ...testdata.Int64Alias) context.Context
 }) *InterfaceBuilder {
 	b.build.AnotherInterface = anotherInterface
 	return b

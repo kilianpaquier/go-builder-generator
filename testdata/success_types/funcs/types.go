@@ -14,7 +14,7 @@ type Func struct {
 	FuncFieldNamedMultiple           func(in, in2 int64) (out, out2 string)
 	FuncFieldNamedMultipleDuplicated func(in int64, in2 int64) (out string, out2 string)
 
-	FuncFieldAlias         func(Int64Alias) string
+	FuncFieldAlias         func(...Int64Alias) string
 	FuncFieldAliasMultiple func(Int64Alias, FuncAlias) (string, error)
 	FuncFieldNoNames       func(map[string]int, func(Int64Alias)) error
 	FuncFieldAliasNamed    func(in Int64Alias) (out FuncAlias)
