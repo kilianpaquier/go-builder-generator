@@ -30,7 +30,7 @@ func (b *InvalidValidationErrorBuilder) Build() *validator.InvalidValidationErro
 }
 
 // Type sets InvalidValidationError's Type.
-func (b *InvalidValidationErrorBuilder) Type(t reflect.Type) *InvalidValidationErrorBuilder {
-	b.build.Type = t
+func (b *InvalidValidationErrorBuilder) Type(value reflect.Type) *InvalidValidationErrorBuilder {
+	b.build.Type = value
 	return b
 }
