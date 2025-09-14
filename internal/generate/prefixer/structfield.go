@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"go/ast"
+	"strings"
 )
 
 // structFieldPrefixer implements Prefixer for a struct field.
@@ -41,16 +42,18 @@ func (f *structFieldPrefixer) Valid() error {
 // ToString transforms a Prefixer (ast.Expr) into its string representation.
 // It also returns a boolean indicating whether the type is exported.
 func (f *structFieldPrefixer) ToString(sourcePackage string, typeParams []string, prefixes ...string) (_ string, _ bool) {
-	stringType, exported := f.TypePrefixer.ToString(sourcePackage, typeParams, prefixes...)
+	stringType, exportedType := f.TypePrefixer.ToString(sourcePackage, typeParams, prefixes...)
 	tag, _ := f.TagPrefixer.ToString("", nil)
 
-	if len(f.Names) > 0 {
-		// for an anonymous struct, exported means the field name
-		// starts with an uppercase and the string type is exported too
-		exported = exported && ast.IsExported(f.Names[0].Name)
-		return fmt.Sprint(f.Names[0].Name, " ", stringType, tag), exported
+	exported := exportedType // if the type is not exported, then the structfield is not exported even if names are exported
+	names := make([]string, 0, len(f.Names))
+	for _, name := range f.Names {
+		// unexport the whole structfield if at least one of its fields is not
+		// i.e. anonymous struct{ Start, end time.Time } cannot be used outside of its own package
+		if !ast.IsExported(name.Name) {
+			exported = false
+		}
+		names = append(names, fmt.Sprint(name, " ", stringType, tag))
 	}
-
-	// this case shouldn't happen since we're in a struct{}
-	return "", false
+	return strings.Join(names, "\n"), exported
 }

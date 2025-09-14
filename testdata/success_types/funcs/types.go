@@ -7,10 +7,12 @@ type Int64Alias int64
 type FuncAlias func()
 
 type Func struct {
-	FuncField         func(int64) string
-	FuncFieldCResult  func(int64, string) (func(), error)
-	FuncFieldMultiple func(int64, string) (string, error)
-	FuncFieldNamed    func(in int64) (out string)
+	FuncField                        func(int64) string
+	FuncFieldCResult                 func(int64, string) (func(), error)
+	FuncFieldMultiple                func(int64, string) (string, error)
+	FuncFieldNamed                   func(in int64) (out string)
+	FuncFieldNamedMultiple           func(in, in2 int64) (out, out2 string)
+	FuncFieldNamedMultipleDuplicated func(in int64, in2 int64) (out string, out2 string)
 
 	FuncFieldAlias         func(Int64Alias) string
 	FuncFieldAliasMultiple func(Int64Alias, FuncAlias) (string, error)

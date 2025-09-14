@@ -15,17 +15,17 @@ import (
 )
 
 // parseField parses and returns the struct field associated to input ast field.
-func parseField(astField *ast.Field, sourcePackage string, typeParams []string) (field, error) {
+func parseField(astField *ast.Field, sourcePackage string, typeParams []string) ([]field, error) {
 	// parse field tags
 	options, err := parseOptions(astField.Tag)
 	if err != nil {
-		return field{}, fmt.Errorf("field '%v' options parsing: %w", astField.Names, err)
+		return nil, fmt.Errorf("field '%v' options parsing: %w", astField.Names, err)
 	}
 
 	// retrieve typePrefixer for field type
 	typePrefixer := prefixer.NewPrefixer(astField.Type)
 	if err := typePrefixer.Valid(); err != nil {
-		return field{}, fmt.Errorf("field '%v' validation: %w", astField.Names, err)
+		return nil, fmt.Errorf("field '%v' validation: %w", astField.Names, err)
 	}
 
 	// retrieve computed string type
@@ -57,37 +57,50 @@ func parseField(astField *ast.Field, sourcePackage string, typeParams []string) 
 		alteredType = strings.TrimPrefix(alteredType, prefixer.Star)
 	}
 
-	fieldName := func() string {
-		// returning name if it exists
-		if len(astField.Names) > 0 {
-			return astField.Names[0].Name
+	fields := make([]field, 0, len(astField.Names))
+	for _, name := range astField.Names {
+		// check field export and ignore option in case generation is done in another package
+		exported := typeExported && ast.IsExported(name.Name)
+		if sourcePackage != "" && !exported {
+			options.Ignore = true
 		}
+		fields = append(fields, field{
+			AlteredType: alteredType,
+			Exported:    exported,
+			InitialType: initialType,
+			Name:        name.Name,
+			ParamName:   paramName(name.Name),
 
+			Opts: options,
+		})
+	}
+
+	if len(fields) == 0 {
 		// handle composition fields (mainly those)
 		// first split type into package + real type
 		split := strings.Split(alteredType, ".")
 		// returning last element to cover two cases:
 		// when altered type is a type from other package (sourcePackage would be false)
 		// when altered type is a type from the same package (sourcePackage would be true)
-		return split[len(split)-1]
-	}()
+		fieldName := split[len(split)-1]
 
-	// check field export and ignore option in case generation is done in another package
-	exported := typeExported && ast.IsExported(fieldName)
-	if sourcePackage != "" && !exported {
-		options.Ignore = true
+		// check field export and ignore option in case generation is done in another package
+		exported := typeExported && ast.IsExported(fieldName)
+		if sourcePackage != "" && !exported {
+			options.Ignore = true // don't affect directly in case an exported field was ignored
+		}
+
+		fields = append(fields, field{
+			AlteredType: alteredType,
+			Exported:    exported,
+			InitialType: initialType,
+			Name:        fieldName,
+			ParamName:   paramName(fieldName),
+
+			Opts: options,
+		})
 	}
-
-	// returning field with computed types and options
-	return field{
-		AlteredType: alteredType,
-		Exported:    exported,
-		InitialType: initialType,
-		Name:        fieldName,
-		ParamName:   paramName(fieldName),
-
-		Opts: options,
-	}, nil
+	return fields, nil
 }
 
 // paramName computes the parameter name for a function associated with the input fieldName.

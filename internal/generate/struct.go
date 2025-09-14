@@ -71,18 +71,20 @@ func parseStruct(typeSpec *ast.TypeSpec, structType *ast.StructType, data packag
 	// compute all fields associated to builder
 	builder.Fields = make([]field, 0, len(structType.Fields.List))
 	for _, astField := range structType.Fields.List {
-		field, err := parseField(astField, data.SourceName, genericNames)
+		// one field may hide multiple fields (because definition for a same type was made inline, i.e. 'Start, End time.Time')
+		fields, err := parseField(astField, data.SourceName, genericNames)
 		if err != nil {
 			errs = append(errs, err)
 			continue
 		}
 
-		// move up default_func option one function could be use for multiple fields
-		if field.Opts.DefaultFunc != "" && !slices.Contains(builder.DefaultFuncs, field.Opts.DefaultFunc) {
-			builder.DefaultFuncs = append(builder.DefaultFuncs, field.Opts.DefaultFunc)
+		for _, field := range fields {
+			// move up default_func option one function could be use for multiple fields
+			if field.Opts.DefaultFunc != "" && !slices.Contains(builder.DefaultFuncs, field.Opts.DefaultFunc) {
+				builder.DefaultFuncs = append(builder.DefaultFuncs, field.Opts.DefaultFunc)
+			}
+			builder.Fields = append(builder.Fields, field)
 		}
-
-		builder.Fields = append(builder.Fields, field)
 	}
 
 	// sort fields to have the same generation even if fields order change

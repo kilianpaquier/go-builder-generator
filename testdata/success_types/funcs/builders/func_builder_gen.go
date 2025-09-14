@@ -75,6 +75,18 @@ func (b *FuncBuilder) FuncFieldNamed(funcFieldNamed func(in int64) (out string))
 	return b
 }
 
+// FuncFieldNamedMultiple sets Func's FuncFieldNamedMultiple.
+func (b *FuncBuilder) FuncFieldNamedMultiple(funcFieldNamedMultiple func(in, in2 int64) (out, out2 string)) *FuncBuilder {
+	b.build.FuncFieldNamedMultiple = funcFieldNamedMultiple
+	return b
+}
+
+// FuncFieldNamedMultipleDuplicated sets Func's FuncFieldNamedMultipleDuplicated.
+func (b *FuncBuilder) FuncFieldNamedMultipleDuplicated(funcFieldNamedMultipleDuplicated func(in int64, in2 int64) (out string, out2 string)) *FuncBuilder {
+	b.build.FuncFieldNamedMultipleDuplicated = funcFieldNamedMultipleDuplicated
+	return b
+}
+
 // FuncFieldNoNames sets Func's FuncFieldNoNames.
 func (b *FuncBuilder) FuncFieldNoNames(funcFieldNoNames func(map[string]int, func(testdata.Int64Alias)) error) *FuncBuilder {
 	b.build.FuncFieldNoNames = funcFieldNoNames

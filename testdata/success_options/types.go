@@ -22,6 +22,8 @@ type Options struct {
 	SliceFieldPtrAppend   *[]int64     `builder:"append,pointer"` // should be the same as below
 	SliceFieldNoPtrAppend *[]int64     `builder:"append"`         // should be the same as above
 
+	SharedFuncA, SharedFuncB string `builder:"default_func=SharedFunc"`
+
 	ForceFuncName                string `builder:"func_name=FooBarForced"`
 	ForceFuncNameWithDefaultFunc string `builder:"func_name=FooBarForceWithDefault,default_func=SetDefaultForceFuncName"`
 
