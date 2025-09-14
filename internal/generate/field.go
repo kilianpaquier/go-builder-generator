@@ -115,13 +115,9 @@ func paramName(fieldName string) string {
 	if strings.ToUpper(fieldName) == fieldName {
 		return strings.ToLower(fieldName)
 	}
-
-	// transform into camel case
 	initial := xstrings.ToCamelCase(fieldName)
 
-	// handle builtin reserved keywords or functions
-	// a fieldName being 'Any' would give an initial 'any' and as such the paramName will be 'a'
-	// it's not optimal but at least it works
+	// handle builtin reserved keywords, functions and types
 	if slices.Contains(slices.Concat(models.Builtin(), models.PrimaryTypes()), initial) {
 		return "value"
 	}
