@@ -27,8 +27,8 @@ var (
 			}
 			return nil
 		},
-		RunE: func(_ *cobra.Command, args []string) error {
-			return generate.Run(generateOpts, args)
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return generate.Run(cmd.Context(), generateOpts, args)
 		},
 	}
 )
