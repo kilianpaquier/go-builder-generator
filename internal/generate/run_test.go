@@ -17,6 +17,7 @@ import (
 )
 
 func TestRun_Errors(t *testing.T) {
+	ctx := t.Context()
 	pwd, _ := os.Getwd()
 	testdata := filepath.Join(pwd, "..", "..", "testdata")
 
@@ -35,7 +36,7 @@ func TestRun_Errors(t *testing.T) {
 		}
 
 		// Act
-		err := generate.Run(options, nil)
+		err := generate.Run(ctx, options, nil)
 
 		// Assert
 		assert.ErrorContains(t, err, "find src go.mod: no parent go.mod found")
@@ -43,7 +44,7 @@ func TestRun_Errors(t *testing.T) {
 
 	t.Run("error_no_dest_gomod", func(t *testing.T) {
 		// Act
-		err := generate.Run(generate.CLIOptions{Destdir: t.TempDir()}, nil)
+		err := generate.Run(ctx, generate.CLIOptions{Destdir: t.TempDir()}, nil)
 
 		// Assert
 		assert.ErrorContains(t, err, "find dest go.mod: no parent go.mod found")
@@ -57,7 +58,7 @@ func TestRun_Errors(t *testing.T) {
 		require.NoError(t, file.Close())
 
 		// Act
-		err = generate.Run(generate.CLIOptions{Destdir: destdir}, nil)
+		err = generate.Run(ctx, generate.CLIOptions{Destdir: destdir}, nil)
 
 		// Assert
 		assert.ErrorIs(t, err, generate.ErrMissingModule)
@@ -69,7 +70,7 @@ func TestRun_Errors(t *testing.T) {
 		require.NoError(t, os.WriteFile(filepath.Join(destdir, "go.mod"), []byte("module test"), files.RwRR))
 
 		// Act
-		err := generate.Run(generate.CLIOptions{Destdir: destdir}, nil)
+		err := generate.Run(ctx, generate.CLIOptions{Destdir: destdir}, nil)
 
 		// Assert
 		assert.ErrorIs(t, err, generate.ErrMissingGo)
@@ -87,7 +88,7 @@ func TestRun_Errors(t *testing.T) {
 		}
 
 		// Act
-		err := generate.Run(options, nil)
+		err := generate.Run(ctx, options, nil)
 
 		// Assert
 		assert.ErrorContains(t, err, "parse file")
@@ -105,7 +106,7 @@ func TestRun_Errors(t *testing.T) {
 		}
 
 		// Act
-		err := generate.Run(options, nil)
+		err := generate.Run(ctx, options, nil)
 
 		// Assert
 		assert.ErrorContains(t, err, "missing module name 'github.com/jarcoal/httpmock/match.go")
@@ -148,7 +149,7 @@ func TestRun_Errors(t *testing.T) {
 				}
 
 				// Act
-				err := generate.Run(options, nil)
+				err := generate.Run(ctx, options, nil)
 
 				// Assert
 				for _, contain := range tc.ErrContains {
@@ -160,6 +161,7 @@ func TestRun_Errors(t *testing.T) {
 }
 
 func TestRun_Types(t *testing.T) {
+	ctx := t.Context()
 	pwd, _ := os.Getwd()
 	testdata := filepath.Join(pwd, "..", "..", "testdata")
 
@@ -281,7 +283,7 @@ func TestRun_Types(t *testing.T) {
 			tc.CLIOptions.File = filepath.Join(destdir, types)
 
 			// Act
-			err := generate.Run(tc.CLIOptions, nil)
+			err := generate.Run(ctx, tc.CLIOptions, nil)
 
 			// Assert
 			assert.NoError(t, err)
@@ -291,6 +293,7 @@ func TestRun_Types(t *testing.T) {
 }
 
 func TestRun_Module(t *testing.T) {
+	ctx := t.Context()
 	pwd, _ := os.Getwd()
 	testdata := filepath.Join(pwd, "..", "..", "testdata")
 
@@ -315,6 +318,14 @@ func TestRun_Module(t *testing.T) {
 			},
 		},
 		{
+			DirName: path.Join("success_module", "std"),
+			CLIOptions: generate.CLIOptions{
+				File:    "std::go/build/build.go",
+				NoCMD:   true,
+				Structs: []string{"Context"},
+			},
+		},
+		{
 			DirName: path.Join("success_module", "subdirectory"),
 			CLIOptions: generate.CLIOptions{
 				File:    "module::github.com/stretchr/testify/mock/mock.go",
@@ -336,7 +347,7 @@ func TestRun_Module(t *testing.T) {
 			tc.CLIOptions.Destdir = filepath.Join(destdir, "builders")
 
 			// Act
-			err := generate.Run(tc.CLIOptions, nil)
+			err := generate.Run(ctx, tc.CLIOptions, nil)
 
 			// Assert
 			assert.NoError(t, err)
@@ -346,6 +357,7 @@ func TestRun_Module(t *testing.T) {
 }
 
 func TestRun_Package(t *testing.T) {
+	ctx := t.Context()
 	pwd, _ := os.Getwd()
 	testdata := filepath.Join(pwd, "..", "..", "testdata")
 
@@ -381,7 +393,7 @@ func TestRun_Package(t *testing.T) {
 			tc.CLIOptions.File = filepath.Join(destdir, "types.go")
 
 			// Act
-			err := generate.Run(tc.CLIOptions, tc.CLIOptions.ToArgs("")[2:])
+			err := generate.Run(ctx, tc.CLIOptions, tc.CLIOptions.ToArgs("")[2:])
 
 			// Assert
 			assert.NoError(t, err)

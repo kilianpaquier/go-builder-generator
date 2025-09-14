@@ -1,6 +1,7 @@
 package generate
 
 import (
+	"context"
 	"embed"
 	"errors"
 	"fmt"
@@ -8,7 +9,6 @@ import (
 	"go/token"
 	"path"
 	"path/filepath"
-	"strings"
 
 	"github.com/huandu/xstrings"
 
@@ -19,7 +19,7 @@ import (
 var tmpl embed.FS
 
 // Run runs the builder generation with input options.
-func Run(options CLIOptions, args []string) error {
+func Run(ctx context.Context, options CLIOptions, args []string) error {
 	// force first rune to lowercase in case of unexported types
 	// it will be titled in gen template in case the type is exported
 	options.Prefix = xstrings.FirstRuneToLower(options.Prefix)
@@ -36,20 +36,13 @@ func Run(options CLIOptions, args []string) error {
 		return fmt.Errorf("find dest go.mod: %w", err)
 	}
 
-	// retrieve source full path (specific since src can use "module::" specific key)
-	src, err := func() (string, error) {
-		if !strings.HasPrefix(options.File, modulePrefix) {
-			return filepath.Abs(options.File)
-		}
-
-		p, err := modulePath(destfile, options.File)
-		if err != nil {
-			return "", err
-		}
-		return filepath.Abs(p)
-	}()
+	// retrieve source full path (specific since src can use "module::" or "std::" specific key)
+	src, err := modulePath(ctx, destfile, options.File)
 	if err != nil {
-		return err
+		return fmt.Errorf("find module path: %w", err)
+	}
+	if src, err = filepath.Abs(src); err != nil {
+		return fmt.Errorf("absolute path: %w", err)
 	}
 	srcdir := filepath.Dir(src)
 
@@ -72,12 +65,10 @@ func Run(options CLIOptions, args []string) error {
 	}
 	imports = append(imports, fileImport(srcfile, srcpkg))
 
-	sourcePackage, destPackage := func() (string, string) {
-		if destdir == srcdir {
-			return "", file.Name.String()
-		}
-		return file.Name.String(), filepath.Base(destdir)
-	}()
+	sourcePackage, destPackage := file.Name.String(), filepath.Base(destdir)
+	if destdir == srcdir {
+		sourcePackage, destPackage = "", file.Name.String()
+	}
 
 	var errs []error
 

@@ -1,11 +1,13 @@
 package generate
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"go/ast"
 	"go/version"
 	"os"
+	"os/exec"
 	"path"
 	"path/filepath"
 	"regexp"
@@ -29,28 +31,52 @@ var (
 	ErrNilMod = errors.New("nil go.mod")
 )
 
-const modulePrefix = "module::"
+const (
+	modulePrefix = "module::"
+	stdPrefix    = "std::"
+)
 
 // modulePath finds the appropriate required in modfile for the input module name
 // and returns its path in the current filesystem.
-func modulePath(file *modfile.File, moduleName string) (string, error) {
-	require := strings.TrimPrefix(moduleName, modulePrefix)
+func modulePath(ctx context.Context, file *modfile.File, moduleName string) (string, error) {
+	// find required in go/src since it's prefixed by "std::"
+	if require, ok := strings.CutPrefix(moduleName, stdPrefix); ok {
+		if root := os.Getenv("GOROOT"); root != "" {
+			return filepath.Join(root, "src", require), nil
+		}
 
-	module, err := findRequire(file, require)
-	if err != nil {
-		return "", err
+		// runtime.GOROOT() being deprecated, the only way to get GOROOT is by retrieving it from 'go env' command
+		output, err := exec.CommandContext(ctx, "go", "env", "GOROOT").CombinedOutput()
+		if err == nil {
+			return filepath.Join(strings.TrimSpace(string(output)), "src", require), nil
+		}
+		if len(output) > 0 {
+			return "", fmt.Errorf("get 'GOROOT' through 'go env GOROOT': %s: %w", string(output), err)
+		}
+		return "", fmt.Errorf("get 'GOROOT' through 'go env GOROOT': %w", err)
 	}
 
-	if modcache := os.Getenv("GOMODCACHE"); modcache != "" {
-		return filepath.Join(modcache, module), nil
+	// find require in go.mod file since it's prefixed by "module::"
+	if require, ok := strings.CutPrefix(moduleName, modulePrefix); ok {
+		module, err := findRequire(file, require)
+		if err != nil {
+			return "", err
+		}
+
+		if modcache := os.Getenv("GOMODCACHE"); modcache != "" {
+			return filepath.Join(modcache, module), nil
+		}
+
+		if gopath := os.Getenv("GOPATH"); gopath != "" {
+			return filepath.Join(gopath, "pkg", "mod", module), nil
+		}
+
+		home, _ := os.UserHomeDir()
+		return filepath.Join(home, "go", "pkg", "mod", module), nil
 	}
 
-	if gopath := os.Getenv("GOPATH"); gopath != "" {
-		return filepath.Join(gopath, "pkg", "mod", module), nil
-	}
-
-	home, _ := os.UserHomeDir()
-	return filepath.Join(home, "go", "pkg", "mod", module), nil
+	// no require to find since it should be a local module file
+	return moduleName, nil
 }
 
 // getImports returns the slice of imports associated to input ast file (it takes care of alias'ed imports).
@@ -137,12 +163,11 @@ func fileImport(file *modfile.File, pkg string) string {
 
 	// when working with std package, go doesn't add the go.mod module name to the import
 	if m.Mod.Path == "std" {
-		return pkg
+		return fmt.Sprint(`"`, pkg, `"`)
 	}
 
 	// when working with a standard go module, the package name is prefixed with the module name from where it comes
-	i := path.Join(m.Mod.Path, pkg)
-	return fmt.Sprint(`"`, i, `"`)
+	return fmt.Sprint(`"`, path.Join(m.Mod.Path, pkg), `"`)
 }
 
 // toolAvailable returns truthy when given modfile go version is above or equal to go1.24.
