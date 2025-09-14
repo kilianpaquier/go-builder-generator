@@ -1,3 +1,32 @@
+## [1.10.0](https://github.com/kilianpaquier/go-builder-generator/compare/v1.9.11...v1.10.0) (2025-09-14)
+
+### Features
+
+* **ast:** handle variadic fields (i.e `func(...string)`) ([d85e329](https://github.com/kilianpaquier/go-builder-generator/commit/d85e329a7a36d96a6a3db086a80482f8e0dedfc5))
+* **std:** handle stdlib builders with "std::" prefix like "module::" (i.e. `-f std::go/build/build.go -s Context`) ([5354982](https://github.com/kilianpaquier/go-builder-generator/commit/5354982cc45444fee981e3e2ece4f15394b8d3fe))
+* **struct:** handle inline type definitions (i.e. `struct{ Start, End time.Time }` or even `func(in, in2 int64) (out, out2 string)`) ([49a728b](https://github.com/kilianpaquier/go-builder-generator/commit/49a728b1422bee1e4921dbbb837f78c5e8010ee9))
+
+### Bug Fixes
+
+* **builtin:** handle correctly inputs names with direct builtin types ([ac83682](https://github.com/kilianpaquier/go-builder-generator/commit/ac83682a022327169669661d21c69bd208cd8b6d))
+* **cmd:** add missing --no-tool arg in cmd in generated files ([4904a38](https://github.com/kilianpaquier/go-builder-generator/commit/4904a38d35602bffb39649008245fa6505a8ea22))
+* **options:** return an error on unknown option ([1200f0a](https://github.com/kilianpaquier/go-builder-generator/commit/1200f0a98a440ca50228f9b8c1254c48d7827471))
+
+### Documentation
+
+* **std:** add example and README path ([3a83898](https://github.com/kilianpaquier/go-builder-generator/commit/3a83898e9642dfb69edc7bf0b5940eb400d73773))
+
+### Chores
+
+* **deps:** remove dependency for charmbracelet/log to avoid adding too many dependencies with go tool imports ([9a43808](https://github.com/kilianpaquier/go-builder-generator/commit/9a43808a13a0004b6997be9f8b6cbce6a636a5d3))
+* **examples:** change examples names ([6560c90](https://github.com/kilianpaquier/go-builder-generator/commit/6560c909f78882ede8297e7bccb2c20e9b657d6b))
+* **regexp:** invert anti-spaces char to its right char ([14a3e20](https://github.com/kilianpaquier/go-builder-generator/commit/14a3e208edbfa7d3dd047d36adb882eaee52e0ce))
+* **slash:** change strings replace to filepath toslash ([ece1170](https://github.com/kilianpaquier/go-builder-generator/commit/ece1170f2a2696734ff487237fe48a0d208edb39))
+
+### Code Refactoring
+
+* **testdata:** rework testdata to avoid generation differences when running `make testdata` with `make test` ([0f71415](https://github.com/kilianpaquier/go-builder-generator/commit/0f71415b30317abe69169cda3a664e371cb8111f))
+
 ## [1.9.11](https://github.com/kilianpaquier/go-builder-generator/compare/v1.9.10...v1.9.11) (2025-08-27)
 
 ### Documentation
