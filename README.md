@@ -194,6 +194,10 @@ To find the appropriate file, `go-builder-generator` will check in the following
 - `GOROOT` environment variable to retrieve the path to Golang root directory, the computed path will be `${GOROOT}/src/<path provided avec std::>`
 - Run `go env GOROOT` to retrieve computed `GOROOT` from Golang directly, the computed path will be `${go env GOROOT}/src/<path provided avec std::>`
 
+```go
+//go:generate go tool go-builder-generator generate -f std::go/build/build.go -s Context -d builders
+```
+
 You may see the [examples](./examples/) folder for real generation cases.
 
 ## Contributing
