@@ -26,11 +26,11 @@ func (f *funcPrefixer) Valid() error {
 
 	editor := func(field *ast.Field) editor {
 		return func(stringType string, exported bool) (string, bool) {
-			var name string
-			if len(field.Names) > 0 {
-				name = field.Names[0].Name + " "
+			names := make([]string, 0, len(field.Names))
+			for _, name := range field.Names {
+				names = append(names, name.Name)
 			}
-			return name + stringType, exported
+			return strings.Join(names, ", ") + " " + stringType, exported
 		}
 	}
 

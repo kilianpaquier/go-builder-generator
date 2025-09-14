@@ -6,6 +6,7 @@ package builders
 
 import (
 	"context"
+	"time"
 
 	"github.com/kilianpaquier/go-builder-generator/testdata"
 )
@@ -42,5 +43,44 @@ func (b *StructBuilder) AnotherStruct(anotherStruct struct {
 	Alias     testdata.Int64Alias
 }) *StructBuilder {
 	b.build.AnotherStruct = anotherStruct
+	return b
+}
+
+// ExportedA sets Struct's ExportedA.
+func (b *StructBuilder) ExportedA(exportedA struct {
+	ExportedA testdata.Int64Alias
+	ExportedB testdata.Int64Alias
+}) *StructBuilder {
+	b.build.ExportedA = exportedA
+	return b
+}
+
+// ExportedC sets Struct's ExportedC.
+func (b *StructBuilder) ExportedC(exportedC struct {
+	ExportedA testdata.Int64Alias
+	ExportedB testdata.Int64Alias
+}) *StructBuilder {
+	b.build.ExportedC = exportedC
+	return b
+}
+
+// ExportedD sets Struct's ExportedD.
+func (b *StructBuilder) ExportedD(exportedD struct {
+	ExportedA testdata.Int64Alias
+	ExportedB testdata.Int64Alias
+}) *StructBuilder {
+	b.build.ExportedD = exportedD
+	return b
+}
+
+// TimeA sets Struct's TimeA.
+func (b *StructBuilder) TimeA(timeA time.Time) *StructBuilder {
+	b.build.TimeA = timeA
+	return b
+}
+
+// TimeB sets Struct's TimeB.
+func (b *StructBuilder) TimeB(timeB time.Time) *StructBuilder {
+	b.build.TimeB = timeB
 	return b
 }

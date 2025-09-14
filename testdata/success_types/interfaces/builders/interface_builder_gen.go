@@ -40,3 +40,19 @@ func (b *InterfaceBuilder) AnotherInterface(anotherInterface interface {
 	b.build.AnotherInterface = anotherInterface
 	return b
 }
+
+// InterfaceA sets Interface's InterfaceA.
+func (b *InterfaceBuilder) InterfaceA(interfaceA interface {
+	AFunc()
+}) *InterfaceBuilder {
+	b.build.InterfaceA = interfaceA
+	return b
+}
+
+// InterfaceB sets Interface's InterfaceB.
+func (b *InterfaceBuilder) InterfaceB(interfaceB interface {
+	AFunc()
+}) *InterfaceBuilder {
+	b.build.InterfaceB = interfaceB
+	return b
+}

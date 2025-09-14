@@ -27,7 +27,7 @@ func (b *OptionsBuilder) Copy() *OptionsBuilder {
 
 // Build returns built Options.
 func (b *OptionsBuilder) Build() (*testdata.Options, error) {
-	b = b.GetDefaultString().GetDefaultContext().SetDefaultForceFuncName()
+	b = b.GetDefaultString().GetDefaultContext().SharedFunc().SetDefaultForceFuncName()
 
 	result := b.build
 	if err := result.Validate(); err != nil {
@@ -68,6 +68,20 @@ func (b *OptionsBuilder) SetPtrField(ptrField *string) *OptionsBuilder {
 func (b *OptionsBuilder) SetPtrFieldValidatedToo(ptrFieldValidatedToo string) *OptionsBuilder {
 	b = b.Copy()
 	b.build.PtrFieldValidatedToo = &ptrFieldValidatedToo
+	return b
+}
+
+// SetSharedFuncA sets Options's SharedFuncA.
+func (b *OptionsBuilder) SetSharedFuncA(sharedFuncA string) *OptionsBuilder {
+	b = b.Copy()
+	b.build.SharedFuncA = sharedFuncA
+	return b
+}
+
+// SetSharedFuncB sets Options's SharedFuncB.
+func (b *OptionsBuilder) SetSharedFuncB(sharedFuncB string) *OptionsBuilder {
+	b = b.Copy()
+	b.build.SharedFuncB = sharedFuncB
 	return b
 }
 

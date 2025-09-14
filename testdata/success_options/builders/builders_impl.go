@@ -28,6 +28,12 @@ func (b *OptionsBuilder) GetDefaultContext() *OptionsBuilder {
 	return b
 }
 
+// SharedFunc will be executed during Build function. It allows defining
+// some fields of Options at the end of builder in case those would depend on other fields.
+func (b *OptionsBuilder) SharedFunc() *OptionsBuilder {
+	return b
+}
+
 // SetDefaultForceFuncName will be executed during Build function. It allows defining
 // some fields of Options at the end of builder in case those would depend on other fields.
 func (b *OptionsBuilder) SetDefaultForceFuncName() *OptionsBuilder {

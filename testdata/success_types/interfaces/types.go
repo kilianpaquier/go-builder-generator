@@ -13,6 +13,10 @@ type Interface struct {
 		privateFunc() Int64Alias
 	}
 
+	InterfaceA, InterfaceB interface {
+		AFunc()
+	}
+
 	AnotherInterface interface {
 		SomeFunc() chan<- Int64Alias
 		SomeOtherFunc(ctx context.Context, c <-chan int64) error
