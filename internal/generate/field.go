@@ -107,10 +107,10 @@ func paramName(fieldName string) string {
 	initial := xstrings.ToCamelCase(fieldName)
 
 	// handle builtin reserved keywords or functions
-	// a fieldName being 'Any' would give an initial 'any' and as such the paramName would be 'a'
+	// a fieldName being 'Any' would give an initial 'any' and as such the paramName will be 'a'
 	// it's not optimal but at least it works
-	if slices.Contains(models.Builtin(), initial) {
-		return string(initial[0])
+	if slices.Contains(slices.Concat(models.Builtin(), models.PrimaryTypes()), initial) {
+		return "value"
 	}
 
 	// for all other names, keep initial value which is camelCase format

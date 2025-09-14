@@ -1,6 +1,8 @@
 package generate_test
 
 import (
+	"fmt"
+	"io"
 	"os"
 	"path"
 	"path/filepath"
@@ -166,6 +168,14 @@ func TestRun_Types(t *testing.T) {
 		DirName    string
 	}{
 		{
+			DirName: path.Join("success_types", "builtin"),
+			CLIOptions: generate.CLIOptions{
+				File:    filepath.Join("pkg", "types.go"),
+				NoCMD:   true,
+				Structs: []string{"Builtin"},
+			},
+		},
+		{
 			DirName: path.Join("success_types", "channels"),
 			CLIOptions: generate.CLIOptions{
 				NoCMD:   true,
@@ -254,16 +264,21 @@ func TestRun_Types(t *testing.T) {
 	} {
 		t.Run(tc.DirName, func(t *testing.T) {
 			// Arrange
+			types := tc.CLIOptions.File
+			if types == "" {
+				types = "types.go"
+			}
 			srcdir := filepath.Join(testdata, tc.DirName)
-			assertdir := filepath.Join(srcdir, "builders")
+			assertdir := filepath.Join(srcdir, filepath.Dir(types), "builders")
 
 			destdir := t.TempDir()
-			for _, file := range []string{"go.mod", "types.go"} {
-				err := files.Copy(filepath.Join(srcdir, file), filepath.Join(destdir, file))
+			for _, file := range []string{"go.mod", types} {
+				require.NoError(t, os.MkdirAll(filepath.Join(destdir, filepath.Dir(file)), files.RwxRxRxRx))
+				err := copyFile(filepath.Join(srcdir, file), filepath.Join(destdir, file))
 				require.NoError(t, err)
 			}
-			tc.CLIOptions.Destdir = filepath.Join(destdir, "builders")
-			tc.CLIOptions.File = filepath.Join(destdir, "types.go")
+			tc.CLIOptions.Destdir = filepath.Join(destdir, filepath.Dir(types), "builders")
+			tc.CLIOptions.File = filepath.Join(destdir, types)
 
 			// Act
 			err := generate.Run(tc.CLIOptions, nil)
@@ -314,8 +329,8 @@ func TestRun_Module(t *testing.T) {
 			assertdir := filepath.Join(srcdir, "builders")
 
 			destdir := t.TempDir()
-			for _, file := range []string{"go.mod", "go.sum", "types.go"} {
-				err := files.Copy(filepath.Join(srcdir, file), filepath.Join(destdir, file))
+			for _, file := range []string{"go.mod", "go.sum"} {
+				err := copyFile(filepath.Join(srcdir, file), filepath.Join(destdir, file))
 				require.NoError(t, err)
 			}
 			tc.CLIOptions.Destdir = filepath.Join(destdir, "builders")
@@ -360,7 +375,7 @@ func TestRun_Package(t *testing.T) {
 			destdir := t.TempDir()
 			tc.CLIOptions.Destdir = destdir
 			for _, file := range []string{"go.mod", "types.go"} {
-				err := files.Copy(filepath.Join(assertdir, file), filepath.Join(destdir, file))
+				err := copyFile(filepath.Join(assertdir, file), filepath.Join(destdir, file))
 				require.NoError(t, err)
 			}
 			tc.CLIOptions.File = filepath.Join(destdir, "types.go")
@@ -373,4 +388,30 @@ func TestRun_Package(t *testing.T) {
 			assert.NoError(t, compare.Dirs(assertdir, tc.CLIOptions.Destdir))
 		})
 	}
+}
+
+// copyFile copies a provided file from src to dest with a default permission of 0o644. It fails if it's a directory.
+func copyFile(src, dst string) error {
+	sfile, err := os.Open(src)
+	if err != nil {
+		return fmt.Errorf("open: %w", err)
+	}
+	defer sfile.Close()
+
+	dfile, err := os.Create(dst)
+	if err != nil {
+		return fmt.Errorf("create: %w", err)
+	}
+	defer dfile.Close()
+
+	// copy buffer from src to dest
+	if _, err := io.Copy(dfile, sfile); err != nil {
+		return fmt.Errorf("copy: %w", err)
+	}
+
+	// update dest permissions
+	if err := dfile.Chmod(files.RwRR); err != nil {
+		return fmt.Errorf("chmod: %w", err)
+	}
+	return nil
 }

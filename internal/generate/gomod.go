@@ -53,11 +53,8 @@ func modulePath(file *modfile.File, moduleName string) (string, error) {
 	return filepath.Join(home, "go", "pkg", "mod", module), nil
 }
 
-// getImports returns the slice of imports associated to input ast file.
-//
-// If srcdir and destdir are different, it will search for the first go.mod in parent folders to retrieve the module name.
+// getImports returns the slice of imports associated to input ast file (it takes care of alias'ed imports).
 func getImports(file *ast.File) ([]string, error) {
-	// get file imports as string
 	imports := make([]string, 0, len(file.Imports))
 	for _, item := range file.Imports {
 		if item.Name != nil {

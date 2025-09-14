@@ -1,8 +1,6 @@
 package files
 
 import (
-	"fmt"
-	"io"
 	"io/fs"
 	"os"
 )
@@ -29,30 +27,4 @@ const (
 func Exists(src string) bool {
 	_, err := os.Stat(src)
 	return err == nil
-}
-
-// Copy copies a provided file from src to dest with a default permission of 0o644. It fails if it's a directory.
-func Copy(src, dst string) error {
-	sfile, err := os.Open(src)
-	if err != nil {
-		return fmt.Errorf("open: %w", err)
-	}
-	defer sfile.Close()
-
-	dfile, err := os.Create(dst)
-	if err != nil {
-		return fmt.Errorf("create: %w", err)
-	}
-	defer dfile.Close()
-
-	// copy buffer from src to dest
-	if _, err := io.Copy(dfile, sfile); err != nil {
-		return fmt.Errorf("copy: %w", err)
-	}
-
-	// update dest permissions
-	if err := dfile.Chmod(RwRR); err != nil {
-		return fmt.Errorf("chmod: %w", err)
-	}
-	return nil
 }
