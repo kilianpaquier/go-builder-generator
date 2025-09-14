@@ -23,6 +23,7 @@
   - [Simple struct](#simple-struct)
   - [Generic struct](#generic-struct)
   - [Imported module struct](#imported-module-struct)
+  - [Standard library module struct](#standard-library-module-struct)
 - [Contributing](#contributing)
 
 ## How to use ?
@@ -168,10 +169,12 @@ type GenericFieldStruct struct {
 
 ### Imported module struct
 
-In case it's needed to generate a builder on a struct not being one of the current module, it's possible to provide the `module::` prefix to tell `go-builder-generator` to generate the struct from an **imported** module.
+In case it's needed to generate a builder on a struct not being one of the current module,
+one may provide the `module::` prefix to tell `go-builder-generator` to generate the struct from an **imported** module.
 The provided module must be imported in the current module `go.mod`.
 
-This case works with both simple structs and generic structs. Under the hood, `go-builder-generator` will retrieve the appropriate version from the current module `go.mod` (it works with `replace` too)
+This case works with both simple structs and generic structs. Under the hood, `go-builder-generator`
+will retrieve the appropriate version from the current module `go.mod` (it works with `replace` too)
 and generate with those specific rules:
 - If `replace` is provided with a custom path, then it will retrieve the file from that path
 - if `GOMODCACHE` environment variable exists, it will retrieve the file from `${GOMODCACHE}/module_name/...`
@@ -181,6 +184,15 @@ and generate with those specific rules:
 ```go
 //go:generate go tool go-builder-generator generate -f module::github.com/kilianpaquier/go-builder-generator/path/to/file.go -s ExternalStructName -d builders
 ```
+
+### Standard library module struct
+
+In case it's needed to generate a builder on a struct being in the standard library, one may provide the `std::` prefix to tell `go-builder-generator`.
+The difference with `module::` is that the tool will not check whether the package is imported (because of course it's already embedded).
+
+To find the appropriate file, `go-builder-generator` will check in the following order:
+- `GOROOT` environment variable to retrieve the path to Golang root directory, the computed path will be `${GOROOT}/src/<path provided avec std::>`
+- Run `go env GOROOT` to retrieve computed `GOROOT` from Golang directly, the computed path will be the following `${go env GOROOT}/src/<path provided avec std::>`
 
 You may see the [examples](./examples/) folder for real generation cases.
 
