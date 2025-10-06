@@ -5,9 +5,9 @@ import (
 	"net/url"
 )
 
-//go:generate ../../go-builder-generator generate -f types.go -s Naming -d builders
+//go:generate ../../../go-builder-generator generate -f types.go -s STD -d builders
 
-type Naming struct {
+type STD struct {
 	ACRONYMOUS        string
 	AnotherACRONYMOUS string
 	AnURL             *url.URL

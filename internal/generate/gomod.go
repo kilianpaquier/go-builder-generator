@@ -79,17 +79,46 @@ func modulePath(ctx context.Context, file *modfile.File, moduleName string) (str
 	return moduleName, nil
 }
 
-// getImports returns the slice of imports associated to input ast file (it takes care of alias'ed imports).
-func getImports(file *ast.File) ([]string, error) {
-	imports := make([]string, 0, len(file.Imports))
+// getImports returns the slice of imports
+// and the slice of imports' names associated to input ast file (it takes care of alias'ed imports).
+func getImports(file *ast.File) (names []string, imports []string, _ error) {
+	names, imports = make([]string, 0, len(file.Imports)), make([]string, 0, len(file.Imports))
 	for _, item := range file.Imports {
 		if item.Name != nil {
+			names = append(names, item.Name.Name)
 			imports = append(imports, fmt.Sprint(item.Name.Name, " ", item.Path.Value))
 			continue
 		}
+		names = append(names, strings.Trim(path.Base(item.Path.Value), `"`))
 		imports = append(imports, item.Path.Value)
 	}
-	return imports, nil
+	return names, imports, nil
+}
+
+// fileImport returns the import and its alias (in case the import name was already taken) for the input pkg with the associated go.mod modfile.
+func fileImport(file *modfile.File, pkg string, names []string) (alias string, imp string) {
+	m := lo.FromPtr(file.Module)
+
+	// when working with std package, go doesn't add the go.mod module name to the import
+	if m.Mod.Path == "std" {
+		return "", fmt.Sprint(`"`, pkg, `"`)
+	}
+
+	// ensure import name is not already used by another import
+	var changed bool
+	alias = lo.CoalesceOrEmpty(pkg, path.Base(m.Mod.Path))
+	for _, name := range names {
+		if alias == name {
+			alias = "builded" // Note: might need a generated name in case 'builded' is also taken ... (but should do the trick for now ? Right ? ...)
+			changed = true
+		}
+	}
+	if !changed {
+		alias = "" // remove unnecessary alias since it's not used by other imports names
+	}
+
+	// when working with a standard go module, the package name is prefixed with the module name from where it comes
+	return alias, alias + " " + fmt.Sprint(`"`, path.Join(m.Mod.Path, pkg), `"`)
 }
 
 // findRequire finds the appropriate module name and version in input file for the input moduleName.
@@ -155,19 +184,6 @@ func validGomod(file *modfile.File) error {
 		return ErrMissingGo
 	}
 	return nil
-}
-
-// fileImport returns the import for the input pkg with the associated go.mod modfile.
-func fileImport(file *modfile.File, pkg string) string {
-	m := lo.FromPtr(file.Module)
-
-	// when working with std package, go doesn't add the go.mod module name to the import
-	if m.Mod.Path == "std" {
-		return fmt.Sprint(`"`, pkg, `"`)
-	}
-
-	// when working with a standard go module, the package name is prefixed with the module name from where it comes
-	return fmt.Sprint(`"`, path.Join(m.Mod.Path, pkg), `"`)
 }
 
 // toolAvailable returns truthy when given modfile go version is above or equal to go1.24.

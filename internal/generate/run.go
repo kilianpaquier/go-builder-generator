@@ -58,16 +58,24 @@ func Run(ctx context.Context, options CLIOptions, args []string) error {
 		return fmt.Errorf("parse file: %w", err)
 	}
 
-	// retrieve source file imports to reuse them in template
-	imports, err := getImports(file)
-	if err != nil {
-		return fmt.Errorf("get imports: %w", err)
-	}
-	imports = append(imports, fileImport(srcfile, srcpkg))
-
 	sourcePackage, destPackage := file.Name.String(), filepath.Base(destdir)
 	if destdir == srcdir {
 		sourcePackage, destPackage = "", file.Name.String()
+	}
+
+	// retrieve source file imports to reuse them in template
+	names, imports, err := getImports(file)
+	if err != nil {
+		return fmt.Errorf("get imports: %w", err)
+	}
+
+	// handle source package name when generating in another directory (import needed, alias might be, etc.)
+	if sourcePackage != "" {
+		alias, imp := fileImport(srcfile, srcpkg, names)
+		if alias != "" {
+			sourcePackage = alias
+		}
+		imports = append(imports, imp)
 	}
 
 	var errs []error

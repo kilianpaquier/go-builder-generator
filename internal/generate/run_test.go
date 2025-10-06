@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	compare "github.com/kilianpaquier/compare/pkg"
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -160,14 +161,15 @@ func TestRun_Errors(t *testing.T) {
 	})
 }
 
-func TestRun_Types(t *testing.T) {
+func TestRun_GeneratedAnotherPackage(t *testing.T) {
 	ctx := t.Context()
 	pwd, _ := os.Getwd()
 	testdata := filepath.Join(pwd, "..", "..", "testdata")
 
 	for _, tc := range []struct {
-		CLIOptions generate.CLIOptions
-		DirName    string
+		CLIOptions   generate.CLIOptions
+		Dependencies []string
+		DirName      string
 	}{
 		{
 			DirName: path.Join("success_types", "builtin"),
@@ -220,10 +222,27 @@ func TestRun_Types(t *testing.T) {
 			},
 		},
 		{
-			DirName: "success_naming",
+			DirName: path.Join("success_imports", "std"),
 			CLIOptions: generate.CLIOptions{
 				NoCMD:   true,
-				Structs: []string{"Naming"},
+				Structs: []string{"STD"},
+			},
+		},
+		{
+			DirName:      path.Join("success_imports", "local_dir"),
+			Dependencies: []string{"dir"},
+			CLIOptions: generate.CLIOptions{
+				NoCMD:   true,
+				Structs: []string{"LocalImport"},
+			},
+		},
+		{
+			DirName:      path.Join("success_imports", "local_same_dir"),
+			Dependencies: []string{"dir"},
+			CLIOptions: generate.CLIOptions{
+				NoCMD:   true,
+				Destdir: "local_same_dir",
+				Structs: []string{"LocalImport"},
 			},
 		},
 		{
@@ -271,7 +290,7 @@ func TestRun_Types(t *testing.T) {
 				types = "types.go"
 			}
 			srcdir := filepath.Join(testdata, tc.DirName)
-			assertdir := filepath.Join(srcdir, filepath.Dir(types), "builders")
+			assertdir := filepath.Join(srcdir, filepath.Dir(types), lo.CoalesceOrEmpty(tc.CLIOptions.Destdir, "builders"))
 
 			destdir := t.TempDir()
 			for _, file := range []string{"go.mod", types} {
@@ -279,7 +298,10 @@ func TestRun_Types(t *testing.T) {
 				err := copyFile(filepath.Join(srcdir, file), filepath.Join(destdir, file))
 				require.NoError(t, err)
 			}
-			tc.CLIOptions.Destdir = filepath.Join(destdir, filepath.Dir(types), "builders")
+			for _, dependency := range tc.Dependencies {
+				require.NoError(t, os.CopyFS(filepath.Join(destdir, dependency), os.DirFS(filepath.Join(srcdir, dependency))))
+			}
+			tc.CLIOptions.Destdir = filepath.Join(destdir, filepath.Dir(types), lo.CoalesceOrEmpty(tc.CLIOptions.Destdir, "builders"))
 			tc.CLIOptions.File = filepath.Join(destdir, types)
 
 			// Act
@@ -292,7 +314,7 @@ func TestRun_Types(t *testing.T) {
 	}
 }
 
-func TestRun_Module(t *testing.T) {
+func TestRun_GeneratedFromAnotherModule(t *testing.T) {
 	ctx := t.Context()
 	pwd, _ := os.Getwd()
 	testdata := filepath.Join(pwd, "..", "..", "testdata")
@@ -356,14 +378,15 @@ func TestRun_Module(t *testing.T) {
 	}
 }
 
-func TestRun_Package(t *testing.T) {
+func TestRun_GeneratedSamePackage(t *testing.T) {
 	ctx := t.Context()
 	pwd, _ := os.Getwd()
 	testdata := filepath.Join(pwd, "..", "..", "testdata")
 
 	for _, tc := range []struct {
-		CLIOptions generate.CLIOptions
-		DirName    string
+		CLIOptions   generate.CLIOptions
+		Dependencies []string
+		DirName      string
 	}{
 		{
 			DirName: path.Join("success_package", "same"),
@@ -379,6 +402,13 @@ func TestRun_Package(t *testing.T) {
 				PackageName: "unused",
 			},
 		},
+		{
+			DirName:      path.Join("success_imports", "local"),
+			Dependencies: []string{"dir"},
+			CLIOptions: generate.CLIOptions{
+				Structs: []string{"LocalImport"},
+			},
+		},
 	} {
 		t.Run(tc.DirName, func(t *testing.T) {
 			// Arrange
@@ -389,6 +419,9 @@ func TestRun_Package(t *testing.T) {
 			for _, file := range []string{"go.mod", "types.go"} {
 				err := copyFile(filepath.Join(assertdir, file), filepath.Join(destdir, file))
 				require.NoError(t, err)
+			}
+			for _, dependency := range tc.Dependencies {
+				require.NoError(t, os.CopyFS(filepath.Join(destdir, dependency), os.DirFS(filepath.Join(assertdir, dependency))))
 			}
 			tc.CLIOptions.File = filepath.Join(destdir, "types.go")
 
