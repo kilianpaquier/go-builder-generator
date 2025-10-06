@@ -1,3 +1,3 @@
 package testdata
 
-//go:generate ../../../go-builder-generator generate -f module::github.com/stretchr/testify/mock/mock.go -s Mock -d builders --no-cmd
+//go:generate ../../../go-builder-generator generate -f module::golang.org/x/mod/modfile/rule.go -s File -d builders --no-cmd

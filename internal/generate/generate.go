@@ -9,13 +9,15 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"reflect"
 	"slices"
 	"strings"
 	"text/template"
 
-	"github.com/Masterminds/sprig/v3"
 	"github.com/huandu/xstrings"
 	"github.com/samber/lo"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 	"golang.org/x/tools/imports"
 
 	"github.com/kilianpaquier/go-builder-generator/internal/generate/files"
@@ -85,7 +87,6 @@ func generateAny(filename string, dest string, data any) error {
 	// parse template file
 	tpl, err := template.New(filename).
 		Funcs(funcMap()).
-		Funcs(sprig.FuncMap()).
 		ParseFS(tmpl, path.Join("templates", filename))
 	if err != nil {
 		return fmt.Errorf("parse template %s file: %w", filename, err)
@@ -117,6 +118,21 @@ func funcMap() template.FuncMap {
 	return template.FuncMap{
 		"joinFields":      joinFields,
 		"joinFieldsNames": joinFieldsNames,
+
+		"default": func(values ...any) any {
+			for _, value := range slices.Backward(values) {
+				if !reflect.ValueOf(value).IsZero() {
+					return value
+				}
+			}
+			return values[0]
+		},
+		"title": func(value string) string {
+			return cases.Title(language.Und, cases.NoLower).String(value)
+		},
+		"hasPrefix": func(prefix, value string) bool {
+			return strings.HasPrefix(value, prefix)
+		},
 	}
 }
 
