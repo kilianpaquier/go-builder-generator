@@ -364,6 +364,7 @@ func TestRun_Package(t *testing.T) {
 	for _, tc := range []struct {
 		CLIOptions generate.CLIOptions
 		DirName    string
+		Subdir     string
 	}{
 		{
 			DirName: path.Join("success_package", "same"),
@@ -379,6 +380,15 @@ func TestRun_Package(t *testing.T) {
 				PackageName: "unused",
 			},
 		},
+		{
+			DirName: path.Join("success_package", "naming"),
+			CLIOptions: generate.CLIOptions{
+				Structs:    []string{"Naming"},
+				NoCMD:      true,
+				ReturnCopy: true,
+			},
+			Subdir: "another_folder",
+		},
 	} {
 		t.Run(tc.DirName, func(t *testing.T) {
 			// Arrange
@@ -389,6 +399,11 @@ func TestRun_Package(t *testing.T) {
 			for _, file := range []string{"go.mod", "types.go"} {
 				err := copyFile(filepath.Join(assertdir, file), filepath.Join(destdir, file))
 				require.NoError(t, err)
+			}
+			if tc.Subdir != "" {
+				if err := copySubFolder(filepath.Join(testdata, tc.DirName, tc.Subdir), filepath.Join(destdir, tc.Subdir)); err != nil {
+					assert.NoError(t, err)
+				}
 			}
 			tc.CLIOptions.File = filepath.Join(destdir, "types.go")
 
@@ -426,4 +441,10 @@ func copyFile(src, dst string) error {
 		return fmt.Errorf("chmod: %w", err)
 	}
 	return nil
+}
+
+func copySubFolder(src, dst string) error {
+	fs := os.DirFS(src)
+
+	return os.CopyFS(dst, fs)
 }

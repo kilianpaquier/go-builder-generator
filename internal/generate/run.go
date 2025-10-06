@@ -9,6 +9,7 @@ import (
 	"go/token"
 	"path"
 	"path/filepath"
+	"strings"
 
 	"github.com/huandu/xstrings"
 
@@ -63,7 +64,10 @@ func Run(ctx context.Context, options CLIOptions, args []string) error {
 	if err != nil {
 		return fmt.Errorf("get imports: %w", err)
 	}
-	imports = append(imports, fileImport(srcfile, srcpkg))
+
+	if imp := fileImport(srcfile, srcpkg); strings.Trim(imp, "\"") != filepath.Join(srcfile.Module.Mod.Path, srcpkg) {
+		imports = append(imports, imp)
+	}
 
 	sourcePackage, destPackage := file.Name.String(), filepath.Base(destdir)
 	if destdir == srcdir {
