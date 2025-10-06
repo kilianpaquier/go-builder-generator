@@ -6,7 +6,7 @@
 // Code generated from {{ .Packages.GeneratedFrom }}.
 {{ end }}
 
-{{ if not (eq .Packages.SourceName "") }}
+{{ if ne .Packages.SourceName "" }}
 package {{ .Opts.PackageName | default .Packages.DestName }}
 {{ else }}
 package {{ .Packages.DestName }}
@@ -29,7 +29,7 @@ import {{ . }}
 {{- $builder := print .Name "Builder" }}
 
 {{- $fullname := print .Name }}
-{{- if not (eq .Packages.SourceName "") }}
+{{- if ne .Packages.SourceName "" }}
 {{- $fullname = print .Packages.SourceName "." $fullname }}
 {{- end }}
 
@@ -94,7 +94,7 @@ func (b *{{ $builder }}{{ $genericName }}) Build() (*{{ $fullname }}{{ $genericN
         - if the field possess the 'export' option
 */}}
 {{ $name := .Name }}
-{{ if or (not (eq $prefix "")) (not $.Exported) (.Opts.Export) }}
+{{ if or (ne $prefix "") (not $.Exported) (.Opts.Export) }}
 {{ $name = title .Name }}
 {{ end }}
 {{ $funcName := .Opts.FuncName | default (printf "%s%s" $prefix $name) }}
