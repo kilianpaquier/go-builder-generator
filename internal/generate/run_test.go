@@ -1,17 +1,17 @@
 package generate_test
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
 	"path"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	compare "github.com/kilianpaquier/compare/pkg"
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/kilianpaquier/go-builder-generator/internal/generate"
 	"github.com/kilianpaquier/go-builder-generator/internal/generate/files"
@@ -25,10 +25,10 @@ func TestRun_Errors(t *testing.T) {
 	t.Run("error_no_src_gomod", func(t *testing.T) {
 		// Arrange
 		destdir := t.TempDir()
-		require.NoError(t, os.WriteFile(filepath.Join(destdir, "go.mod"), []byte("module test\ngo 1.22"), files.RwRR))
+		NoError(t, os.WriteFile(filepath.Join(destdir, "go.mod"), []byte("module test\ngo 1.22"), files.RwRR))
 
 		srcdir := t.TempDir()
-		require.NoError(t, os.CopyFS(srcdir, os.DirFS(filepath.Join(testdata, "errors", "no_gomod"))))
+		NoError(t, os.CopyFS(srcdir, os.DirFS(filepath.Join(testdata, "errors", "no_gomod"))))
 
 		options := generate.CLIOptions{
 			Destdir: destdir,
@@ -40,7 +40,7 @@ func TestRun_Errors(t *testing.T) {
 		err := generate.Run(ctx, options, nil)
 
 		// Assert
-		assert.ErrorContains(t, err, "find src go.mod: no parent go.mod found")
+		ErrorContains(t, err, "find src go.mod: no parent go.mod found")
 	})
 
 	t.Run("error_no_dest_gomod", func(t *testing.T) {
@@ -48,39 +48,39 @@ func TestRun_Errors(t *testing.T) {
 		err := generate.Run(ctx, generate.CLIOptions{Destdir: t.TempDir()}, nil)
 
 		// Assert
-		assert.ErrorContains(t, err, "find dest go.mod: no parent go.mod found")
+		ErrorContains(t, err, "find dest go.mod: no parent go.mod found")
 	})
 
 	t.Run("error_no_module_statement", func(t *testing.T) {
 		// Arrange
 		destdir := t.TempDir()
 		file, err := os.Create(filepath.Join(destdir, "go.mod"))
-		require.NoError(t, err)
-		require.NoError(t, file.Close())
+		NoError(t, err)
+		NoError(t, file.Close())
 
 		// Act
 		err = generate.Run(ctx, generate.CLIOptions{Destdir: destdir}, nil)
 
 		// Assert
-		assert.ErrorIs(t, err, generate.ErrMissingModule)
+		ErrorIs(t, err, generate.ErrMissingModule)
 	})
 
 	t.Run("error_no_go_statement", func(t *testing.T) {
 		// Arrange
 		destdir := t.TempDir()
-		require.NoError(t, os.WriteFile(filepath.Join(destdir, "go.mod"), []byte("module test"), files.RwRR))
+		NoError(t, os.WriteFile(filepath.Join(destdir, "go.mod"), []byte("module test"), files.RwRR))
 
 		// Act
 		err := generate.Run(ctx, generate.CLIOptions{Destdir: destdir}, nil)
 
 		// Assert
-		assert.ErrorIs(t, err, generate.ErrMissingGo)
+		ErrorIs(t, err, generate.ErrMissingGo)
 	})
 
 	t.Run("error_missing_struct_file", func(t *testing.T) {
 		// Arrange
 		destdir := t.TempDir()
-		require.NoError(t, os.WriteFile(filepath.Join(destdir, "go.mod"), []byte("module test\ngo 1.22"), files.RwRR))
+		NoError(t, os.WriteFile(filepath.Join(destdir, "go.mod"), []byte("module test\ngo 1.22"), files.RwRR))
 
 		options := generate.CLIOptions{
 			Destdir: destdir,
@@ -92,13 +92,13 @@ func TestRun_Errors(t *testing.T) {
 		err := generate.Run(ctx, options, nil)
 
 		// Assert
-		assert.ErrorContains(t, err, "parse file")
+		ErrorContains(t, err, "parse file")
 	})
 
 	t.Run("error_not_required_module", func(t *testing.T) {
 		// Arrange
 		destdir := t.TempDir()
-		require.NoError(t, os.WriteFile(filepath.Join(destdir, "go.mod"), []byte("module test\ngo 1.22"), files.RwRR))
+		NoError(t, os.WriteFile(filepath.Join(destdir, "go.mod"), []byte("module test\ngo 1.22"), files.RwRR))
 
 		options := generate.CLIOptions{
 			Destdir: destdir,
@@ -110,14 +110,14 @@ func TestRun_Errors(t *testing.T) {
 		err := generate.Run(ctx, options, nil)
 
 		// Assert
-		assert.ErrorContains(t, err, "missing module name 'github.com/jarcoal/httpmock/match.go")
+		ErrorContains(t, err, "missing module name 'github.com/jarcoal/httpmock/match.go")
 	})
 
 	t.Run("error_invalid", func(t *testing.T) {
 		// Arrange
 		destdir := t.TempDir()
 		srcdir := filepath.Join(testdata, "errors", "invalids")
-		require.NoError(t, os.CopyFS(destdir, os.DirFS(srcdir)))
+		NoError(t, os.CopyFS(destdir, os.DirFS(srcdir)))
 
 		type testcase struct {
 			ErrContains []string
@@ -154,7 +154,7 @@ func TestRun_Errors(t *testing.T) {
 
 				// Assert
 				for _, contain := range tc.ErrContains {
-					assert.ErrorContains(t, err, contain)
+					ErrorContains(t, err, contain)
 				}
 			})
 		}
@@ -294,12 +294,12 @@ func TestRun_GeneratedAnotherPackage(t *testing.T) {
 
 			destdir := t.TempDir()
 			for _, file := range []string{"go.mod", types} {
-				require.NoError(t, os.MkdirAll(filepath.Join(destdir, filepath.Dir(file)), files.RwxRxRxRx))
-				err := copyFile(filepath.Join(srcdir, file), filepath.Join(destdir, file))
-				require.NoError(t, err)
+				NoError(t, os.MkdirAll(filepath.Join(destdir, filepath.Dir(file)), files.RwxRxRxRx))
+				err := CopyFile(filepath.Join(srcdir, file), filepath.Join(destdir, file))
+				NoError(t, err)
 			}
 			for _, dependency := range tc.Dependencies {
-				require.NoError(t, os.CopyFS(filepath.Join(destdir, dependency), os.DirFS(filepath.Join(srcdir, dependency))))
+				NoError(t, os.CopyFS(filepath.Join(destdir, dependency), os.DirFS(filepath.Join(srcdir, dependency))))
 			}
 			tc.CLIOptions.Destdir = filepath.Join(destdir, filepath.Dir(types), lo.CoalesceOrEmpty(tc.CLIOptions.Destdir, "builders"))
 			tc.CLIOptions.File = filepath.Join(destdir, types)
@@ -308,8 +308,8 @@ func TestRun_GeneratedAnotherPackage(t *testing.T) {
 			err := generate.Run(ctx, tc.CLIOptions, nil)
 
 			// Assert
-			assert.NoError(t, err)
-			assert.NoError(t, compare.Dirs(assertdir, tc.CLIOptions.Destdir))
+			NoError(t, err)
+			NoError(t, compare.Dirs(assertdir, tc.CLIOptions.Destdir))
 		})
 	}
 }
@@ -326,9 +326,9 @@ func TestRun_GeneratedFromAnotherModule(t *testing.T) {
 		{
 			DirName: path.Join("success_module", "replace"),
 			CLIOptions: generate.CLIOptions{
-				File:    "module::github.com/stretchr/testify/mock/mock.go",
+				File:    "module::github.com/spf13/cobra/command.go",
 				NoCMD:   true,
-				Structs: []string{"Mock"},
+				Structs: []string{"Command"},
 			},
 		},
 		{
@@ -350,9 +350,9 @@ func TestRun_GeneratedFromAnotherModule(t *testing.T) {
 		{
 			DirName: path.Join("success_module", "subdirectory"),
 			CLIOptions: generate.CLIOptions{
-				File:    "module::github.com/stretchr/testify/mock/mock.go",
+				File:    "module::golang.org/x/mod/modfile/rule.go",
 				NoCMD:   true,
-				Structs: []string{"Mock"},
+				Structs: []string{"File"},
 			},
 		},
 	} {
@@ -363,8 +363,8 @@ func TestRun_GeneratedFromAnotherModule(t *testing.T) {
 
 			destdir := t.TempDir()
 			for _, file := range []string{"go.mod", "go.sum"} {
-				err := copyFile(filepath.Join(srcdir, file), filepath.Join(destdir, file))
-				require.NoError(t, err)
+				err := CopyFile(filepath.Join(srcdir, file), filepath.Join(destdir, file))
+				NoError(t, err)
 			}
 			tc.CLIOptions.Destdir = filepath.Join(destdir, "builders")
 
@@ -372,8 +372,8 @@ func TestRun_GeneratedFromAnotherModule(t *testing.T) {
 			err := generate.Run(ctx, tc.CLIOptions, nil)
 
 			// Assert
-			assert.NoError(t, err)
-			assert.NoError(t, compare.Dirs(assertdir, tc.CLIOptions.Destdir))
+			NoError(t, err)
+			NoError(t, compare.Dirs(assertdir, tc.CLIOptions.Destdir))
 		})
 	}
 }
@@ -417,11 +417,11 @@ func TestRun_GeneratedSamePackage(t *testing.T) {
 			destdir := t.TempDir()
 			tc.CLIOptions.Destdir = destdir
 			for _, file := range []string{"go.mod", "types.go"} {
-				err := copyFile(filepath.Join(assertdir, file), filepath.Join(destdir, file))
-				require.NoError(t, err)
+				err := CopyFile(filepath.Join(assertdir, file), filepath.Join(destdir, file))
+				NoError(t, err)
 			}
 			for _, dependency := range tc.Dependencies {
-				require.NoError(t, os.CopyFS(filepath.Join(destdir, dependency), os.DirFS(filepath.Join(assertdir, dependency))))
+				NoError(t, os.CopyFS(filepath.Join(destdir, dependency), os.DirFS(filepath.Join(assertdir, dependency))))
 			}
 			tc.CLIOptions.File = filepath.Join(destdir, "types.go")
 
@@ -429,14 +429,14 @@ func TestRun_GeneratedSamePackage(t *testing.T) {
 			err := generate.Run(ctx, tc.CLIOptions, tc.CLIOptions.ToArgs("")[2:])
 
 			// Assert
-			assert.NoError(t, err)
-			assert.NoError(t, compare.Dirs(assertdir, tc.CLIOptions.Destdir))
+			NoError(t, err)
+			NoError(t, compare.Dirs(assertdir, tc.CLIOptions.Destdir))
 		})
 	}
 }
 
-// copyFile copies a provided file from src to dest with a default permission of 0o644. It fails if it's a directory.
-func copyFile(src, dst string) error {
+// CopyFile copies a provided file from src to dest with a default permission of 0o644. It fails if it's a directory.
+func CopyFile(src, dst string) error {
 	sfile, err := os.Open(src)
 	if err != nil {
 		return fmt.Errorf("open: %w", err)
@@ -459,4 +459,38 @@ func copyFile(src, dst string) error {
 		return fmt.Errorf("chmod: %w", err)
 	}
 	return nil
+}
+
+// NoError fails t in case input err is not nil.
+func NoError(t testing.TB, err error) {
+	t.Helper()
+
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
+}
+
+// ErrorContains fails t in case input err is nil or doesn't contain the expected contains.
+func ErrorContains(t testing.TB, err error, contains string) {
+	t.Helper()
+
+	if err == nil {
+		t.Error("error is nil")
+		t.FailNow()
+	}
+	if !strings.Contains(err.Error(), contains) {
+		t.Errorf("error '%s' doesn't contain '%s'", err.Error(), contains)
+		t.FailNow()
+	}
+}
+
+// ErrorIs fails t in case input err doesn't validate errors.Is for expected is error.
+func ErrorIs(t testing.TB, err, is error) {
+	t.Helper()
+
+	if !errors.Is(err, is) {
+		t.Errorf("error '%s' doesn't validate 'errors.Is' for '%s'", err.Error(), is.Error())
+		t.FailNow()
+	}
 }

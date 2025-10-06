@@ -22,6 +22,7 @@ linters:
     - recvcheck
     - tagliatelle
     - unparam
+    - varnamelen
     - wrapcheck
     - wsl
     - wsl_v5
@@ -205,15 +206,23 @@ linters:
         # Default: ""
         fn-pattern: ^NoErrorf?$
 
-    varnamelen:
-      # The longest distance, in source lines, that is being considered a "small scope".
-      # Variables used in at most this many lines will be ignored.
-      # Default: 5
-      max-distance: 10
-      # The minimum length of a variable's name that is considered "long".
-      # Variable names that are at least this long will be ignored.
-      # Default: 3
-      min-name-length: 2
+    thelper:
+      test:
+        # Check *testing.T param has name t.
+        # Default: true
+        name: false
+      benchmark:
+        # Check *testing.B param has name b.
+        # Default: true
+        name: false
+      tb:
+        # Check *testing.TB param has name tb.
+        # Default: true
+        name: false
+      fuzz:
+        # Check *testing.F param has name f.
+        # Default: true
+        name: false
 
     whitespace:
       # Enforces newlines (or comments) after every multi-line if statement.
