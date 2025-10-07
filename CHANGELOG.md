@@ -1,3 +1,14 @@
+## [1.10.1](https://github.com/kilianpaquier/go-builder-generator/compare/v1.10.0...v1.10.1) (2025-10-07)
+
+### Bug Fixes
+
+* **imports:** handle correctly imports having the same name as base package ([b893ca9](https://github.com/kilianpaquier/go-builder-generator/commit/b893ca9609f5b4db4607b814ac269f229bd5f461))
+
+### Chores
+
+* **deps:** remove testify and sprig in favor of local implementation for less module imports ([5c22bb9](https://github.com/kilianpaquier/go-builder-generator/commit/5c22bb92da031d16eca75e84c2a4cf5c4ae2dce4))
+* **tmpl:** change `not eq` to `ne` ([55055d5](https://github.com/kilianpaquier/go-builder-generator/commit/55055d5d2b6a0a3e1469d2126131e56bfa99d6a1))
+
 ## [1.10.0](https://github.com/kilianpaquier/go-builder-generator/compare/v1.9.11...v1.10.0) (2025-09-14)
 
 ### Features
