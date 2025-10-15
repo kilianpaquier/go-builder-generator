@@ -1,3 +1,9 @@
+## [1.10.2](https://github.com/kilianpaquier/go-builder-generator/compare/v1.10.1...v1.10.2) (2025-10-15)
+
+### Chores
+
+* **deps:** bump the minor-patch group with 4 updates ([076ef0c](https://github.com/kilianpaquier/go-builder-generator/commit/076ef0cfb8046f33abab1472b0d2c5c9f73160a2))
+
 ## [1.10.1](https://github.com/kilianpaquier/go-builder-generator/compare/v1.10.0...v1.10.1) (2025-10-07)
 
 ### Bug Fixes
