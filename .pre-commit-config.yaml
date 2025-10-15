@@ -8,12 +8,17 @@ default_stages:
   - pre-commit
 
 repos:
-  - repo: https://github.com/compilerla/conventional-pre-commit
-    # renovate: datasource=github-tags packageName=compilerla/conventional-pre-commit depName=conventional-pre-commit
-    rev: v4.2.0
+  # see https://www.conventionalcommits.org/en/v1.0.0/#specification
+  - repo: https://github.com/commitizen-tools/commitizen
+    # renovate: datasource=github-tags packageName=commitizen-tools/commitizen depName=commitizen
+    rev: v4.9.1
     hooks:
-      - id: conventional-pre-commit
-        stages: [commit-msg]
+      - id: commitizen
+      - id: commitizen-branch
+        args:
+          - --rev-range
+          - ${GITHUB_BASE_REF:+origin/}${GITHUB_BASE_REF:-HEAD~1}..HEAD
+        stages: [pre-commit]
 
   - repo: https://github.com/gitleaks/gitleaks
     # renovate: datasource=github-tags packageName=gitleaks/gitleaks depName=gitleaks
