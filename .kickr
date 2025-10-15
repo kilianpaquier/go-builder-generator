@@ -8,11 +8,12 @@ ci:
     - codeql
     - harden-runner
     - ossf-scorecard
+    - renovate:personal-token
   release:
     auth: github-token
     auto: true
 dependencies:
-  manager: dependabot
+  manager: renovate
 license: mit
 maintainers:
   - name: kilianpaquier
