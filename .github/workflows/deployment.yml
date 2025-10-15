@@ -53,7 +53,6 @@ jobs:
             if (!latest) {
               throw new Error(`No '${process.env.WORKFLOW_ID}' workflow runs found on ref name '${process.env.GITHUB_REF_NAME}'`)
             }
-            console.log(latest)
             return latest.conclusion
         env:
           WORKFLOW_ID: integration.yml
@@ -91,7 +90,7 @@ jobs:
         with:
           dry_run: true
           # renovate: datasource=github-tags packageName=semantic-release/semantic-release depName=semantic-release
-          semantic_version: v24.2.7
+          semantic_version: v24.2.9
           extra_plugins: |-
             @semantic-release/changelog
             @semantic-release/commit-analyzer
@@ -186,7 +185,7 @@ jobs:
         with:
           dry_run: ${{ inputs.release != 'release' }}
           # renovate: datasource=github-tags packageName=semantic-release/semantic-release depName=semantic-release
-          semantic_version: v24.2.7
+          semantic_version: v24.2.9
           extra_plugins: |-
             @semantic-release/changelog
             @semantic-release/commit-analyzer

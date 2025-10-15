@@ -126,6 +126,8 @@ linters:
           disabled: true
         - name: package-comments
           disabled: true
+        - name: package-directory-mismatch
+          disabled: true
 
         # Enabled
         - name: argument-limit
