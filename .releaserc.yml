@@ -27,10 +27,10 @@ plugins:
           - { type: chore, section: "Chores" }
           - { type: refactor, section: "Code Refactoring" }
 
-          - { type: build, section: "Build System", hidden: true }
-          - { type: ci, section: "Continuous Integration", hidden: true }
-          - { type: style, section: "Styles", hidden: true }
-          - { type: test, section: "Tests", hidden: true }
+          - { type: build, section: "Build System" }
+          - { type: ci, section: "Continuous Integration" }
+          - { type: style, section: "Styles" }
+          - { type: test, section: "Tests" }
       releaseRules:
         - { breaking: true, release: major }
         - { revert: true, release: patch }
@@ -60,10 +60,10 @@ plugins:
           - { type: chore, section: "Chores" }
           - { type: refactor, section: "Code Refactoring" }
 
-          - { type: build, section: "Build System", hidden: true }
-          - { type: ci, section: "Continuous Integration", hidden: true }
-          - { type: style, section: "Styles", hidden: true }
-          - { type: test, section: "Tests", hidden: true }
+          - { type: build, section: "Build System" }
+          - { type: ci, section: "Continuous Integration" }
+          - { type: style, section: "Styles" }
+          - { type: test, section: "Tests" }
       parserOpts:
         noteKeywords:
         - BREAKING CHANGE

@@ -86,11 +86,11 @@ jobs:
           fetch-depth: 0
       # https://github.com/marketplace/actions/action-for-semantic-release
       - id: semrel_version
-        uses: cycjimmy/semantic-release-action@ba330626c4750c19d8299de843f05c7aa5574f62 # v5.0.2
+        uses: cycjimmy/semantic-release-action@9cc899c47e6841430bbaedb43de1560a568dfd16 # v5.0.0
         with:
           dry_run: true
           # renovate: datasource=github-tags packageName=semantic-release/semantic-release depName=semantic-release
-          semantic_version: v24.2.9
+          semantic_version: v25.0.0
           extra_plugins: |-
             @semantic-release/changelog
             @semantic-release/commit-analyzer
@@ -131,7 +131,7 @@ jobs:
       - uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
         with:
           check-latest: true
-          go-version: '1.25.1'
+          go-version: '1.25.3'
           token: ${{ secrets.GITHUB_TOKEN }}
       # https://github.com/marketplace/actions/goreleaser-action
       - if: ${{ hashFiles('.goreleaser.yml') != '' }}
@@ -181,11 +181,11 @@ jobs:
           path: dist
       # https://github.com/marketplace/actions/action-for-semantic-release
       - id: semrel_version
-        uses: cycjimmy/semantic-release-action@ba330626c4750c19d8299de843f05c7aa5574f62 # v5.0.2
+        uses: cycjimmy/semantic-release-action@9cc899c47e6841430bbaedb43de1560a568dfd16 # v5.0.0
         with:
           dry_run: ${{ inputs.release != 'release' }}
           # renovate: datasource=github-tags packageName=semantic-release/semantic-release depName=semantic-release
-          semantic_version: v24.2.9
+          semantic_version: v25.0.0
           extra_plugins: |-
             @semantic-release/changelog
             @semantic-release/commit-analyzer

@@ -8,7 +8,9 @@
     "extends": [
         "github>kickr-dev/renovate//configs/renovate/default.json",
         "github>kickr-dev/renovate//configs/renovate/docker.json",
+        "github>kickr-dev/renovate//configs/renovate/github-actions.json",
+        "github>kickr-dev/renovate//configs/renovate/gitlab-ci.json",
         "github>kickr-dev/renovate//configs/renovate/gomod.json",
-        "github>kickr-dev/renovate//configs/renovate/tmpl.json"
+        "github>kickr-dev/renovate//configs/renovate/pre-commit.json"
     ]
 }
