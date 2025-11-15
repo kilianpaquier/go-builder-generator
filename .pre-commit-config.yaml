@@ -8,6 +8,7 @@ default_stages:
   - pre-commit
 
 repos:
+
   # see https://www.conventionalcommits.org/en/v1.0.0/#specification
   - repo: https://github.com/commitizen-tools/commitizen
     # renovate: datasource=github-tags packageName=commitizen-tools/commitizen depName=commitizen
@@ -22,7 +23,7 @@ repos:
 
   - repo: https://github.com/gitleaks/gitleaks
     # renovate: datasource=github-tags packageName=gitleaks/gitleaks depName=gitleaks
-    rev: v8.28.0
+    rev: v8.29.0
     hooks:
       - id: gitleaks
 
