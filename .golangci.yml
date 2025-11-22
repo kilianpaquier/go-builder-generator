@@ -242,6 +242,7 @@ linters:
       - std-error-handling
     rules:
       - linters:
+          - cyclop
           - dupl
           - funlen
           - gocognit
