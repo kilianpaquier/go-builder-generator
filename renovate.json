@@ -12,6 +12,7 @@
         "github>kickr-dev/renovate//configs/renovate/gitlab-ci.json",
         "github>kickr-dev/renovate//configs/renovate/gomod.json",
         "github>kickr-dev/renovate//configs/renovate/kickr.json",
-        "github>kickr-dev/renovate//configs/renovate/pre-commit.json"
+        "github>kickr-dev/renovate//configs/renovate/pre-commit.json",
+        "local>kilianpaquier/go-builder-generator//configs/renovate/local.json"
     ]
 }
