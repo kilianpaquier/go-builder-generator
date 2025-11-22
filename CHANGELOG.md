@@ -1,3 +1,19 @@
+## [1.10.3](https://github.com/kilianpaquier/go-builder-generator/compare/v1.10.2...v1.10.3) (2025-11-22)
+
+### Chores
+
+* **deps:** update go dependencies ([2a05d68](https://github.com/kilianpaquier/go-builder-generator/commit/2a05d683c88d0e13c9805fcf6251161ed44f3c09))
+
+### Continuous Integration
+
+* **deps:** update dependency go to v1.25.2 ([af9518f](https://github.com/kilianpaquier/go-builder-generator/commit/af9518fc73c25d218463961083b842900648842b))
+* **deps:** update dependency go to v1.25.4 ([4dbbf02](https://github.com/kilianpaquier/go-builder-generator/commit/4dbbf029fc7f351cfec61b98c6b4bf9dcd30b479))
+* **deps:** update github actions dependencies ([245c11b](https://github.com/kilianpaquier/go-builder-generator/commit/245c11bfebeed2dc10285eeb491e1d198ba24ac7))
+* **layout:** regenerate kickr layout ([e0c55ff](https://github.com/kilianpaquier/go-builder-generator/commit/e0c55ff794ca86c1c679ab7cd8cff9bb7ce02718))
+* **layout:** regenerate kickr layout ([5f41a64](https://github.com/kilianpaquier/go-builder-generator/commit/5f41a649f57e7a11ba3e0e06c387bf5ecc28871d))
+* **layout:** regenerate kickr layout ([0824257](https://github.com/kilianpaquier/go-builder-generator/commit/0824257fccfb8798e72947789c191c3fd380b36e))
+* **renovate:** ignore specific testdata version update ([857f333](https://github.com/kilianpaquier/go-builder-generator/commit/857f333094625b97413dddab0ae600a9b144e807))
+
 ## [1.10.2](https://github.com/kilianpaquier/go-builder-generator/compare/v1.10.1...v1.10.2) (2025-10-15)
 
 ### Chores
