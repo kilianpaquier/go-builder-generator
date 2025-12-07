@@ -37,8 +37,8 @@ jobs:
         with:
           disable-sudo-and-containers: false # docker use
           egress-policy: audit
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
-      - uses: renovatebot/github-action@c5fdc9f98fdf9e9bb16b5760f7e560256eb79326 # v44.0.2
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
+      - uses: renovatebot/github-action@5712c6a41dea6cdf32c72d92a763bd417e6606aa # v44.0.5
         with:
           token: ${{ secrets.RENOVATE_TOKEN }}
         env:

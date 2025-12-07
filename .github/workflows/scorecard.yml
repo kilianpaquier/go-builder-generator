@@ -41,7 +41,7 @@ jobs:
         with:
           disable-sudo-and-containers: false # docker use
           egress-policy: audit
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
       - uses: ossf/scorecard-action@4eaacf0543bb3f2c246792bd56e8cdeffafb205a # v2.4.3
         with:
           publish_results: true
@@ -52,6 +52,6 @@ jobs:
           name: scorecard
           path: scorecard.sarif
           retention-days: 5
-      - uses: github/codeql-action/upload-sarif@014f16e7ab1402f30e7c3329d33797e7948572db # v4.31.3
+      - uses: github/codeql-action/upload-sarif@fe4161a26a8629af62121b670040955b330f9af2 # v4.31.6
         with:
           sarif_file: scorecard.sarif
