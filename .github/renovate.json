@@ -6,6 +6,6 @@
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
 
     "autodiscover": true,
-    "autodiscoverFilter": [ "kilianpaquier/go-builder-generator" ],
+    "autodiscoverFilter": ["kilianpaquier/go-builder-generator"],
     "onboarding": false
 }
