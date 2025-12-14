@@ -6,7 +6,7 @@ go 1.25.1
 // ignored by renovate in configs/renovate/local.json
 require github.com/spf13/cobra v1.10.0
 
-replace github.com/spf13/cobra => github.com/spf13/cobra v1.10.1 // test replace feature
+replace github.com/spf13/cobra => github.com/spf13/cobra v1.10.2 // test replace feature
 
 require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
