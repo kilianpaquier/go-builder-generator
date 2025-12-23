@@ -23,7 +23,7 @@ jobs:
     steps:
       # https://docs.stepsecurity.io/harden-runner/workflow-runs
       # https://github.com/marketplace/actions/harden-runner
-      - uses: step-security/harden-runner@95d9a5deda9de15063e7595e9719c11c38c90ae2 # v2.13.2
+      - uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
         with:
           disable-sudo-and-containers: true
           egress-policy: audit
@@ -32,7 +32,7 @@ jobs:
         with:
           app-id: ${{ vars.KICKR_APP_ID }}
           private-key: ${{ secrets.KICKR_PRIVATE_KEY }}
-      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           fetch-depth: 0
           token: ${{ steps.app_token.outputs.token }}
@@ -45,7 +45,7 @@ jobs:
           install-mode: goinstall
           version: beta
       - run: kickr generate
-      - uses: peter-evans/create-pull-request@84ae59a2cdc2258d6fa0732dd66352dddae2a412 # v7.0.9
+      - uses: peter-evans/create-pull-request@98357b18bf14b5342f975ff684046ec3b2a07725 # v8
         with:
           body: "Automated kickr layout generation"
           branch: kickr/layout
