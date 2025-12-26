@@ -1,3 +1,15 @@
+## [1.10.4](https://github.com/kilianpaquier/go-builder-generator/compare/v1.10.3...v1.10.4) (2025-12-26)
+
+### Chores
+
+* **deps:** update go dependencies ([ef77cf7](https://github.com/kilianpaquier/go-builder-generator/commit/ef77cf7e7235e3c3ac919b930a6f4dfd0543ddbe))
+
+### Continuous Integration
+
+* **deps:** update dependency go to v1.25.5 ([c762a5b](https://github.com/kilianpaquier/go-builder-generator/commit/c762a5bb1d89ace26ca5e33d9713f20ea59304c3))
+* **layout:** regenerate kickr layout ([9fb99f5](https://github.com/kilianpaquier/go-builder-generator/commit/9fb99f534659812c9abc882fc40ff8b6910e0360))
+* **layout:** regenerate kickr layout ([efe48bc](https://github.com/kilianpaquier/go-builder-generator/commit/efe48bcd045e89893850009ce24f1e6158a50100))
+
 ## [1.10.3](https://github.com/kilianpaquier/go-builder-generator/compare/v1.10.2...v1.10.3) (2025-11-22)
 
 ### Chores
