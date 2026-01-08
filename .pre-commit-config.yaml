@@ -12,7 +12,7 @@ repos:
   # see https://www.conventionalcommits.org/en/v1.0.0/#specification
   - repo: https://github.com/commitizen-tools/commitizen
     # renovate: datasource=github-tags packageName=commitizen-tools/commitizen depName=commitizen
-    rev: v4.10.1
+    rev: v4.11.0
     hooks:
       - id: commitizen
       - id: commitizen-branch

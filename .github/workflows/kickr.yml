@@ -40,16 +40,14 @@ jobs:
         with:
           check-latest: true
           token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: kickr-dev/action-setup@743e6047a045df20b006cc3f02c7b2010ce473de # v0.0.0
-        with:
-          install-mode: goinstall
-          version: beta
+      - run: go install github.com/kickr-dev/kickr/cmd/kickr@beta
       - run: kickr generate
       - uses: peter-evans/create-pull-request@98357b18bf14b5342f975ff684046ec3b2a07725 # v8
         with:
           body: "Automated kickr layout generation"
           branch: kickr/layout
           commit-message: "ci(layout): regenerate kickr layout"
+          labels: dependencies,kickr
           sign-commits: true
           signoff: true
           title: "ci(layout): regenerate kickr layout"
