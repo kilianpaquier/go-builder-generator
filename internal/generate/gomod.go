@@ -36,11 +36,17 @@ const (
 	stdPrefix    = "std::"
 )
 
+// modFile is an enriched modfile.File with its local directory path.
+type modFile struct {
+	*modfile.File
+	Dir string
+}
+
 // modulePath finds the appropriate required in modfile for the input module name
 // and returns its path in the current filesystem.
-func modulePath(ctx context.Context, file *modfile.File, moduleName string) (string, error) {
+func modulePath(ctx context.Context, file modFile, modulepathfile string) (string, error) {
 	// find required in go/src since it's prefixed by "std::"
-	if require, ok := strings.CutPrefix(moduleName, stdPrefix); ok {
+	if require, ok := strings.CutPrefix(modulepathfile, stdPrefix); ok {
 		if root := os.Getenv("GOROOT"); root != "" {
 			return filepath.Join(root, "src", require), nil
 		}
@@ -56,11 +62,21 @@ func modulePath(ctx context.Context, file *modfile.File, moduleName string) (str
 		return "", fmt.Errorf("get 'GOROOT' through 'go env GOROOT': %w", err)
 	}
 
-	// find require in go.mod file since it's prefixed by "module::"
-	if require, ok := strings.CutPrefix(moduleName, modulePrefix); ok {
-		module, err := findRequire(file, require)
+	// find modulepathfile in go.mod file since it's prefixed by "module::"
+	if modulepathfile, ok := strings.CutPrefix(modulepathfile, modulePrefix); ok {
+		module, err := findRequire(file, modulepathfile)
 		if err != nil {
 			return "", err
+		}
+
+		// handle local replace
+		//  - could be provided as absolute path (but it would be weird): replace github.com/module/name => /path/to/module/name
+		//	- could be provided as relative path: replace github.com/module/name => ../../path/to/module/name
+		if filepath.IsAbs(module) {
+			return module, nil
+		}
+		if abs, err := filepath.Abs(filepath.Join(file.Dir, module)); err == nil && files.Exists(abs) {
+			return abs, nil
 		}
 
 		if modcache := os.Getenv("GOMODCACHE"); modcache != "" {
@@ -76,7 +92,7 @@ func modulePath(ctx context.Context, file *modfile.File, moduleName string) (str
 	}
 
 	// no require to find since it should be a local module file
-	return moduleName, nil
+	return modulepathfile, nil
 }
 
 // getImports returns the slice of imports
@@ -96,7 +112,7 @@ func getImports(file *ast.File) (names []string, imports []string, _ error) {
 }
 
 // fileImport returns the import and its alias (in case the import name was already taken) for the input pkg with the associated go.mod modfile.
-func fileImport(file *modfile.File, pkg string, names []string) (alias string, imp string) {
+func fileImport(file modFile, pkg string, names []string) (alias string, imp string) {
 	m := lo.FromPtr(file.Module)
 
 	// when working with std package, go doesn't add the go.mod module name to the import
@@ -109,7 +125,7 @@ func fileImport(file *modfile.File, pkg string, names []string) (alias string, i
 	alias = lo.CoalesceOrEmpty(pkg, path.Base(m.Mod.Path))
 	for _, name := range names {
 		if alias == name {
-			alias = "builded" // Note: might need a generated name in case 'builded' is also taken ... (but should do the trick for now ? Right ? ...)
+			alias = "builded" // Note: might need a generated name in case 'builded' is also taken ... (but should do the trick for now? Right? ...)
 			changed = true
 		}
 	}
@@ -146,14 +162,14 @@ func findRequire(file *modfile.File, moduleName string) (string, error) {
 
 // findGomod finds the parent go.mod associated to input dir
 // and returns the parsed modfile alongside the path between the go.mod and the input dir.
-func findGomod(dir string, parts ...string) (*modfile.File, string, error) {
+func findGomod(dir string, parts ...string) (modFile, string, error) {
 	mod := filepath.Join(dir, "go.mod")
 
 	// go through parent directory to find go.mod in case it doesn't exist in current directory
 	if !files.Exists(mod) {
 		// handle root directory -> VolumeName (e.g "C:") + os.PathSeparator
 		if dir == filepath.VolumeName(dir)+string(os.PathSeparator) {
-			return nil, "", errors.New("no parent go.mod found")
+			return modFile{}, "", errors.New("no parent go.mod found")
 		}
 		return findGomod(filepath.Dir(dir), append(parts, filepath.Base(dir))...)
 	}
@@ -161,15 +177,15 @@ func findGomod(dir string, parts ...string) (*modfile.File, string, error) {
 
 	file, err := modfile.Parse(mod, bytes, nil)
 	if err != nil {
-		return nil, "", fmt.Errorf("go.mod '%s' parsing: %w", mod, err)
+		return modFile{}, "", fmt.Errorf("go.mod '%s' parsing: %w", mod, err)
 	}
 
 	if err := validGomod(file); err != nil {
-		return nil, "", fmt.Errorf("invalid '%s' go.mod: %w", mod, err)
+		return modFile{}, "", fmt.Errorf("invalid '%s' go.mod: %w", mod, err)
 	}
 
 	slices.Reverse(parts)
-	return file, strings.Join(parts, "/"), nil
+	return modFile{File: file, Dir: dir}, strings.Join(parts, "/"), nil
 }
 
 // validGomod ensures that used properties in generation process aren't nil.
