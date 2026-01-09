@@ -1,3 +1,20 @@
+## [1.10.5](https://github.com/kilianpaquier/go-builder-generator/compare/v1.10.4...v1.10.5) (2026-01-09)
+
+### Bug Fixes
+
+* **module:::** make it work with local replace ([e32cd71](https://github.com/kilianpaquier/go-builder-generator/commit/e32cd71e87220f01adcd4494dfad473509a5f423))
+* **require:** handle submodules cases where the parent and one of its submodules is imported ([e5c9b6c](https://github.com/kilianpaquier/go-builder-generator/commit/e5c9b6cb991daa619e77c6a2597aa593193e0980))
+* **tmpl:** invalid filerelpath when using std:: ([adebdc6](https://github.com/kilianpaquier/go-builder-generator/commit/adebdc60a644181e36e9cb36f0e33cb898054cb0))
+
+### Documentation
+
+* **readme:** remove french typo ([0aa503c](https://github.com/kilianpaquier/go-builder-generator/commit/0aa503c79e23ea65781a73722f88d79bee9849c4))
+
+### Continuous Integration
+
+* **layout:** regenerate kickr layout ([db2e45c](https://github.com/kilianpaquier/go-builder-generator/commit/db2e45ce98222bcf57d537b14fbbfb3a3d42225f))
+* **lint:** fix/remove lint issues ([ee44ab1](https://github.com/kilianpaquier/go-builder-generator/commit/ee44ab1fd69ccd154e62a8d076ad0faa51fa445d))
+
 ## [1.10.4](https://github.com/kilianpaquier/go-builder-generator/compare/v1.10.3...v1.10.4) (2025-12-26)
 
 ### Chores
