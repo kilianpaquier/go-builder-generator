@@ -343,7 +343,6 @@ func TestRun_GeneratedFromAnotherModule(t *testing.T) {
 			DirName: path.Join("success_module", "std"),
 			CLIOptions: generate.CLIOptions{
 				File:    "std::go/build/build.go",
-				NoCMD:   true,
 				Structs: []string{"Context"},
 			},
 		},
@@ -351,7 +350,6 @@ func TestRun_GeneratedFromAnotherModule(t *testing.T) {
 			DirName: path.Join("success_module", "subdirectory"),
 			CLIOptions: generate.CLIOptions{
 				File:    "module::golang.org/x/mod/modfile/rule.go",
-				NoCMD:   true,
 				Structs: []string{"File"},
 			},
 		},

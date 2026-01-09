@@ -4,6 +4,8 @@ package builders
 
 import "golang.org/x/mod/modfile"
 
+//go:generate go tool go-builder-generator generate -d . -f module::golang.org/x/mod/modfile/rule.go -s File
+
 // FileBuilder represents File's builder.
 type FileBuilder struct {
 	build modfile.File

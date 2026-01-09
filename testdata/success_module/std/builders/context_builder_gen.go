@@ -10,6 +10,8 @@ import (
 	_ "unsafe"
 )
 
+//go:generate go tool go-builder-generator generate -d . -f std::go/build/build.go -s Context
+
 // ContextBuilder represents Context's builder.
 type ContextBuilder struct {
 	build build.Context

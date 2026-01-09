@@ -44,7 +44,7 @@ type CLIOptions struct {
 
 // FileRelPath returns the relative path of options File property and options Destdir.
 func (c CLIOptions) FileRelPath() string {
-	if strings.HasPrefix(c.File, modulePrefix) {
+	if strings.HasPrefix(c.File, modulePrefix) || strings.HasPrefix(c.File, stdPrefix) {
 		return c.File
 	}
 	file, _ := filepath.Rel(c.Destdir, c.File) // relative path to destdir since RelPath is expected to be called in templates (in destination directory)
