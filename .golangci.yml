@@ -84,6 +84,11 @@ linters:
       # Default is to use a neutral variety of English.
       locale: US
 
+    nestif:
+      # Minimal complexity of if statements to report.
+      # Default: 5
+      min-complexity: 8
+
     perfsprint:
       # Optimizes into `err.Error()` even if it is only equivalent for non-nil errors.
       # Default: false

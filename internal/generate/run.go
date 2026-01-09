@@ -87,7 +87,7 @@ func Run(ctx context.Context, options CLIOptions, args []string) error {
 		GeneratedFrom: path.Join(srcpkg, filepath.Base(options.File)),
 		HasGenerate:   hasGenerate(file, args),
 		Imports:       imports,
-		SameModule:    destfile.Module.Mod.String() == srcfile.Module.Mod.String(),
+		SameModule:    destfile.File.Module.Mod.String() == srcfile.File.Module.Mod.String(),
 		SourceName:    sourcePackage,
 		ToolAvailable: toolAvailable(destfile),
 	}
