@@ -113,16 +113,16 @@ func getImports(file *ast.File) (names []string, imports []string, _ error) {
 
 // fileImport returns the import and its alias (in case the import name was already taken) for the input pkg with the associated go.mod modfile.
 func fileImport(file modFile, pkg string, names []string) (alias string, imp string) {
-	m := lo.FromPtr(file.Module)
+	module := lo.FromPtr(file.Module)
 
 	// when working with std package, go doesn't add the go.mod module name to the import
-	if m.Mod.Path == "std" {
+	if module.Mod.Path == "std" {
 		return "", fmt.Sprint(`"`, pkg, `"`)
 	}
 
 	// ensure import name is not already used by another import
 	var changed bool
-	alias = lo.CoalesceOrEmpty(pkg, path.Base(m.Mod.Path))
+	alias = lo.CoalesceOrEmpty(pkg, path.Base(module.Mod.Path))
 	for _, name := range names {
 		if alias == name {
 			alias = "builded" // Note: might need a generated name in case 'builded' is also taken ... (but should do the trick for now? Right? ...)
@@ -134,30 +134,37 @@ func fileImport(file modFile, pkg string, names []string) (alias string, imp str
 	}
 
 	// when working with a standard go module, the package name is prefixed with the module name from where it comes
-	return alias, alias + " " + fmt.Sprint(`"`, path.Join(m.Mod.Path, pkg), `"`)
+	return alias, alias + " " + fmt.Sprint(`"`, path.Join(module.Mod.Path, pkg), `"`)
 }
 
-// findRequire finds the appropriate module name and version in input file for the input moduleName.
-func findRequire(file *modfile.File, moduleName string) (string, error) {
-	// find appropriate require in go.mod file to retrieve the version
-	require, ok := lo.Find(file.Require, func(require *modfile.Require) bool {
-		return strings.HasPrefix(moduleName, require.Mod.Path)
+// findRequire finds the appropriate module name and version in input file for the input modulepathfile.
+func findRequire(file modFile, modulepathfile string) (string, error) {
+	requires := lo.SliceToMap(file.Require, func(require *modfile.Require) (string, *modfile.Require) {
+		return require.Mod.Path, require
 	})
-	if !ok {
-		return "", fmt.Errorf("missing module name '%s' in go.mod", moduleName)
+	// find the exact require in go.mod file
+	var require *modfile.Require
+	for mod := modulepathfile; mod != "."; mod = path.Dir(mod) {
+		if req, ok := requires[mod]; ok {
+			require = req
+			break
+		}
 	}
-	subpath := strings.TrimPrefix(moduleName, require.Mod.Path)
+	if require == nil {
+		return "", fmt.Errorf("missing module name '%s' in go.mod", modulepathfile)
+	}
+	pathfile := strings.TrimPrefix(modulepathfile, require.Mod.Path)
 
 	// find the appropriate replace version in go.mod (in such case it could exist)
 	replace, ok := lo.Find(file.Replace, func(replace *modfile.Replace) bool {
-		return strings.HasPrefix(moduleName, replace.Old.Path)
+		return require.Mod.Path == replace.Old.Path // find the exact replace match for the require that would be used
 	})
-	if !ok {
-		// return required version if no replaced version found
-		return filepath.Join(require.Mod.String(), subpath), nil
+	if ok {
+		// return replaced version if provided
+		return filepath.Join(replace.New.String(), pathfile), nil
 	}
-	// return replaced version if provided
-	return filepath.Join(replace.New.String(), subpath), nil
+	// return required version if no replaced version found
+	return filepath.Join(require.Mod.String(), pathfile), nil
 }
 
 // findGomod finds the parent go.mod associated to input dir
@@ -204,7 +211,7 @@ func validGomod(file *modfile.File) error {
 
 // toolAvailable returns truthy when given modfile go version is above or equal to go1.24.
 // Meaning it can handle go tool section.
-func toolAvailable(file *modfile.File) bool {
+func toolAvailable(file modFile) bool {
 	minGo := "go1.24"
 	return version.Compare("go"+file.Go.Version, minGo) >= 0
 }
