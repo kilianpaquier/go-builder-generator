@@ -32,21 +32,21 @@ var (
 )
 
 const (
-	modulePrefix = "module::"
-	stdPrefix    = "std::"
+	module = "module::"
+	std    = "std::"
 )
 
 // modFile is an enriched modfile.File with its local directory path.
 type modFile struct {
-	*modfile.File
-	Dir string
+	Dir  string
+	File *modfile.File
 }
 
 // modulePath finds the appropriate required in modfile for the input module name
 // and returns its path in the current filesystem.
 func modulePath(ctx context.Context, file modFile, modulepathfile string) (string, error) {
 	// find required in go/src since it's prefixed by "std::"
-	if require, ok := strings.CutPrefix(modulepathfile, stdPrefix); ok {
+	if require, ok := strings.CutPrefix(modulepathfile, std); ok {
 		if root := os.Getenv("GOROOT"); root != "" {
 			return filepath.Join(root, "src", require), nil
 		}
@@ -63,7 +63,7 @@ func modulePath(ctx context.Context, file modFile, modulepathfile string) (strin
 	}
 
 	// find modulepathfile in go.mod file since it's prefixed by "module::"
-	if modulepathfile, ok := strings.CutPrefix(modulepathfile, modulePrefix); ok {
+	if modulepathfile, ok := strings.CutPrefix(modulepathfile, module); ok { //nolint:revive // modified input (it's fine)
 		module, err := findRequire(file, modulepathfile)
 		if err != nil {
 			return "", err
@@ -113,16 +113,16 @@ func getImports(file *ast.File) (names []string, imports []string, _ error) {
 
 // fileImport returns the import and its alias (in case the import name was already taken) for the input pkg with the associated go.mod modfile.
 func fileImport(file modFile, pkg string, names []string) (alias string, imp string) {
-	module := lo.FromPtr(file.Module)
+	mod := lo.FromPtr(file.File.Module)
 
 	// when working with std package, go doesn't add the go.mod module name to the import
-	if module.Mod.Path == "std" {
+	if mod.Mod.Path == "std" {
 		return "", fmt.Sprint(`"`, pkg, `"`)
 	}
 
 	// ensure import name is not already used by another import
 	var changed bool
-	alias = lo.CoalesceOrEmpty(pkg, path.Base(module.Mod.Path))
+	alias = lo.CoalesceOrEmpty(pkg, path.Base(mod.Mod.Path))
 	for _, name := range names {
 		if alias == name {
 			alias = "builded" // Note: might need a generated name in case 'builded' is also taken ... (but should do the trick for now? Right? ...)
@@ -134,12 +134,12 @@ func fileImport(file modFile, pkg string, names []string) (alias string, imp str
 	}
 
 	// when working with a standard go module, the package name is prefixed with the module name from where it comes
-	return alias, alias + " " + fmt.Sprint(`"`, path.Join(module.Mod.Path, pkg), `"`)
+	return alias, alias + " " + fmt.Sprint(`"`, path.Join(mod.Mod.Path, pkg), `"`)
 }
 
 // findRequire finds the appropriate module name and version in input file for the input modulepathfile.
 func findRequire(file modFile, modulepathfile string) (string, error) {
-	requires := lo.SliceToMap(file.Require, func(require *modfile.Require) (string, *modfile.Require) {
+	requires := lo.SliceToMap(file.File.Require, func(require *modfile.Require) (string, *modfile.Require) {
 		return require.Mod.Path, require
 	})
 	// find the exact require in go.mod file
@@ -156,7 +156,7 @@ func findRequire(file modFile, modulepathfile string) (string, error) {
 	pathfile := strings.TrimPrefix(modulepathfile, require.Mod.Path)
 
 	// find the appropriate replace version in go.mod (in such case it could exist)
-	replace, ok := lo.Find(file.Replace, func(replace *modfile.Replace) bool {
+	replace, ok := lo.Find(file.File.Replace, func(replace *modfile.Replace) bool {
 		return require.Mod.Path == replace.Old.Path // find the exact replace match for the require that would be used
 	})
 	if ok {
@@ -213,7 +213,7 @@ func validGomod(file *modfile.File) error {
 // Meaning it can handle go tool section.
 func toolAvailable(file modFile) bool {
 	minGo := "go1.24"
-	return version.Compare("go"+file.Go.Version, minGo) >= 0
+	return version.Compare("go"+file.File.Go.Version, minGo) >= 0
 }
 
 // hasGenerate checks whether a 'go:generate' comment is present in input file for go-builder-generator.
