@@ -191,8 +191,8 @@ In case it's needed to generate a builder on a struct being in the standard libr
 The difference with `module::` is that the tool will not check whether the package is imported (because of course it's already embedded).
 
 To find the appropriate file, `go-builder-generator` will check in the following order:
-- `GOROOT` environment variable to retrieve the path to Golang root directory, the computed path will be `${GOROOT}/src/<path provided avec std::>`
-- Run `go env GOROOT` to retrieve computed `GOROOT` from Golang directly, the computed path will be `${go env GOROOT}/src/<path provided avec std::>`
+- `GOROOT` environment variable to retrieve the path to Golang root directory, the computed path will be `${GOROOT}/src/<path provided with std::>`
+- Run `go env GOROOT` to retrieve computed `GOROOT` from Golang directly, the computed path will be `${go env GOROOT}/src/<path provided with std::>`
 
 ```go
 //go:generate go tool go-builder-generator generate -f std::go/build/build.go -s Context -d builders
