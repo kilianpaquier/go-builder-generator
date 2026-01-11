@@ -16,6 +16,7 @@ type require struct {
 
 // Errorf logs the formatted error message and fails the test immediately.
 func (r require) Errorf(format string, args ...any) {
+	r.Helper()
 	r.Logf(format, args...)
 	r.FailNow()
 }
