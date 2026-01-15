@@ -14,6 +14,13 @@ type require struct {
 	testing.TB
 }
 
+// Error logs the args and fails the test immediately.
+func (r require) Error(args ...any) {
+	r.Helper()
+	r.Log(args...)
+	r.FailNow()
+}
+
 // Errorf logs the formatted error message and fails the test immediately.
 func (r require) Errorf(format string, args ...any) {
 	r.Helper()

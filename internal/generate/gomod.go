@@ -63,7 +63,7 @@ func modulePath(ctx context.Context, file modFile, modulepathfile string) (strin
 	}
 
 	// find modulepathfile in go.mod file since it's prefixed by "module::"
-	if modulepathfile, ok := strings.CutPrefix(modulepathfile, module); ok { //nolint:revive // modified input (it's fine)
+	if modulepathfile, ok := strings.CutPrefix(modulepathfile, module); ok { //nolint:revive
 		module, err := findRequire(file, modulepathfile)
 		if err != nil {
 			return "", err
