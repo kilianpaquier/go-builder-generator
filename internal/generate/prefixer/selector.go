@@ -20,7 +20,7 @@ var _ Prefixer = &selectorPrefixer{} // ensure interface is implemented
 // An example would be a composition of a StarExpr with an ArrayType of an Ident.
 // In that case, all three prefixers computed from those ast.Expr will be validated with Valid.
 func (s *selectorPrefixer) Valid() error {
-	var errs []error
+	var errs []error //nolint:prealloc
 
 	// retrieve package prefixer
 	// with context.Context, X would be the "context" part

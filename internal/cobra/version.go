@@ -6,12 +6,11 @@ import (
 	"github.com/kilianpaquier/go-builder-generator/internal/build"
 )
 
-var versionCmd = &cobra.Command{
-	Use:   "version",
-	Short: "Show current go-builder-generator version",
-	Run:   func(_ *cobra.Command, _ []string) { logger.Info(build.GetInfo().String()) },
-}
-
-func init() {
-	rootCmd.AddCommand(versionCmd)
+func version() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "version",
+		Short: "Show current version",
+		Run:   func(_ *cobra.Command, _ []string) { logger.Info(build.GetInfo().String()) },
+	}
+	return cmd
 }

@@ -22,7 +22,7 @@ var _ Prefixer = &mapPrefixer{} // ensure interface is implemented
 // An example would be a composition of a StarExpr with an ArrayType of an Ident.
 // In that case, all three prefixers computed from those ast.Expr will be validated with Valid.
 func (m *mapPrefixer) Valid() error {
-	var errs []error
+	var errs []error //nolint:prealloc
 
 	// retrieve map key prefixer
 	m.KeyPrefixer = NewPrefixer(m.Key)
