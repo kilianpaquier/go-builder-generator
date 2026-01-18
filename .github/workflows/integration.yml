@@ -150,7 +150,7 @@ jobs:
           args: --config=.golangci.yml --timeout=240s --allow-parallel-runners --output.sarif.path="reports/golangci-lint.sarif" --output.text.path=stdout
           problem-matchers: true
           # renovate: datasource=github-tags packageName=golangci/golangci-lint depName=golangci-lint
-          version: v2.7.2
+          version: v2.8.0
       - if: ${{ !cancelled() }}
         uses: github/codeql-action/upload-sarif@5d4e8d1aca955e8d8589aabd499c5cae939e33c7 # v4.31.9
         with:
