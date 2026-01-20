@@ -45,7 +45,7 @@ jobs:
       - uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5 # v6.2.0
         with:
           check-latest: true
-          go-version: '1.25.5'
+          go-version: '1.25.6'
           token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/go-dependency-submission@f35d5c9af13ce9cc32f7930b171e315e878f6921 # v2.0.3
         with:
