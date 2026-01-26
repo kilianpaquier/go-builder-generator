@@ -7,7 +7,7 @@ toolchain go1.25.6
 require (
 	github.com/fatih/structtag v1.2.0
 	github.com/huandu/xstrings v1.5.0
-	github.com/kilianpaquier/compare v1.1.0
+	github.com/kilianpaquier/compare v1.1.1
 	github.com/samber/lo v1.52.0
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10
