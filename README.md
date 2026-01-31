@@ -65,15 +65,12 @@ Available Commands:
   completion  Generate the autocompletion script for the specified shell
   generate    Generate builders for structs arguments present in file argument.
   help        Help about any command
-  upgrade     Upgrade or install go-builder-generator
-  version     Show current go-builder-generator version
+  version     Show current version
 
 Flags:
   -h, --help                help for go-builder-generator
       --log-format string   set logging format (either "text" or "json") (default "text")
       --log-level string    set logging level (default "info")
-
-Use "go-builder-generator [command] --help" for more information about a command.
 ```
 
 ### Generate

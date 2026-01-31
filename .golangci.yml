@@ -89,10 +89,18 @@ linters:
       # Default: 5
       min-complexity: 8
 
+    nolintlint:
+      # Enable to require nolint directives to mention the specific linter being suppressed.
+      # Default: false
+      require-specific: true
+
     perfsprint:
       # Optimizes into `err.Error()` even if it is only equivalent for non-nil errors.
       # Default: false
       err-error: true
+      # Optimization of `concat-loop` even with other operations.
+      # Default: false
+      loop-other-ops: true
 
     prealloc:
       # IMPORTANT: we don't recommend using this linter before doing performance profiling.

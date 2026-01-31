@@ -2,6 +2,11 @@
 
 version: 2
 
+checksum:
+  name_template: checksums.txt
+snapshot:
+  version_template: "{{ .Env.VERSION }}"
+
 builds:
   - main: ./cmd/go-builder-generator
     env:
@@ -9,7 +14,7 @@ builds:
     ldflags:
       - -X github.com/kilianpaquier/go-builder-generator/internal/build.branch={{ .Branch }}
       - -X github.com/kilianpaquier/go-builder-generator/internal/build.commit={{ .Commit }}
-      - -X github.com/kilianpaquier/go-builder-generator/internal/build.date={{ .CommitDate }}
+      - -X github.com/kilianpaquier/go-builder-generator/internal/build.date={{ .Date }}
       - -X github.com/kilianpaquier/go-builder-generator/internal/build.version={{ .Env.VERSION }}
     goos:
       - linux
@@ -18,12 +23,6 @@ builds:
     goarch:
       - amd64
       - arm64
-
-announce:
-  skip: true
-
-changelog:
-  disable: true
 
 archives:
   - formats: tar.gz
@@ -37,9 +36,6 @@ archives:
       - goos: windows
         formats: zip
 
-checksum:
-  name_template: checksums.txt
-
 nfpms:
   - maintainer: kilianpaquier
     license: MIT
@@ -49,6 +45,5 @@ nfpms:
       {{- .Arch }}
       {{- if .Arm }}v{{ .Arm }}{{ end }}
     formats:
-      - apk
       - deb
       - rpm

@@ -3,7 +3,7 @@
 // https://docs.renovatebot.com/self-hosted-configuration/
 
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "$schema": "https://docs.renovatebot.com/renovate-global-schema.json",
 
     "autodiscover": true,
     "autodiscoverFilter": ["kilianpaquier/go-builder-generator"],
