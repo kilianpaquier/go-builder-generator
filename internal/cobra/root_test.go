@@ -15,7 +15,7 @@ func TestRootFlags(t *testing.T) {
 		cmd := rootCmd()
 
 		// Act
-		err := cmd.Execute()
+		err := cmd.ExecuteContext(t.Context())
 
 		// Assert
 		testutils.NoError(testutils.Require(t), err)
@@ -35,7 +35,7 @@ func TestRootFlags(t *testing.T) {
 		cmd.SetArgs([]string{"--" + flagLogFormat, "json", "--" + flagLogLevel, "debug"})
 
 		// Act
-		err := cmd.Execute()
+		err := cmd.ExecuteContext(t.Context())
 
 		// Assert
 		testutils.NoError(testutils.Require(t), err)

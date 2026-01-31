@@ -18,6 +18,8 @@ func Execute() {
 	cmd.AddCommand(version())
 
 	if err := cmd.Execute(); err != nil {
+		subcmd, _, _ := cmd.Find(os.Args[1:])
+		usage(cmd, subcmd, err)
 		logger.Error(err.Error())
 		os.Exit(1) //nolint:revive
 	}
@@ -29,6 +31,7 @@ func rootCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:               "go-builder-generator",
 		SilenceErrors:     true, // don't print errors with cobra, let logger.Error handle them
+		SilenceUsage:      true, // don't print help on errors, let usage function handle printing depending on command error
 		PersistentPreRunE: func(*cobra.Command, []string) error { return setupLogger(logFormat, logLevel) },
 	}
 
