@@ -8,7 +8,7 @@ log_info() {
 
 dirs=$(find "$(pwd)" -name go.mod -exec dirname {} +;)
 for dir in $dirs; do
-    log_info "Updating layout of $dir"
+    log_info "Updating go dependencies in $dir"
     (cd "$dir" && go get -u ./... && go mod tidy)
 done
 unset dirs dir

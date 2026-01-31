@@ -1,6 +1,6 @@
 package examples
 
-//go:generate ../../go-builder-generator generate -f types.go -s SomeStruct -d builders
+//go:generate go tool go-builder-generator generate -f types.go -s SomeStruct -d builders
 
 type SomeAlias int64
 
