@@ -76,9 +76,8 @@ plugins:
         - CHANGELOG.md
         - LICENSE
       message: "chore(release): v${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
-  - - "@semantic-release/github"
-    - draftRelease: false
-      failComment: ⚠️ Expected release for branch '${branch.name}' has failed due to the following errors:\n- ${errors.map(err => err.message).join('\\n- ')}
+  - - "@semantic-release/gitlab"
+    - failComment: ⚠️ Expected release for branch '${branch.name}' has failed due to the following errors:\n- ${errors.map(err => err.message).join('\\n- ')}
       failCommentCondition: <% return false; %>
       successComment: 🎉 This issue has been resolved in version v${nextRelease.version} 🎉
       successCommentCondition: <% return true; %>
@@ -89,3 +88,8 @@ plugins:
         - path: dist/*.rpm
         - path: dist/*.tar.gz
         - path: dist/*.zip
+  - - "@semantic-release/exec"
+    - analyzeCommitsCmd: echo "SEMREL_INFO_LAST_VERSION=${lastRelease.version}" > semrel.out.env
+      verifyReleaseCmd: |
+        echo "SEMREL_INFO_NEXT_VERSION=${nextRelease.version}" >> semrel.out.env
+        echo "SEMREL_INFO_NEXT_VERSION_TYPE=${nextRelease.type}" >> semrel.out.env
