@@ -37,7 +37,7 @@ archives:
         formats: zip
 
 nfpms:
-  - maintainer: kilianpaquier
+  - maintainer: u.kilianpaquier
     license: MIT
     file_name_template: >-
       {{- .ProjectName }}_

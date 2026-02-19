@@ -62,5 +62,5 @@ kickr:
 
       glab mr create --title "$MERGE_TITLE" --description "$MERGE_BODY" \
         --source-branch "$MERGE_SOURCE_BRANCH" --target-branch "$MERGE_TARGET_BRANCH" --remove-source-branch \
-        --reviewer "kilianpaquier" \
+        --reviewer "u.kilianpaquier" \
         --label "$MERGE_LABELS"
