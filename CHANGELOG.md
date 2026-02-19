@@ -1,3 +1,31 @@
+## [1.11.0](https://gitlab.com/kilianpaquier/go-builder-generator/compare/v1.10.5...v1.11.0) (2026-02-19)
+
+### Chores
+
+* **cobra:** show usage only on arguments errors ([f3adb31](https://gitlab.com/kilianpaquier/go-builder-generator/commit/f3adb312005cce852420d8e2a497d4c89114f5d6))
+* **deps:** update go dependencies ([1cfd110](https://gitlab.com/kilianpaquier/go-builder-generator/commit/1cfd1106bedfb088c3a7408fd5d9dbb2fb0198b4))
+* **deps:** update go dependencies ([feca6d8](https://gitlab.com/kilianpaquier/go-builder-generator/commit/feca6d88c9946dfae76ce8865dfdbcb6b69ac2d8))
+
+### Code Refactoring
+
+* **cobra:** reduce global variables through cobra commands definitions ([c10dc88](https://gitlab.com/kilianpaquier/go-builder-generator/commit/c10dc881aaae24fe2d0d1fbefec2e4d59531519b))
+* **cobra:** use os.Args to rebuild generate command instead of flag parsing deactivation / activation ([b603618](https://gitlab.com/kilianpaquier/go-builder-generator/commit/b60361816b08143dfc3f4325b0b07eaecd5e71f2))
+
+### Continuous Integration
+
+* **deps:** update dependency go to v1.25.6 ([8aeb6fc](https://gitlab.com/kilianpaquier/go-builder-generator/commit/8aeb6fc35bc85abbaadeb7386f809e8226fd2be4))
+* **deps:** update dependency go to v1.26.0 ([dceb219](https://gitlab.com/kilianpaquier/go-builder-generator/commit/dceb219ad63061ac573994b1bb853ebb041385de))
+* **layout:** regenerate kickr layout ([c035c6a](https://gitlab.com/kilianpaquier/go-builder-generator/commit/c035c6afcb5ceecc87cfe6f1c88c3961355768c9))
+* **layout:** regenerate kickr layout ([05993a4](https://gitlab.com/kilianpaquier/go-builder-generator/commit/05993a460c62c75d08e578ed9dd4ef404fbbc6e1))
+* migrate to GitLab CICD ([dafa050](https://gitlab.com/kilianpaquier/go-builder-generator/commit/dafa0506e6f6d7aac59585554311f79fffe3ea0c))
+* update codeowners ([770dce8](https://gitlab.com/kilianpaquier/go-builder-generator/commit/770dce86915c64aaff45c0f39cf687d6a6cc4741))
+
+### Tests
+
+* add Error override for required assertions ([dacad18](https://gitlab.com/kilianpaquier/go-builder-generator/commit/dacad1866b962e4913e12b291aeb660bab871e5f))
+* add missing t.Helper() on internal testing func ([e5a4937](https://gitlab.com/kilianpaquier/go-builder-generator/commit/e5a493723568bfc582eadaf11343926152c215bd))
+* setup internal simple testing functions ([eead35c](https://gitlab.com/kilianpaquier/go-builder-generator/commit/eead35c735938e43c323d74b462830562b835c38))
+
 ## [1.10.5](https://github.com/kilianpaquier/go-builder-generator/compare/v1.10.4...v1.10.5) (2026-01-09)
 
 ### Bug Fixes
