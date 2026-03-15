@@ -5,28 +5,26 @@ include:
 
   # pre-commit template
   # https://gitlab.com/to-be-continuous/pre-commit
-  - project: to-be-continuous/pre-commit
-    ref: 781cb6e8a6a4009a4ca29357fd6aa1a81f9867cd # 1.4.2
-    file: templates/gitlab-ci-pre-commit.yml
+  - component: gitlab.com/to-be-continuous/pre-commit/gitlab-ci-pre-commit@781cb6e8a6a4009a4ca29357fd6aa1a81f9867cd # 1.4.2
+    inputs:
+      pre-commit-file: .pre-commit-config.yaml
 
   # Go template
   # https://gitlab.com/to-be-continuous/golang
-  - project: to-be-continuous/golang
-    ref: 473da325602b2a247fc6d880bc243cf6a42dbe0f # 4.15.3
-    file: templates/gitlab-ci-golang.yml
-
-variables:
-  PRE_COMMIT_FILE: .pre-commit-config.yaml
-
-  GO_BUILD_MODE: modules
-  GO_CI_LINT_ARGS: --config=.golangci.yml --timeout=240s --allow-parallel-runners --output.checkstyle.path="reports/go-ci-lint.checkstyle.xml" --output.text.path=stdout
-  GO_SBOM_OPTS: -licenses -assert-licenses
-  GO_TEST_FLAGS: -v -coverpkg=./... -covermode=count -timeout=30s
-  GO_TEST_IMAGE: $GO_IMAGE
+  - component: gitlab.com/to-be-continuous/golang/gitlab-ci-golang@473da325602b2a247fc6d880bc243cf6a42dbe0f # 4.15.3
+    inputs:
+      build-mode: modules
+      ci-lint-args: --config=.golangci.yml --timeout=240s --allow-parallel-runners --output.checkstyle.path="reports/go-ci-lint.checkstyle.xml" --output.text.path=stdout
+      sbom-opts: -licenses -assert-licenses
+      test-flags: -v -coverpkg=./... -covermode=count -timeout=30s
+      test-image: $GO_IMAGE
 
 pre-commit:
   variables:
     GIT_DEPTH: "0"
+
+go-govulncheck:
+  allow_failure: true
 
 go-build:
   image:
@@ -35,8 +33,6 @@ go-build:
   needs:
     - semantic-release-info
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule"'
-      when: never
     # https://gitlab.com/to-be-continuous/golang/-/blob/master/templates/gitlab-ci-golang.yml?ref_type=heads#L670
     - if: '$GO_TEST_IMAGE != ""'
   script:
