@@ -47,3 +47,8 @@ semantic-release:
   interruptible: false
   dependencies:
     - go-build
+
+semantic-release:dry-run:
+  extends: semantic-release
+  variables:
+    SEMREL_DRY_RUN: "true"
