@@ -10,9 +10,9 @@ require (
 	github.com/kilianpaquier/compare v1.1.1
 	github.com/samber/lo v1.53.0
 	github.com/spf13/cobra v1.10.2
-	golang.org/x/mod v0.34.0
-	golang.org/x/text v0.35.0
-	golang.org/x/tools v0.43.0
+	golang.org/x/mod v0.35.0
+	golang.org/x/text v0.36.0
+	golang.org/x/tools v0.44.0
 )
 
 require (
