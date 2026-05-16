@@ -1,3 +1,21 @@
+## [1.11.1](https://gitlab.com/kilianpaquier/go-builder-generator/compare/v1.11.0...v1.11.1) (2026-05-16)
+
+### Chores
+
+* **deps:** update go dependencies ([75ed0d4](https://gitlab.com/kilianpaquier/go-builder-generator/commit/75ed0d40fcca7807d8f8625d4e3c14f19d04ef16))
+* **deps:** update go dependencies ([07600ee](https://gitlab.com/kilianpaquier/go-builder-generator/commit/07600ee8462d783b096a9600fd509c04ac6a4564))
+* **deps:** update go dependencies ([dc92930](https://gitlab.com/kilianpaquier/go-builder-generator/commit/dc929301b0d5660a943767dfd5d7de4510820dd2))
+* **deps:** update module github.com/samber/lo to v1.53.0 ([6010e82](https://gitlab.com/kilianpaquier/go-builder-generator/commit/6010e8232721b1648ac4c629c9e0e1a64d906975))
+* **deps:** update module golang.org/x/tools to v0.43.0 ([647ea3d](https://gitlab.com/kilianpaquier/go-builder-generator/commit/647ea3d75a5aef21cf6ca7704d538adbd02bb8c7))
+
+### Continuous Integration
+
+* **deps:** update dependency go to v1.26.1 ([c9510b9](https://gitlab.com/kilianpaquier/go-builder-generator/commit/c9510b9dfe92086db10a85fdd953a2105dab6503))
+* **deps:** update dependency go to v1.26.2 ([c819567](https://gitlab.com/kilianpaquier/go-builder-generator/commit/c8195670e075c9413e0e87ec6c35073c1d59fd7b))
+* **deps:** update go toolchain directive to v1.26.3 ([cebbfff](https://gitlab.com/kilianpaquier/go-builder-generator/commit/cebbfff0dc45e47a0208152cb13c0519e246ce69))
+* **layout:** regenerate kickr layout ([271eb30](https://gitlab.com/kilianpaquier/go-builder-generator/commit/271eb30dd4dea0eed2935f3563aa677ccf173dbe))
+* **layout:** regenerate kickr layout ([1d2b13f](https://gitlab.com/kilianpaquier/go-builder-generator/commit/1d2b13fe2c2e300fc43da22d03d86416aece6612))
+
 ## [1.11.0](https://gitlab.com/kilianpaquier/go-builder-generator/compare/v1.10.5...v1.11.0) (2026-02-19)
 
 ### Chores
