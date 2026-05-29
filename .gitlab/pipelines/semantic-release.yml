@@ -4,7 +4,7 @@
 include:
   # semantic-release template
   # https://gitlab.com/to-be-continuous/semantic-release
-  - component: gitlab.com/to-be-continuous/semantic-release/gitlab-ci-semrel@b339fb11b538e51f6c67eb3eb1c755f5fa85b864 # 4.0.4
+  - component: gitlab.com/to-be-continuous/semantic-release/gitlab-ci-semrel@f7c8ec592083596d1b392778582f160c1a2a0379 # 4.3.0
     inputs:
       auto-release-enabled: "false"
       branches-ref: /^(alpha|beta|dev|develop|main|next|rc|staging|v[0-9]+(\.[0-9]+)?\.x)$/

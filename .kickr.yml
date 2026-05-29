@@ -11,5 +11,3 @@ license: mit
 maintainers:
   - name: u.kilianpaquier
 platform: gitlab
-pre-commit:
-  - conventional-commits

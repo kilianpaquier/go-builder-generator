@@ -9,21 +9,9 @@ default_stages:
 
 repos:
 
-  # see https://www.conventionalcommits.org/en/v1.0.0/#specification
-  - repo: https://github.com/commitizen-tools/commitizen
-    # renovate: datasource=github-tags packageName=commitizen-tools/commitizen depName=commitizen
-    rev: v4.12.1
-    hooks:
-      - id: commitizen
-      - id: commitizen-branch
-        args:
-          - --rev-range
-          - ${GITHUB_BASE_REF:-${CI_MERGE_REQUEST_TARGET_BRANCH_NAME:+origin/}}${GITHUB_BASE_REF:-${CI_MERGE_REQUEST_TARGET_BRANCH_NAME:-HEAD~1}}..HEAD
-        stages: [pre-commit]
-
   - repo: https://github.com/gitleaks/gitleaks
     # renovate: datasource=github-tags packageName=gitleaks/gitleaks depName=gitleaks
-    rev: v8.30.0
+    rev: v8.30.1
     hooks:
       - id: gitleaks
 

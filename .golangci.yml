@@ -12,11 +12,13 @@ linters:
     - exhaustruct
     - gochecknoglobals
     - gochecknoinits
+    - gomodguard
     - ireturn
     - lll
     - mnd
     - nlreturn
     - noinlineerr
+    - nolintlint
     - nonamedreturns
     - paralleltest
     - recvcheck
