@@ -5,7 +5,7 @@ version: 2
 checksum:
   name_template: checksums.txt
 snapshot:
-  version_template: "{{ .Env.VERSION }}"
+  version_template: "{{ .Env.APP_VERSION }}"
 
 builds:
   - main: ./cmd/go-builder-generator
@@ -15,7 +15,7 @@ builds:
       - -X github.com/kilianpaquier/go-builder-generator/internal/build.branch={{ .Branch }}
       - -X github.com/kilianpaquier/go-builder-generator/internal/build.commit={{ .Commit }}
       - -X github.com/kilianpaquier/go-builder-generator/internal/build.date={{ .Date }}
-      - -X github.com/kilianpaquier/go-builder-generator/internal/build.version={{ .Env.VERSION }}
+      - -X github.com/kilianpaquier/go-builder-generator/internal/build.version={{ .Env.APP_VERSION }}
     goos:
       - linux
       - windows
