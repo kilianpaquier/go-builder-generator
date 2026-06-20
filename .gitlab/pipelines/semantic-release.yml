@@ -25,12 +25,12 @@ semantic-release-info:
     SEMREL_DRY_RUN: "true"
   script:
     - !reference [semantic-release, script]
-    - >
+    - |
       if [ -f "$SEMREL_CONFIG_DIR/semrel.out.env" ]; then
         source "$SEMREL_CONFIG_DIR/semrel.out.env"
         rm "$SEMREL_CONFIG_DIR/semrel.out.env"
       fi
-    - >
+    - |
       echo "BRANCH_SHA=$(echo "$CI_COMMIT_REF_NAME" | sha256sum | cut -c -8)" >> "$SEMREL_CONFIG_DIR/semrel.out.env"
 
       if [ -n "$SEMREL_INFO_NEXT_VERSION" ]; then
