@@ -5,13 +5,13 @@ include:
 
   # pre-commit template
   # https://gitlab.com/to-be-continuous/pre-commit
-  - component: $CI_SERVER_FQDN/to-be-continuous/pre-commit/gitlab-ci-pre-commit@805b30e6daceca57eae1296f7864bd65577c0b40 # 1.5.0
+  - remote: https://gitlab.com/to-be-continuous/pre-commit/-/raw/805b30e6daceca57eae1296f7864bd65577c0b40/templates/gitlab-ci-pre-commit.yml # 1.5.0
     inputs:
       pre-commit-file: .pre-commit-config.yaml
 
   # Go template
   # https://gitlab.com/to-be-continuous/golang
-  - component: $CI_SERVER_FQDN/to-be-continuous/golang/gitlab-ci-golang@8a3028125ed0e16d9ad1be4fee6c2905e64915b0 # 4.16.0
+  - remote: https://gitlab.com/to-be-continuous/golang/-/raw/8a3028125ed0e16d9ad1be4fee6c2905e64915b0/templates/gitlab-ci-golang.yml # 4.16.0
     inputs:
       build-mode: modules
       ci-lint-args: --config=.golangci.yml --timeout=300s --allow-parallel-runners --output.checkstyle.path="reports/go-ci-lint.checkstyle.xml" --output.text.path=stdout

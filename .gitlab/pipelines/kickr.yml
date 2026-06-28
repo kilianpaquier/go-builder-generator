@@ -2,7 +2,9 @@
 
 ---
 kickr:
-  image: $KICKR_IMAGE
+  image:
+    name: $KICKR_IMAGE
+    entrypoint: [""]
   stage: test
   needs: []
   rules:
@@ -20,17 +22,14 @@ kickr:
     MERGE_SOURCE_BRANCH: kickr/layout
     MERGE_TARGET_BRANCH: $CI_DEFAULT_BRANCH
     MERGE_TITLE: "ci(layout): regenerate kickr layout"
-    # renovate: datasource=github-tags packageName=jdx/mise depName=mise
-    MISE_VERSION: v2026.6.7
   before_script:
     - export GOBIN="$HOME/.cache/go/bin"
     - export PATH="$HOME/.local/share/mise/shims:$GOBIN:$PATH"
-    - apk update -q && apk add -q curl git jq
-    - curl -fSL https://mise.run | MISE_INSTALL_PATH=/usr/local/bin/mise MISE_VERSION=$MISE_VERSION sh
+    - apt-get update -yq && apt-get install -yq git jq
     # renovate: datasource=golang-version packageName=golang/go depName=golang
     - mise use -g golang@1.26.4
     # renovate: datasource=gitlab-tags packageName=gitlab-org/cli depName=glab
-    - mise use -g glab@1.102.0
+    - mise use -g glab@1.103.0
     - go install github.com/kickr-dev/kickr/cmd/kickr@beta
   script:
     - kickr generate
