@@ -29,7 +29,7 @@ kickr:
     # renovate: datasource=golang-version packageName=golang/go depName=golang
     - mise use -g golang@1.26.4
     # renovate: datasource=gitlab-tags packageName=gitlab-org/cli depName=glab
-    - mise use -g glab@1.103.0
+    - mise use -g glab@1.105.0
     - go install github.com/kickr-dev/kickr/cmd/kickr@beta
   script:
     - kickr generate
@@ -54,7 +54,7 @@ kickr:
         glab mr close $MERGE_SOURCE_BRANCH || true
         exit 0
       }
-      git push https://oauth2:$GITLAB_TOKEN@$CI_SERVER_FQDN/$CI_PROJECT_PATH.git $MERGE_SOURCE_BRANCH --force
+      git push https://oauth2:$KICKR_TOKEN@$CI_SERVER_FQDN/$CI_PROJECT_PATH.git $MERGE_SOURCE_BRANCH --force
 
       # check opened merge requests
       merges=$(glab mr list --source-branch "$MERGE_SOURCE_BRANCH" --target-branch "$MERGE_TARGET_BRANCH" -F json) || {
