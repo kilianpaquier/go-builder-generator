@@ -30,7 +30,6 @@ func (i *indexListPrefixer) Valid() error {
 	i.IndicesPrefixers = make([]Prefixer, 0, len(i.Indices))
 	for _, indice := range i.Indices {
 		prefixer := NewPrefixer(indice)
-
 		errs = append(errs, prefixer.Valid())
 		i.IndicesPrefixers = append(i.IndicesPrefixers, prefixer)
 	}

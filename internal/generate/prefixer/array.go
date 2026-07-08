@@ -41,15 +41,18 @@ func (a *arrayPrefixer) Valid() error {
 // ToString transforms a Prefixer (ast.Expr) into its string representation.
 // It also returns a boolean indicating whether the type is exported.
 func (a *arrayPrefixer) ToString(sourcePackage string, typeParams []string, prefixes ...string) (_ string, _ bool) {
-	prefix := func() string {
+	prefix, lenExported := func() (string, bool) {
 		if a.LenPrefixer == nil {
-			return Slice
+			return Slice, true
 		}
 
-		ellipsis, _ := a.LenPrefixer.ToString("", nil)
-		return fmt.Sprintf("[%s]", ellipsis)
+		ellipsis, lenExported := a.LenPrefixer.ToString(sourcePackage, typeParams)
+		return fmt.Sprintf("[%s]", ellipsis), lenExported
 	}()
 
 	// retrieve prefixer associated to slice/array element
-	return a.EltPrefixer.ToString(sourcePackage, typeParams, append(prefixes, prefix)...)
+	stringType, eltExported := a.EltPrefixer.ToString(sourcePackage, typeParams, append(prefixes, prefix)...)
+
+	// to be exported, both the length expression and the element type must be exported
+	return stringType, lenExported && eltExported
 }

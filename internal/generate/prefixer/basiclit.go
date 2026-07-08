@@ -17,6 +17,9 @@ func (*basicLitPrefixer) Valid() error {
 
 // ToString transforms a Prefixer (ast.Expr) into its string representation.
 // It also returns a boolean indicating whether the type is exported.
+//
+// A literal value (e.g. a number or a string) never requires package qualification,
+// so it's always considered exported regardless of its content.
 func (b *basicLitPrefixer) ToString(_ string, _ []string, _ ...string) (_ string, _ bool) {
-	return b.Value, ast.IsExported(b.Value)
+	return b.Value, true
 }
