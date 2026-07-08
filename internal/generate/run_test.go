@@ -208,7 +208,7 @@ func TestRun_GeneratedAnotherPackage(t *testing.T) {
 			DirName: path.Join("success_types", "generics"),
 			CLIOptions: generate.CLIOptions{
 				NoCMD:   true,
-				Structs: []string{"Struct", "SimpleGeneric", "AliasGeneric", "ComplexGeneric", "GenericAnonymousStruct", "ComplexSliceGeneric"},
+				Structs: []string{"Struct", "SimpleGeneric", "AliasGeneric", "ComplexGeneric", "GenericAnonymousStruct", "ComplexSliceGeneric", "UnionGeneric"},
 			},
 		},
 		{

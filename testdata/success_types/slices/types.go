@@ -12,6 +12,8 @@ type ArrayAndSlice struct {
 	ArrayFieldPtrAlias *[10]*Int64Alias
 	ArrayFieldWithPkg  [10]context.Context
 
+	ArrayBinaryLen         [2 * 3]int64
+
 	SliceField          []int64
 	SliceFieldAlias     []Int64Alias
 	SliceFieldAliasChan []chan<- Int64Alias

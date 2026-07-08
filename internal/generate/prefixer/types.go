@@ -78,6 +78,11 @@ func NewPrefixer(input ast.Expr) Prefixer {
 	// field is a ...<some type> (variadic type)
 	case *ast.Ellipsis:
 		return &joinpathPrefixer{Ellipsis: expr}
+
+	// field is a binary expression, like for array length [N+1]int
+	// or an inline generic type parameter constraint type-set union (T ~int | ~float64)
+	case *ast.BinaryExpr:
+		return &binaryPrefixer{BinaryExpr: expr}
 	}
 
 	// any other unanticipated types that could exist

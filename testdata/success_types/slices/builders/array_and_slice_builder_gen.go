@@ -31,6 +31,12 @@ func (b *ArrayAndSliceBuilder) Build() *testdata.ArrayAndSlice {
 	return &result
 }
 
+// ArrayBinaryLen sets ArrayAndSlice's ArrayBinaryLen.
+func (b *ArrayAndSliceBuilder) ArrayBinaryLen(arrayBinaryLen [2 * 3]int64) *ArrayAndSliceBuilder {
+	b.build.ArrayBinaryLen = arrayBinaryLen
+	return b
+}
+
 // ArrayField sets ArrayAndSlice's ArrayField.
 func (b *ArrayAndSliceBuilder) ArrayField(arrayField [10]int64) *ArrayAndSliceBuilder {
 	b.build.ArrayField = arrayField

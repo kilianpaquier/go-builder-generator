@@ -1,6 +1,6 @@
 package testdata
 
-//go:generate ../../../go-builder-generator generate -f types.go -s Struct,SimpleGeneric,AliasGeneric,GenericAnonymousStruct,ComplexGeneric,ComplexSliceGeneric -d builders
+//go:generate ../../../go-builder-generator generate -f types.go -s Struct,SimpleGeneric,AliasGeneric,GenericAnonymousStruct,ComplexGeneric,ComplexSliceGeneric,UnionGeneric -d builders
 
 type SimpleGeneric[T any] struct {
 	Value T
@@ -30,6 +30,10 @@ type ComplexGeneric[T Struct, Y comparable] struct {
 
 type ComplexSliceGeneric[S ~[]E, E Struct] struct {
 	ValueT func(S) E
+}
+
+type UnionGeneric[T ~int | ~float64] struct { // T constraint is an inline *ast.BinaryExpr type-set union
+	Value T
 }
 
 type GenericAnonymousStruct[T struct {
