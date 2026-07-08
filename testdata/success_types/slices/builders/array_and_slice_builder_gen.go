@@ -6,6 +6,7 @@ package builders
 
 import (
 	"context"
+	"unsafe"
 
 	"github.com/kilianpaquier/go-builder-generator/testdata"
 )
@@ -34,6 +35,18 @@ func (b *ArrayAndSliceBuilder) Build() *testdata.ArrayAndSlice {
 // ArrayBinaryLen sets ArrayAndSlice's ArrayBinaryLen.
 func (b *ArrayAndSliceBuilder) ArrayBinaryLen(arrayBinaryLen [2 * 3]int64) *ArrayAndSliceBuilder {
 	b.build.ArrayBinaryLen = arrayBinaryLen
+	return b
+}
+
+// ArrayCallEllipsisLen sets ArrayAndSlice's ArrayCallEllipsisLen.
+func (b *ArrayAndSliceBuilder) ArrayCallEllipsisLen(arrayCallEllipsisLen [unsafe.Sizeof(testdata.SumInts(55, testdata.IntSlice...))]byte) *ArrayAndSliceBuilder {
+	b.build.ArrayCallEllipsisLen = arrayCallEllipsisLen
+	return b
+}
+
+// ArrayCallLen sets ArrayAndSlice's ArrayCallLen.
+func (b *ArrayAndSliceBuilder) ArrayCallLen(arrayCallLen [unsafe.Sizeof(uint64(0))]byte) *ArrayAndSliceBuilder {
+	b.build.ArrayCallLen = arrayCallLen
 	return b
 }
 

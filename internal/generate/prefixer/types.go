@@ -83,6 +83,10 @@ func NewPrefixer(input ast.Expr) Prefixer {
 	// or an inline generic type parameter constraint type-set union (T ~int | ~float64)
 	case *ast.BinaryExpr:
 		return &binaryPrefixer{BinaryExpr: expr}
+
+	// field is a call expression, like for array length [unsafe.Sizeof(uint64(0))]byte
+	case *ast.CallExpr:
+		return &callPrefixer{CallExpr: expr}
 	}
 
 	// any other unanticipated types that could exist
