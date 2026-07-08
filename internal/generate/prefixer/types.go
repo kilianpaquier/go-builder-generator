@@ -79,6 +79,10 @@ func NewPrefixer(input ast.Expr) Prefixer {
 	case *ast.Ellipsis:
 		return &joinpathPrefixer{Ellipsis: expr}
 
+	// field type is a parenthesized type, like for field type (int)
+	case *ast.ParenExpr:
+		return &parenPrefixer{ParenExpr: expr}
+
 	// field is a binary expression, like for array length [N+1]int
 	// or an inline generic type parameter constraint type-set union (T ~int | ~float64)
 	case *ast.BinaryExpr:

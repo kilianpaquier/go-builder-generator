@@ -18,6 +18,7 @@ type Builtin struct {
 	Int32         int32
 	Int64         int64
 	Int8          int8
+	ParenInt      (int)
 	Rune          rune
 	Runes         []rune
 	String        string

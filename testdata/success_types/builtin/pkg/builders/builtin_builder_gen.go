@@ -109,6 +109,12 @@ func (b *BuiltinBuilder) Int8(value int8) *BuiltinBuilder {
 	return b
 }
 
+// ParenInt sets Builtin's ParenInt.
+func (b *BuiltinBuilder) ParenInt(parenInt int) *BuiltinBuilder {
+	b.build.ParenInt = parenInt
+	return b
+}
+
 // Rune sets Builtin's Rune.
 func (b *BuiltinBuilder) Rune(value rune) *BuiltinBuilder {
 	b.build.Rune = value
