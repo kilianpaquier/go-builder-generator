@@ -27,9 +27,9 @@ kickr:
     - export PATH="$HOME/.local/share/mise/shims:$GOBIN:$PATH"
     - apt-get update -yq && apt-get install -yq git jq
     # renovate: datasource=golang-version packageName=golang/go depName=golang
-    - mise use -g golang@1.26.4
+    - mise use -g golang@1.26.5
     # renovate: datasource=gitlab-tags packageName=gitlab-org/cli depName=glab
-    - mise use -g glab@1.106.0
+    - mise use -g glab@1.112.0
     - go install github.com/kickr-dev/kickr/cmd/kickr@beta
   script:
     - kickr generate

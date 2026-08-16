@@ -8,7 +8,8 @@ snapshot:
   version_template: "{{ .Env.APP_VERSION }}"
 
 builds:
-  - main: ./cmd/go-builder-generator
+  - id: go-builder-generator
+    main: ./cmd/go-builder-generator
     env:
       - CGO_ENABLED=0
     ldflags:

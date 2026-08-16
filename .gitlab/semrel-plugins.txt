@@ -1,8 +1,8 @@
-@semantic-release/changelog
-@semantic-release/commit-analyzer
-@semantic-release/exec
-@semantic-release/git
-@semantic-release/gitlab
-@semantic-release/release-notes-generator
-conventional-changelog-conventionalcommits
-semantic-release-license
+@semantic-release/changelog@6.0.3
+@semantic-release/commit-analyzer@13.0.1
+@semantic-release/exec@7.1.0
+@semantic-release/git@10.0.1
+@semantic-release/gitlab@13.3.3
+@semantic-release/release-notes-generator@14.1.1
+conventional-changelog-conventionalcommits@9.3.1
+semantic-release-license@1.0.3

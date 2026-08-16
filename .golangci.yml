@@ -50,6 +50,11 @@ linters:
       # Default: true (disabled)
       disable-init-func-first-check: true
 
+    dupl:
+      # Tokens count to trigger issue.
+      # Default: 150
+      threshold: 200
+
     funlen:
       # Checks the number of lines in a function.
       # If lower than 0, disable the check.
