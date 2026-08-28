@@ -7,7 +7,7 @@ toolchain go1.26.6
 require (
 	github.com/fatih/structtag v1.2.0
 	github.com/huandu/xstrings v1.5.0
-	github.com/kilianpaquier/compare v1.1.2
+	github.com/kilianpaquier/compare v1.1.3
 	github.com/samber/lo v1.53.0
 	github.com/spf13/cobra v1.10.2
 	golang.org/x/mod v0.40.0
@@ -17,7 +17,7 @@ require (
 
 require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/rogpeppe/go-internal v1.15.0 // indirect
+	github.com/rogpeppe/go-internal v1.16.0 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
 	golang.org/x/sync v0.22.0 // indirect
 )
