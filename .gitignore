@@ -3,6 +3,7 @@
 # Various build / compile directories
 dist/
 logs/
+public/
 reports/
 tmp/
 
