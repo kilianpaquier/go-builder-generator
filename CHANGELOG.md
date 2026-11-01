@@ -1,3 +1,23 @@
+## [1.12.2](https://gitlab.com/kilianpaquier/go-builder-generator/compare/v1.12.1...v1.12.2) (2026-11-01)
+
+### Chores
+
+* **deps:** update go dependencies ([c1753dc](https://gitlab.com/kilianpaquier/go-builder-generator/commit/c1753dcc7fb2f4a2712c03e07b6395f52292ea6e))
+
+### Continuous Integration
+
+* **deps:** update go toolchain directive to v1.27.1 ([5cf3105](https://gitlab.com/kilianpaquier/go-builder-generator/commit/5cf31050bfa799db3179eae0da40faadb5a58b7c))
+* **deps:** update go toolchain directive to v1.27.3 [security] ([67be59c](https://gitlab.com/kilianpaquier/go-builder-generator/commit/67be59c42c55caf2198c44b7754454ee1108203c))
+* **layout:** regenerate kickr layout ([ef7641a](https://gitlab.com/kilianpaquier/go-builder-generator/commit/ef7641a09a9ac6ee44e428a64d104e2015604697))
+
+### Styles
+
+* **cobra:** use local CLI name in help (fixes completion generation when a different name is used) ([980f7fe](https://gitlab.com/kilianpaquier/go-builder-generator/commit/980f7fe8b2c1087f73523150bb24f0f2e57168bb))
+
+### Tests
+
+* **ctx:** use testcases context isn't of global func tests ([1aa0990](https://gitlab.com/kilianpaquier/go-builder-generator/commit/1aa099049fef2db7e873c888d76f6e92b9bf0dc5))
+
 ## [1.12.1](https://gitlab.com/kilianpaquier/go-builder-generator/compare/v1.12.0...v1.12.1) (2026-09-05)
 
 ### Chores
