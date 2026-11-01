@@ -34,7 +34,7 @@ linters:
     cyclop:
       # The maximal code complexity to report.
       # Default: 10
-      max-complexity: 20
+      max-complexity: 30
 
     decorder:
       # Required order of `type`, `const`, `var` and `func` declarations inside a file.

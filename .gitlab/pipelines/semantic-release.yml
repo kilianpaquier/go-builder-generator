@@ -6,11 +6,11 @@ include:
   # https://gitlab.com/to-be-continuous/semantic-release
   - remote: https://gitlab.com/to-be-continuous/semantic-release/-/raw/f7c8ec592083596d1b392778582f160c1a2a0379/templates/gitlab-ci-semrel.yml # 4.3.0
     inputs:
-      auto-release-enabled: "false"
+      auto-release-enabled: false
       branches-ref: /^(alpha|beta|dev|develop|main|next|rc|staging|v[0-9]+(\.[0-9]+)?\.x)$/
       hooks-dir: scripts
       info-on: all
-      release-disabled: "false"
+      release-disabled: false
       required-plugins-file: .gitlab/semrel-plugins.txt
       tag-format: v$${version}
 
@@ -20,7 +20,7 @@ include:
     GITLAB_TOKEN: $RELEASE_TOKEN
 
 semantic-release-info:
-  stage: build
+  rules: [when: on_success]
   variables:
     SEMREL_DRY_RUN: "true"
   script:
@@ -37,6 +37,8 @@ semantic-release-info:
         echo "SEMREL_INFO_LAST_VERSION=v${SEMREL_INFO_LAST_VERSION#v}" >> "$SEMREL_CONFIG_DIR/semrel.out.env"
         echo "SEMREL_INFO_NEXT_VERSION=v${SEMREL_INFO_NEXT_VERSION#v}" >> "$SEMREL_CONFIG_DIR/semrel.out.env"
         echo "SEMREL_INFO_NEXT_VERSION_TYPE=${SEMREL_INFO_NEXT_VERSION_TYPE}" >> "$SEMREL_CONFIG_DIR/semrel.out.env"
+      elif [ -n "$CI_COMMIT_TAG" ]; then
+        echo "SEMREL_INFO_NEXT_VERSION=v${CI_COMMIT_TAG#v}" >> "$SEMREL_CONFIG_DIR/semrel.out.env"
       else
         DESCRIBE=$(git describe --tags || echo "v1.0.0")
         echo "SEMREL_INFO_NEXT_VERSION=v${DESCRIBE#v}" >> "$SEMREL_CONFIG_DIR/semrel.out.env"

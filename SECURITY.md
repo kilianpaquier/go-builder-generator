@@ -11,5 +11,5 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability, please report it through a **GitLab**'s [work items](https://gitlab.com/kilianpaquier/go-builder-generator/-/work_items)
-and make sure to tick checkbox `Turn on confidentiality: Limit visibility to project members with at least the Planner role.`.
+If you discover a security vulnerability, please report it through **GitLab** [work items](https://gitlab.com/kilianpaquier/go-builder-generator/-/work_items)
+and make sure to tick the `Turn on confidentiality: Limit visibility to project members with at least the Planner role.` checkbox.

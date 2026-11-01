@@ -75,7 +75,7 @@ plugins:
     - assets:
         - CHANGELOG.md
         - LICENSE
-      message: "chore(release): v${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      message: "chore(release): v${nextRelease.version} [skip ci on branch]\n\n${nextRelease.notes}"
   - - "@semantic-release/gitlab"
     - failComment: ⚠️ Expected release for branch '${branch.name}' has failed due to the following errors:\n- ${errors.map(err => err.message).join('\\n- ')}
       failCommentCondition: <% return false; %>

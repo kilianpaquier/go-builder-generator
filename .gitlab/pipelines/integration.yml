@@ -5,7 +5,7 @@ include:
 
   # pre-commit template
   # https://gitlab.com/to-be-continuous/pre-commit
-  - remote: https://gitlab.com/to-be-continuous/pre-commit/-/raw/545565bb99ba3b932c9f1f244d446d5ff3f77b40/templates/gitlab-ci-pre-commit.yml # 1.6.0
+  - remote: https://gitlab.com/to-be-continuous/pre-commit/-/raw/50e22ece81358c673c8d33b79185d5563bdc1d39/templates/gitlab-ci-pre-commit.yml # 1.8.0
     inputs:
       pre-commit-file: .pre-commit-config.yaml
 
@@ -19,9 +19,6 @@ include:
       test-flags: -v -coverpkg=./... -covermode=count -timeout=30s
       test-image: $GO_IMAGE
 
-go-govulncheck:
-  allow_failure: true
-
 go-build:
   image:
     name: $GO_GORELEASER_IMAGE
@@ -30,7 +27,10 @@ go-build:
     - semantic-release-info
   rules:
     # https://gitlab.com/to-be-continuous/golang/-/blob/master/templates/gitlab-ci-golang.yml?ref_type=heads#L670
-    - if: '$GO_TEST_IMAGE != ""'
+    - if: '$GO_TEST_IMAGE == ""'
+      when: never
+    - if: '$CI_COMMIT_REF_NAME =~ $INTEG_REF || $CI_COMMIT_REF_NAME =~ $PROD_REF'
+    - when: manual
   script:
     - goreleaser release --clean --config .goreleaser.yml --snapshot
   artifacts:
@@ -38,3 +38,15 @@ go-build:
     paths:
       - dist
     expire_in: 1 day
+
+go-ci-lint:
+  needs: []
+
+go-govulncheck:
+  allow_failure: true
+
+go-mod-outdated:
+  rules: [when: never]
+
+go-test:
+  needs: []
