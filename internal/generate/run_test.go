@@ -17,7 +17,6 @@ import (
 )
 
 func TestRun_Errors(t *testing.T) {
-	ctx := t.Context()
 	pwd, _ := os.Getwd()
 	testdata := filepath.Join(pwd, "..", "..", "testdata")
 
@@ -36,7 +35,7 @@ func TestRun_Errors(t *testing.T) {
 		}
 
 		// Act
-		err := generate.Run(ctx, options, nil)
+		err := generate.Run(t.Context(), options, nil)
 
 		// Assert
 		testutils.Error(testutils.Require(t), err)
@@ -45,7 +44,7 @@ func TestRun_Errors(t *testing.T) {
 
 	t.Run("error_no_dest_gomod", func(t *testing.T) {
 		// Act
-		err := generate.Run(ctx, generate.CLIOptions{Destdir: t.TempDir()}, nil)
+		err := generate.Run(t.Context(), generate.CLIOptions{Destdir: t.TempDir()}, nil)
 
 		// Assert
 		testutils.Error(testutils.Require(t), err)
@@ -60,7 +59,7 @@ func TestRun_Errors(t *testing.T) {
 		testutils.NoError(testutils.Require(t), file.Close())
 
 		// Act
-		err = generate.Run(ctx, generate.CLIOptions{Destdir: destdir}, nil)
+		err = generate.Run(t.Context(), generate.CLIOptions{Destdir: destdir}, nil)
 
 		// Assert
 		testutils.ErrorIs(t, err, generate.ErrMissingModule)
@@ -72,7 +71,7 @@ func TestRun_Errors(t *testing.T) {
 		testutils.NoError(testutils.Require(t), os.WriteFile(filepath.Join(destdir, "go.mod"), []byte("module test"), files.RwRR))
 
 		// Act
-		err := generate.Run(ctx, generate.CLIOptions{Destdir: destdir}, nil)
+		err := generate.Run(t.Context(), generate.CLIOptions{Destdir: destdir}, nil)
 
 		// Assert
 		testutils.ErrorIs(t, err, generate.ErrMissingGo)
@@ -90,7 +89,7 @@ func TestRun_Errors(t *testing.T) {
 		}
 
 		// Act
-		err := generate.Run(ctx, options, nil)
+		err := generate.Run(t.Context(), options, nil)
 
 		// Assert
 		testutils.Error(testutils.Require(t), err)
@@ -109,7 +108,7 @@ func TestRun_Errors(t *testing.T) {
 		}
 
 		// Act
-		err := generate.Run(ctx, options, nil)
+		err := generate.Run(t.Context(), options, nil)
 
 		// Assert
 		testutils.Error(testutils.Require(t), err)
@@ -153,7 +152,7 @@ func TestRun_Errors(t *testing.T) {
 				}
 
 				// Act
-				err := generate.Run(ctx, options, nil)
+				err := generate.Run(t.Context(), options, nil)
 
 				// Assert
 				testutils.Error(testutils.Require(t), err)
@@ -166,7 +165,6 @@ func TestRun_Errors(t *testing.T) {
 }
 
 func TestRun_GeneratedAnotherPackage(t *testing.T) {
-	ctx := t.Context()
 	pwd, _ := os.Getwd()
 	testdata := filepath.Join(pwd, "..", "..", "testdata")
 
@@ -309,7 +307,7 @@ func TestRun_GeneratedAnotherPackage(t *testing.T) {
 			tc.CLIOptions.File = filepath.Join(destdir, types)
 
 			// Act
-			err := generate.Run(ctx, tc.CLIOptions, nil)
+			err := generate.Run(t.Context(), tc.CLIOptions, nil)
 
 			// Assert
 			testutils.NoError(testutils.Require(t), err)
@@ -319,7 +317,6 @@ func TestRun_GeneratedAnotherPackage(t *testing.T) {
 }
 
 func TestRun_GeneratedFromAnotherModule(t *testing.T) {
-	ctx := t.Context()
 	pwd, _ := os.Getwd()
 	testdata := filepath.Join(pwd, "..", "..", "testdata")
 
@@ -371,7 +368,7 @@ func TestRun_GeneratedFromAnotherModule(t *testing.T) {
 			tc.CLIOptions.Destdir = filepath.Join(destdir, "builders")
 
 			// Act
-			err := generate.Run(ctx, tc.CLIOptions, nil)
+			err := generate.Run(t.Context(), tc.CLIOptions, nil)
 
 			// Assert
 			testutils.NoError(testutils.Require(t), err)
@@ -381,7 +378,6 @@ func TestRun_GeneratedFromAnotherModule(t *testing.T) {
 }
 
 func TestRun_GeneratedSamePackage(t *testing.T) {
-	ctx := t.Context()
 	pwd, _ := os.Getwd()
 	testdata := filepath.Join(pwd, "..", "..", "testdata")
 
@@ -428,7 +424,7 @@ func TestRun_GeneratedSamePackage(t *testing.T) {
 			tc.CLIOptions.File = filepath.Join(destdir, "types.go")
 
 			// Act
-			err := generate.Run(ctx, tc.CLIOptions, tc.CLIOptions.ToArgs("")[2:])
+			err := generate.Run(t.Context(), tc.CLIOptions, tc.CLIOptions.ToArgs("")[2:])
 
 			// Assert
 			testutils.NoError(testutils.Require(t), err)
