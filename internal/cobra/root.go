@@ -2,6 +2,7 @@ package cobra
 
 import (
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 )
@@ -29,7 +30,7 @@ func rootCmd() *cobra.Command {
 	logFormat, logLevel := "text", "info"
 
 	cmd := &cobra.Command{
-		Use:               "go-builder-generator",
+		Use:               filepath.Base(os.Args[0]),
 		SilenceErrors:     true, // don't print errors with cobra, let logger.Error handle them
 		SilenceUsage:      true, // don't print help on errors, let usage function handle printing depending on command error
 		PersistentPreRunE: func(*cobra.Command, []string) error { return setupLogger(logFormat, logLevel) },
