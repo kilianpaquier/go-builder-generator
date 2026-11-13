@@ -2,7 +2,7 @@ module github.com/kilianpaquier/go-builder-generator
 
 go 1.26.0
 
-toolchain go1.27.3
+toolchain go1.27.4
 
 require (
 	github.com/fatih/structtag v1.2.0
