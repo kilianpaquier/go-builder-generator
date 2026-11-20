@@ -2,4 +2,4 @@ module github.com/kilianpaquier/go-builder-generator/testdata
 
 go 1.26.0
 
-require golang.org/x/mod v0.42.0
+require golang.org/x/mod v0.43.0
