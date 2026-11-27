@@ -6,13 +6,13 @@ toolchain go1.27.4
 
 require (
 	github.com/fatih/structtag v1.2.0
-	github.com/huandu/xstrings v1.6.3
+	github.com/huandu/xstrings v1.6.4
 	github.com/kilianpaquier/compare v1.1.3
 	github.com/samber/lo v1.53.0
 	github.com/spf13/cobra v1.10.2
 	golang.org/x/mod v0.43.0
 	golang.org/x/text v0.44.0
-	golang.org/x/tools v0.52.0
+	golang.org/x/tools v0.53.0
 )
 
 require (
