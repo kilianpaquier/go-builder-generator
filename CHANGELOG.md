@@ -1,3 +1,16 @@
+## [1.12.3](https://gitlab.com/kilianpaquier/go-builder-generator/compare/v1.12.2...v1.12.3) (2026-11-27)
+
+### Chores
+
+* **deps:** update go dependencies ([55df922](https://gitlab.com/kilianpaquier/go-builder-generator/commit/55df922dedf307cd171e0c147acdfddd35d50bfc))
+* **deps:** update go dependencies ([3b8465b](https://gitlab.com/kilianpaquier/go-builder-generator/commit/3b8465bd366ceb731e9ac3e4a15a4d532df36297))
+
+### Continuous Integration
+
+* **deps:** update go toolchain directive to v1.27.4 [security] ([205f10c](https://gitlab.com/kilianpaquier/go-builder-generator/commit/205f10ceec62b4e0e1edcc71fc0e1dea19a49f66))
+* **layout:** regenerate kickr layout ([8113090](https://gitlab.com/kilianpaquier/go-builder-generator/commit/8113090b9ffde37b3093e6ac91963bee0fc5482c))
+* **layout:** regenerate kickr layout ([8e0197d](https://gitlab.com/kilianpaquier/go-builder-generator/commit/8e0197d36164824d5f0fa4a4c9d33ae278081782))
+
 ## [1.12.2](https://gitlab.com/kilianpaquier/go-builder-generator/compare/v1.12.1...v1.12.2) (2026-11-01)
 
 ### Chores
